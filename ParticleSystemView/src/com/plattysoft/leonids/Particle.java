@@ -1,4 +1,4 @@
-package com.plattysoft.particlesystemview;
+package com.plattysoft.leonids;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

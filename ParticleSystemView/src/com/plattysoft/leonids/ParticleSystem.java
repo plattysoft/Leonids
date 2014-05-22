@@ -1,4 +1,4 @@
-package com.plattysoft.particlesystemview;
+package com.plattysoft.leonids;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -96,7 +96,7 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 //			mParticles.get(i).configureFadeOut(mMilisecondsBeforeEnd, mFinalAlpha);
 		}
 		// Add a full size view to the parent view		
-//		mDrawingView = (ParticleField) View.inflate(mParentView.gœetContext(), R.layout.particle_field, null).findViewById(R.id.particle_field);
+//		mDrawingView = (ParticleField) View.inflate(mParentView.g?etContext(), R.layout.particle_field, null).findViewById(R.id.particle_field);
 		mDrawingView = new ParticleField(mParentView.getContext());
 		mParentView.addView(mDrawingView);
 		mDrawingView.setParticles (mParticles);

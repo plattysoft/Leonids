@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class ParticleSystemExampleActivity extends Activity implements OnClickListener {
+public class OneShotSimpleExampleActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,16 +25,12 @@ public class ParticleSystemExampleActivity extends Activity implements OnClickLi
 		ParticleSystem ps = new ParticleSystem(this, 80, ((BitmapDrawable) d).getBitmap());
 		ps.setScaleRange(0.7f, 1.3f);
 		ps.setSpeedRange(0.2f, 0.5f);
-		ps.setRotationSpeed(90, 180);
-		ps.setVelocity(0.0002f, 90);
 		ps.oneShot(arg0, 80, 800);
 
 		d = getResources().getDrawable(R.drawable.star_pink);
 		ps = new ParticleSystem(this, 80, ((BitmapDrawable) d).getBitmap());
 		ps.setScaleRange(0.7f, 1.3f);
 		ps.setSpeedRange(0.2f, 0.5f);
-		ps.setRotationSpeed(-90, -180);
-		ps.setVelocity(0.0002f, 90);
 		ps.oneShot(arg0, 80, 800);
 	}
 

@@ -1,4 +1,4 @@
-package com.plattysoft.particlesystemexamples;
+package com.plattysoft.leonids.examples;
 
 import android.app.ListActivity;
 import android.content.Intent;

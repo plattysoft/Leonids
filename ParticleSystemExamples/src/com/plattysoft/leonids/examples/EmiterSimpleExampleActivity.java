@@ -1,6 +1,6 @@
-package com.plattysoft.particlesystemexamples;
+package com.plattysoft.leonids.examples;
 
-import com.plattysoft.particlesystemview.ParticleSystem;
+import com.plattysoft.leonids.ParticleSystem;
 
 import android.os.Bundle;
 import android.app.Activity;

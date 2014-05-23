@@ -30,7 +30,7 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 	private ParticleField mDrawingView;
 
 	private long mMilisecondsBeforeEnd = 0;
-	private Interpolator mFadeOutInterpolator;
+	private Interpolator mFadeOutInterpolator = new LinearInterpolator();
 
 	private float mMinRotation = 0;
 	private float mMaxRotation = 0;
@@ -105,7 +105,7 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 			int angle = r.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
 			float scale = r.nextFloat()*(mMaxScale-mMinScale) + mMinScale;
 			float rotationSpeed = r.nextFloat()*(mMaxRotation-mMinRotation) + mMinRotation;			
-			Particle p = mParticles.remove(i);
+			Particle p = mParticles.remove(0);
 			p.configure(timeToLive, emiterX, emiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFadeOutInterpolator);
 			mActiveParticles.add(p);
 		}

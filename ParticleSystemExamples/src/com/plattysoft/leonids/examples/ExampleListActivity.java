@@ -12,7 +12,7 @@ public class ExampleListActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		String sampleList[] = new String [] {"One Shot", "One Shot With Gravity", "Emiter"};
+		String sampleList[] = new String [] {"One Shot Simple", "One Shot Intermediate", "One Shot Advanced", "Emiter"};
 		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sampleList));
 	}
 
@@ -23,7 +23,10 @@ public class ExampleListActivity extends ListActivity {
 			startActivity(new Intent(this, OneShotSimpleExampleActivity.class));
 			break;
 		case 1:
-			startActivity(new Intent(this, OneShotGravityExampleActivity.class));
+			startActivity(new Intent(this, OneShotIntermediateExampleActivity.class));
+			break;
+		case 2:
+			startActivity(new Intent(this, OneShotAdvancedExampleActivity.class));
 			break;
 		}
 	}

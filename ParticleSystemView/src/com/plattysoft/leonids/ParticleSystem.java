@@ -49,7 +49,8 @@ public class ParticleSystem {
 	private int mTimeToLive;
 	private int mCurrentTime;
 	
-	private int mDelayBetweenParticles;
+	private float mParticlesPerMilisecond;
+	private int mActivatedParticles;
 
 	public ParticleSystem(Activity a, int maxParticles, Bitmap bitmap) {
 		mRandom = new Random();
@@ -123,8 +124,9 @@ public class ParticleSystem {
 	public void emit (View emiter, int particlesPerSecond, int timeToLive) {
 		// Setup emiter
 		configureEmiter(emiter);
+		mActivatedParticles = 0;
 		mTimeToLive = timeToLive;
-		mDelayBetweenParticles = particlesPerSecond/1000;
+		mParticlesPerMilisecond = particlesPerSecond/1000f;
 		// Add a full size view to the parent view		
 		mDrawingView = new ParticleField(mParentView.getContext());
 		mParentView.addView(mDrawingView);
@@ -162,7 +164,7 @@ public class ParticleSystem {
 	 */
 	public void oneShot(View emiter, int numParticles, int timeToLive, Interpolator interpolator) {
 		configureEmiter(emiter);
-		
+		mActivatedParticles = 0;
 		mTimeToLive = timeToLive;
 		// We create particles based in the parameters
 		for (int i=0; i<numParticles && i<mMaxParticles; i++) {
@@ -226,10 +228,11 @@ public class ParticleSystem {
 		p.configure(mTimeToLive, mEmiterX, mEmiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFadeOutInterpolator);
 		p.activate(delay);
 		mActiveParticles.add(p);
+		mActivatedParticles++;
 	}
 
 	private void onUpdate(int miliseconds) {
-		if (!mParticles.isEmpty() && mActiveParticles.size() * mDelayBetweenParticles < miliseconds) {
+		while (!mParticles.isEmpty() && mActivatedParticles < mParticlesPerMilisecond*miliseconds) {
 			// Activate a new particle
 			activateParticle(miliseconds);			
 		}

@@ -92,11 +92,9 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 			int angle = r.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
 			float scale = r.nextFloat()*(mMaxScale-mMinScale) + mMinScale;
 			float rotationSpeed = r.nextFloat()*(mMaxRotation-mMinRotation) + mMinRotation;			
-			mParticles.get(i).configure(emiterX, emiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle);
-//			mParticles.get(i).configureFadeOut(mMilisecondsBeforeEnd, mFinalAlpha);
+			mParticles.get(i).configure(timeToLive, emiterX, emiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFinalAlpha);
 		}
 		// Add a full size view to the parent view		
-//		mDrawingView = (ParticleField) View.inflate(mParentView.g?etContext(), R.layout.particle_field, null).findViewById(R.id.particle_field);
 		mDrawingView = new ParticleField(mParentView.getContext());
 		mParentView.addView(mDrawingView);
 		mDrawingView.setParticles (mParticles);

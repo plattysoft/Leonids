@@ -23,10 +23,6 @@ public class Particle {
 
 	private float mInitialY;
 
-//	private long mMilisecondsBeforeEnd;
-//	private float mFinalAlpha;
-//	private double mAlpha;
-
 	private float mRotationSpeed = 0;
 	private float mInitialRotation = 0;
 
@@ -35,11 +31,17 @@ public class Particle {
 	private float mVelocityX;
 	private float mVelocityY;
 
+	private long mMilisecondBeforeEndFade;
+	private float mFinalAlpha;
+	private double mAlpha;
+
+	private long mTimeToLive;
+
 	public Particle(Bitmap image) {
 		mImage = image;
 	}
 
-	public void configure(float emiterX, float emiterY, float speed, int angle,	float scale, float rotationSpeed, float velocity, float velocityAngle) {
+	public void configure(long timeToLive, float emiterX, float emiterY, float speed, int angle,	float scale, float rotationSpeed, float velocity, float velocityAngle, long milisecondsBeforeEnd, float finalAlpha) {
 		float angleInRads = (float) (angle*Math.PI/180f);
 		float velocityAngleInRads = (float) (velocityAngle*Math.PI/180f);
 		
@@ -52,7 +54,10 @@ public class Particle {
 		mVelocityX = (float) (velocity * Math.cos(velocityAngleInRads));
 		mVelocityY = (float) (velocity * Math.sin(velocityAngleInRads));
 		mRotationSpeed = rotationSpeed;
+		mMilisecondBeforeEndFade = milisecondsBeforeEnd;
+		mFinalAlpha = finalAlpha;
 		mScale = scale;
+		mTimeToLive = timeToLive;
 		// Scale the bitmap if scale != 1
 		mMatrix = new Matrix();
 		mPaint = new Paint();
@@ -62,9 +67,12 @@ public class Particle {
 		mCurrentX = mInitialX+mSpeedX*miliseconds+mVelocityX*miliseconds*miliseconds;
 		mCurrentY = mInitialY+mSpeedY*miliseconds+mVelocityY*miliseconds*miliseconds;
 		mRotation = mInitialRotation + mRotationSpeed*miliseconds/1000;
-//		if (miliseconds > mMilisecondsBeforeEnd) {
-//			mAlpha = 1.0 - (mFinalAlpha -1.0) * (miliseconds - mMilisecondsBeforeEnd);
-//		}
+		if (mTimeToLive - miliseconds > mMilisecondBeforeEndFade) {
+			mAlpha = 1.0 - (mFinalAlpha -1.0) * (miliseconds - mMilisecondBeforeEndFade);
+		}
+		else {
+			mAlpha = 1.0;
+		}
 	}
 	
 	public void draw (Canvas c) {
@@ -73,14 +81,8 @@ public class Particle {
 		mMatrix.postRotate(mRotation);
 		mMatrix.postTranslate(mCurrentX, mCurrentY);
 		
-		// TODO
-//		mPaint.setAlpha(100);
+		mPaint.setAlpha(100);
 		
 		c.drawBitmap(mImage, mMatrix, mPaint);
 	}
-
-//	public void configureFadeOut(long milisecondsBeforeEnd, float finalAlpha) {
-//		mMilisecondsBeforeEnd = milisecondsBeforeEnd;
-//		mFinalAlpha = finalAlpha;
-//	}
 }

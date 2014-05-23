@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 
 public class Particle {
 
@@ -32,33 +34,34 @@ public class Particle {
 	private float mVelocityY;
 
 	private long mMilisecondBeforeEndFade;
-	private float mFinalAlpha;
-	private double mAlpha;
+	private int mAlpha;
 
 	private long mTimeToLive;
+
+	private Interpolator mInterpolator;
 
 	public Particle(Bitmap image) {
 		mImage = image;
 	}
 
-	public void configure(long timeToLive, float emiterX, float emiterY, float speed, int angle,	float scale, float rotationSpeed, float velocity, float velocityAngle, long milisecondsBeforeEnd, float finalAlpha) {
+	public void configure(long timeToLive, float emiterX, float emiterY, float speed, int angle, float scale, float rotationSpeed, float velocity, float velocityAngle, long fadeOutMiliseconds) {
 		float angleInRads = (float) (angle*Math.PI/180f);
 		float velocityAngleInRads = (float) (velocityAngle*Math.PI/180f);
 		
 		mCurrentX = emiterX;
 		mCurrentY = emiterY;
-		mInitialX = emiterX;
-		mInitialY = emiterY;
+		mInitialX = emiterX - mImage.getWidth()/2*scale;
+		mInitialY = emiterY - mImage.getHeight()/2*scale;
 		mSpeedX = (float) (speed * Math.cos(angleInRads));
 		mSpeedY = (float) (speed * Math.sin(angleInRads));
 		mVelocityX = (float) (velocity * Math.cos(velocityAngleInRads));
 		mVelocityY = (float) (velocity * Math.sin(velocityAngleInRads));
 		mRotationSpeed = rotationSpeed;
-		mMilisecondBeforeEndFade = milisecondsBeforeEnd;
-		mFinalAlpha = finalAlpha;
+		mMilisecondBeforeEndFade = fadeOutMiliseconds;
 		mScale = scale;
 		mTimeToLive = timeToLive;
 		// Scale the bitmap if scale != 1
+		mInterpolator = new LinearInterpolator();
 		mMatrix = new Matrix();
 		mPaint = new Paint();
 	}
@@ -67,11 +70,12 @@ public class Particle {
 		mCurrentX = mInitialX+mSpeedX*miliseconds+mVelocityX*miliseconds*miliseconds;
 		mCurrentY = mInitialY+mSpeedY*miliseconds+mVelocityY*miliseconds*miliseconds;
 		mRotation = mInitialRotation + mRotationSpeed*miliseconds/1000;
-		if (mTimeToLive - miliseconds > mMilisecondBeforeEndFade) {
-			mAlpha = 1.0 - (mFinalAlpha -1.0) * (miliseconds - mMilisecondBeforeEndFade);
+		// Alpha goes from 0 to 255
+		if (mTimeToLive - miliseconds <= mMilisecondBeforeEndFade) {
+			mAlpha = (int) (mMilisecondBeforeEndFade - (mTimeToLive - miliseconds))*255;
 		}
 		else {
-			mAlpha = 1.0;
+			mAlpha = 255;
 		}
 	}
 	
@@ -81,7 +85,7 @@ public class Particle {
 		mMatrix.postRotate(mRotation);
 		mMatrix.postTranslate(mCurrentX, mCurrentY);
 		
-		mPaint.setAlpha(100);
+		mPaint.setAlpha(mAlpha);
 		
 		c.drawBitmap(mImage, mMatrix, mPaint);
 	}

@@ -31,7 +31,6 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 	private ParticleField mDrawingView;
 
 	private long mMilisecondsBeforeEnd = 0;
-	private float mFinalAlpha = 0;
 
 	private float mMinRotation = 0;
 	private float mMaxRotation = 0;
@@ -74,9 +73,8 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		mVelocityAngle = angle;
 	}
 	
-	public void setFading(long milisecondsBeforeEnd, float finalAlpha) {
+	public void setFadeOut(long milisecondsBeforeEnd) {
 		mMilisecondsBeforeEnd = milisecondsBeforeEnd;
-		mFinalAlpha = finalAlpha;
 	}
 	
 	public void oneShot(View emiter, int numParticles, int timeToLive) {

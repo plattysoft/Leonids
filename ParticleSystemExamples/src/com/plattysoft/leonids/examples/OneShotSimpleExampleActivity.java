@@ -26,7 +26,7 @@ public class OneShotSimpleExampleActivity extends Activity implements OnClickLis
 		ParticleSystem ps = new ParticleSystem(this, 100, ((BitmapDrawable) d).getBitmap());
 		ps.setScaleRange(0.7f, 1.3f);
 		ps.setSpeedRange(0.2f, 0.5f);
-		ps.setFading(200, 0);
+		ps.setFadeOut(200);
 		ps.oneShot(arg0, 100, 800);
 	}
 

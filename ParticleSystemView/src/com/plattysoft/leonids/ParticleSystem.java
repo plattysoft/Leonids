@@ -16,8 +16,6 @@ import android.view.animation.LinearInterpolator;
 
 public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener {
 
-	private ArrayList<Particle> mParticles;
-
 	private ViewGroup mParentView;
 	private int mMaxParticles;
 	
@@ -32,6 +30,7 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 	private ParticleField mDrawingView;
 
 	private long mMilisecondsBeforeEnd = 0;
+	private Interpolator mFadeOutInterpolator;
 
 	private float mMinRotation = 0;
 	private float mMaxRotation = 0;
@@ -39,10 +38,14 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 	private float mVelocity = 0;
 	private float mVelocityAngle = 0;
 
+	private ArrayList<Particle> mParticles;
+	private ArrayList<Particle> mActiveParticles;
+
 	public ParticleSystem(Activity a, int maxParticles, Bitmap bitmap) {
 		mParentView = (ViewGroup) a.findViewById(android.R.id.content);
 		mMaxParticles = maxParticles;
 		// Create the particles
+		mActiveParticles = new ArrayList<Particle>(); 
 		mParticles = new ArrayList<Particle> ();
 		for (int i=0; i<mMaxParticles; i++) {
 			mParticles.add (new Particle (bitmap));
@@ -74,8 +77,13 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		mVelocityAngle = angle;
 	}
 	
-	public void setFadeOut(long milisecondsBeforeEnd) {
+	public void setFadeOut(long milisecondsBeforeEnd, Interpolator interpolator) {
 		mMilisecondsBeforeEnd = milisecondsBeforeEnd;
+		mFadeOutInterpolator = interpolator;
+	}
+	
+	public void setFadeOut(long milisecondsBeforeEnd) {
+		setFadeOut(milisecondsBeforeEnd, new LinearInterpolator());
 	}
 	
 	public void oneShot(View emiter, int numParticles, int timeToLive) {
@@ -97,12 +105,14 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 			int angle = r.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
 			float scale = r.nextFloat()*(mMaxScale-mMinScale) + mMinScale;
 			float rotationSpeed = r.nextFloat()*(mMaxRotation-mMinRotation) + mMinRotation;			
-			mParticles.get(i).configure(timeToLive, emiterX, emiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd);
+			Particle p = mParticles.remove(i);
+			p.configure(timeToLive, emiterX, emiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFadeOutInterpolator);
+			mActiveParticles.add(p);
 		}
 		// Add a full size view to the parent view		
 		mDrawingView = new ParticleField(mParentView.getContext());
 		mParentView.addView(mDrawingView);
-		mDrawingView.setParticles (mParticles);
+		mDrawingView.setParticles (mActiveParticles);
 		// We start a property animator that will call us to do the update
 		// Animate from 0 to timeToLiveMax
 		ValueAnimator animator = ValueAnimator.ofInt(new int[] {0, timeToLive});
@@ -115,8 +125,8 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 
 	@Override
 	public void onAnimationUpdate(ValueAnimator arg0) {
-		for (int i=0; i<mParticles.size(); i++) {
-			mParticles.get(i).update((Integer)arg0.getAnimatedValue());
+		for (int i=0; i<mActiveParticles.size(); i++) {
+			mActiveParticles.get(i).update((Integer)arg0.getAnimatedValue());
 		}
 		mDrawingView.postInvalidate();
 	}
@@ -134,6 +144,7 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		mParentView.removeView(mDrawingView);
 		mDrawingView = null;
 		mParentView.postInvalidate();
+		mParticles.addAll(mActiveParticles);
 	}
 
 	@Override

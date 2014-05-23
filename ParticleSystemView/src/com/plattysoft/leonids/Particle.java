@@ -38,8 +38,6 @@ public class Particle {
 
 	private long mTimeToLive;
 
-	private Interpolator mInterpolator;
-
 	public Particle(Bitmap image) {
 		mImage = image;
 	}
@@ -61,7 +59,6 @@ public class Particle {
 		mScale = scale;
 		mTimeToLive = timeToLive;
 		// Scale the bitmap if scale != 1
-		mInterpolator = new LinearInterpolator();
 		mMatrix = new Matrix();
 		mPaint = new Paint();
 	}

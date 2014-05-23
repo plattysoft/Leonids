@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
 public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener {
@@ -78,6 +79,10 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 	}
 	
 	public void oneShot(View emiter, int numParticles, int timeToLive) {
+		oneShot(emiter, numParticles, timeToLive, new LinearInterpolator());
+	}
+	
+	public void oneShot(View emiter, int numParticles, int timeToLive, Interpolator interpolator) {
 		int[] location = new int[2];
 		int[] parentLocation = new int[2];
 		emiter.getLocationInWindow(location);
@@ -104,7 +109,7 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		animator.setDuration(timeToLive);
 		animator.addUpdateListener(this);
 		animator.addListener(this);
-		animator.setInterpolator(null);
+		animator.setInterpolator(interpolator);
 		animator.start();
 	}
 

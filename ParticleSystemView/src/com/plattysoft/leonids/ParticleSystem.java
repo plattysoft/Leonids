@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
-public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener {
+public class ParticleSystem {
 
 	private static final long TIMMERTASK_INTERVAL = 50;
 	private ViewGroup mParentView;
@@ -92,15 +92,34 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		mVelocityAngle = angle;
 	}
 	
+	/**
+	 * Configures a fade out for the particles when they disappear
+	 * 
+	 * @param duration fade out duration in miliseconds
+	 * @param interpolator the interpolator for the fade out (default is linear)
+	 */
 	public void setFadeOut(long milisecondsBeforeEnd, Interpolator interpolator) {
 		mMilisecondsBeforeEnd = milisecondsBeforeEnd;
 		mFadeOutInterpolator = interpolator;
 	}
 	
-	public void setFadeOut(long milisecondsBeforeEnd) {
-		setFadeOut(milisecondsBeforeEnd, new LinearInterpolator());
+	/**
+	 * Configures a fade out for the particles when they disappear
+	 * 
+	 * @param duration fade out duration in miliseconds
+	 */
+	public void setFadeOut(long duration) {
+		setFadeOut(duration, new LinearInterpolator());
 	}
 	
+	/**
+	 * Starts emiting particles from a specific view. If at some point the number goes over the amount of particles availabe on create
+	 * no new particles will be created
+	 * 
+	 * @param emiter  View from which center the particles will be emited
+	 * @param particlesPerSecond Number of particles per second that will be emited (evenly distributed)
+	 * @param timeToLive miliseconds the particles will be displayed
+	 */
 	public void emit (View emiter, int particlesPerSecond, int timeToLive) {
 		// Setup emiter
 		configureEmiter(emiter);
@@ -122,10 +141,25 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		}, 0, TIMMERTASK_INTERVAL);
 	}
 	
+	/**
+	 * Launches particles in one Shot
+	 * 
+	 * @param emiter View from which center the particles will be emited
+	 * @param numParticles number of particles launched on the one shot
+	 * @param timeToLive miliseconds the particles will be displayed
+	 */
 	public void oneShot(View emiter, int numParticles, int timeToLive) {
 		oneShot(emiter, numParticles, timeToLive, new LinearInterpolator());
 	}
 	
+	/**
+     * Launches particles in one Shot using a special Interpolator
+	 * 
+	 * @param emiter View from which center the particles will be emited
+	 * @param numParticles number of particles launched on the one shot
+	 * @param timeToLive miliseconds the particles will be displayed
+	 * @param interpolator the interpolator for the time
+	 */
 	public void oneShot(View emiter, int numParticles, int timeToLive, Interpolator interpolator) {
 		configureEmiter(emiter);
 		
@@ -140,10 +174,36 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		mDrawingView.setParticles (mActiveParticles);
 		// We start a property animator that will call us to do the update
 		// Animate from 0 to timeToLiveMax
-		ValueAnimator animator = ValueAnimator.ofInt(new int[] {0, timeToLive});
-		animator.setDuration(timeToLive);
-		animator.addUpdateListener(this);
-		animator.addListener(this);
+		startAnimator(interpolator);
+	}
+
+	private void startAnimator(Interpolator interpolator) {
+		ValueAnimator animator = ValueAnimator.ofInt(new int[] {0, mTimeToLive});
+		animator.setDuration(mTimeToLive);
+		animator.addUpdateListener(new AnimatorUpdateListener() {			
+			@Override
+			public void onAnimationUpdate(ValueAnimator animation) {
+				int miliseconds = (Integer) animation.getAnimatedValue();
+				onUpdate(miliseconds);
+			}
+		});
+		animator.addListener(new AnimatorListener() {			
+			@Override
+			public void onAnimationStart(Animator animation) {}
+			
+			@Override
+			public void onAnimationRepeat(Animator animation) {}
+			
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				cleanupAnimation();
+			}
+			
+			@Override
+			public void onAnimationCancel(Animator animation) {
+				cleanupAnimation();				
+			}
+		});
 		animator.setInterpolator(interpolator);
 		animator.start();
 	}
@@ -168,12 +228,6 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		mActiveParticles.add(p);
 	}
 
-	@Override
-	public void onAnimationUpdate(ValueAnimator arg0) {
-		int miliseconds = (Integer)arg0.getAnimatedValue();
-		onUpdate(miliseconds);		
-	}
-
 	private void onUpdate(int miliseconds) {
 		if (!mParticles.isEmpty() && mActiveParticles.size() * mDelayBetweenParticles < miliseconds) {
 			// Activate a new particle
@@ -190,27 +244,10 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		mDrawingView.postInvalidate();
 	}
 
-	@Override
-	public void onAnimationCancel(Animator arg0) {
-		mParentView.removeView(mDrawingView);
-		mDrawingView = null;
-		mParentView.postInvalidate();
-	}
-
-	@Override
-	public void onAnimationEnd(Animator arg0) {
-		// Remove the view from the parent
+	private void cleanupAnimation() {
 		mParentView.removeView(mDrawingView);
 		mDrawingView = null;
 		mParentView.postInvalidate();
 		mParticles.addAll(mActiveParticles);
-	}
-
-	@Override
-	public void onAnimationRepeat(Animator arg0) {
-	}
-
-	@Override
-	public void onAnimationStart(Animator arg0) {
 	}
 }

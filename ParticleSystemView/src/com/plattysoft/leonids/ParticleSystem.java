@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 
 public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener {
 
@@ -85,6 +86,7 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		mParentView.getLocationInWindow(parentLocation);
 		float emiterX = location[0] + emiter.getWidth()/2 - parentLocation[0];
 		float emiterY = location[1] + emiter.getHeight()/2 - parentLocation[1];
+
 		Random r = new Random();
 		// We create particles based in the parameters
 		for (int i=0; i<numParticles && i<mMaxParticles; i++) {
@@ -92,7 +94,7 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 			int angle = r.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
 			float scale = r.nextFloat()*(mMaxScale-mMinScale) + mMinScale;
 			float rotationSpeed = r.nextFloat()*(mMaxRotation-mMinRotation) + mMinRotation;			
-			mParticles.get(i).configure(timeToLive, emiterX, emiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFinalAlpha);
+			mParticles.get(i).configure(timeToLive, emiterX, emiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd);
 		}
 		// Add a full size view to the parent view		
 		mDrawingView = new ParticleField(mParentView.getContext());
@@ -104,6 +106,7 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		animator.setDuration(timeToLive);
 		animator.addUpdateListener(this);
 		animator.addListener(this);
+		animator.setInterpolator(null);
 		animator.start();
 	}
 

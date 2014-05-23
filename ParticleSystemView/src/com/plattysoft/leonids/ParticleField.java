@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class ParticleField extends View {
+class ParticleField extends View {
 
 	private ArrayList<Particle> mParticles;
 
@@ -35,6 +35,4 @@ public class ParticleField extends View {
 			mParticles.get(i).draw(canvas);			
 		}
 	}
-
-
 }

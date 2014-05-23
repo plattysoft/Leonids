@@ -6,7 +6,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.view.animation.Interpolator;
 
-public class Particle {
+class Particle {
 
 	private Bitmap mImage;
 	

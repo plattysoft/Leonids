@@ -65,33 +65,38 @@ public class ParticleSystem {
 		}
 	}
 
-	public void setSpeed(float speed) {
-		setSpeedRange(speed, speed);
+	public ParticleSystem setSpeed(float speed) {
+		return setSpeedRange(speed, speed);
 	}
 	
-	public void setSpeedRange(float speedMin, float speedMax) {
+	public ParticleSystem setSpeedRange(float speedMin, float speedMax) {
 		mSpeedMin = speedMin;
 		mSpeedMax = speedMax;
+		return this;
 	}
 	
-	public void setAngleRange(int minAngle, int maxAngle) {
+	public ParticleSystem setAngleRange(int minAngle, int maxAngle) {
 		mMinAngle = minAngle;
 		mMaxAngle = maxAngle;
+		return this;
 	}
 	
-	public void setScaleRange(float minScale, float maxScale) {
+	public ParticleSystem setScaleRange(float minScale, float maxScale) {
 		mMinScale = minScale;
 		mMaxScale = maxScale;
+		return this;
 	}
 	
-	public void setRotationSpeed(float minRotationSpeed, float maxRotationSpeed) {
+	public ParticleSystem setRotationSpeed(float minRotationSpeed, float maxRotationSpeed) {
 		mMinRotation = minRotationSpeed;
 		mMaxRotation = maxRotationSpeed;
+		return this;
 	}
 	
-	public void setVelocity(float velocity, float angle) {
+	public ParticleSystem setVelocity(float velocity, float angle) {
 		mVelocity = velocity;
 		mVelocityAngle = angle;
+		return this;
 	}
 	
 	/**
@@ -100,9 +105,10 @@ public class ParticleSystem {
 	 * @param duration fade out duration in miliseconds
 	 * @param interpolator the interpolator for the fade out (default is linear)
 	 */
-	public void setFadeOut(long milisecondsBeforeEnd, Interpolator interpolator) {
+	public ParticleSystem setFadeOut(long milisecondsBeforeEnd, Interpolator interpolator) {
 		mMilisecondsBeforeEnd = milisecondsBeforeEnd;
 		mFadeOutInterpolator = interpolator;
+		return this;
 	}
 	
 	/**
@@ -110,8 +116,8 @@ public class ParticleSystem {
 	 * 
 	 * @param duration fade out duration in miliseconds
 	 */
-	public void setFadeOut(long duration) {
-		setFadeOut(duration, new LinearInterpolator());
+	public ParticleSystem setFadeOut(long duration) {
+		return setFadeOut(duration, new LinearInterpolator());
 	}
 	
 	/**

@@ -28,6 +28,9 @@ public class ExampleListActivity extends ListActivity {
 		case 2:
 			startActivity(new Intent(this, OneShotAdvancedExampleActivity.class));
 			break;
+		case 3:
+			startActivity(new Intent(this, EmiterSimpleExampleActivity.class));
+			break;
 		}
 	}
 

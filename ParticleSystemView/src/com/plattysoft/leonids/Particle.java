@@ -39,8 +39,12 @@ public class Particle {
 
 	private Interpolator mFadeOutInterpolator;
 
+	private int mStartingMilisecond;
+
 	public Particle(Bitmap image) {
 		mImage = image;
+		mMatrix = new Matrix();
+		mPaint = new Paint();
 	}
 
 	public void configure(long timeToLive, float emiterX, float emiterY, float speed, int angle, float scale, float rotationSpeed, float velocity, float velocityAngle, long fadeOutMiliseconds, Interpolator fadeOutInterpolator) {
@@ -61,22 +65,25 @@ public class Particle {
 		mScale = scale;
 		mTimeToLive = timeToLive;
 		// Scale the bitmap if scale != 1
-		mMatrix = new Matrix();
-		mPaint = new Paint();
 	}
 
-	public void update (long miliseconds) {
-		mCurrentX = mInitialX+mSpeedX*miliseconds+mVelocityX*miliseconds*miliseconds;
-		mCurrentY = mInitialY+mSpeedY*miliseconds+mVelocityY*miliseconds*miliseconds;
-		mRotation = mInitialRotation + mRotationSpeed*miliseconds/1000;
+	public boolean update (long miliseconds) {
+		long realMiliseconds = miliseconds - mStartingMilisecond;
+		mCurrentX = mInitialX+mSpeedX*realMiliseconds+mVelocityX*realMiliseconds*realMiliseconds;
+		mCurrentY = mInitialY+mSpeedY*realMiliseconds+mVelocityY*realMiliseconds*realMiliseconds;
+		mRotation = mInitialRotation + mRotationSpeed*realMiliseconds/1000;
 		// Alpha goes from 255 (no transparency) to 0 transparent		
-		if (mTimeToLive - miliseconds <= mMilisecondBeforeEndFade) {
-			float interpolaterdValue = mFadeOutInterpolator.getInterpolation((mTimeToLive - miliseconds)*1f/mMilisecondBeforeEndFade);
+		if (mMilisecondBeforeEndFade > 0 && mTimeToLive - realMiliseconds < mMilisecondBeforeEndFade) {
+			float interpolaterdValue = mFadeOutInterpolator.getInterpolation((mTimeToLive - realMiliseconds)*1f/mMilisecondBeforeEndFade);
 			mAlpha = (int) (interpolaterdValue*255);
 		}
 		else {
 			mAlpha = 255;
 		}
+		if (realMiliseconds > mTimeToLive) {
+			return false;
+		}
+		return true;
 	}
 	
 	public void draw (Canvas c) {
@@ -87,5 +94,10 @@ public class Particle {
 		
 		mPaint.setAlpha(mAlpha);		
 		c.drawBitmap(mImage, mMatrix, mPaint);
+	}
+
+	public Particle activate(int startingMilisecond) {
+		mStartingMilisecond = startingMilisecond;
+		return this;
 	}
 }

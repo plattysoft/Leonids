@@ -24,7 +24,7 @@ public class OneShotSimpleExampleActivity extends Activity implements OnClickLis
 		// Launch 2 particle systems one for each image
 		Drawable d = getResources().getDrawable(R.drawable.star_pink);
 		ParticleSystem ps = new ParticleSystem(this, 100, ((BitmapDrawable) d).getBitmap());		
-		ps.setSpeed(0.4f);
+		ps.setSpeedRange(0.2f, 0.5f);
 		ps.oneShot(arg0, 100, 800);
 	}
 

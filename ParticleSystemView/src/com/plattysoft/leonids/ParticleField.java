@@ -32,7 +32,7 @@ public class ParticleField extends View {
 		super.onDraw(canvas);
 		// Draw all the particles
 		for (int i=0; i<mParticles.size(); i++) {
-			mParticles.get(i).draw(canvas);
+			mParticles.get(i).draw(canvas);			
 		}
 	}
 

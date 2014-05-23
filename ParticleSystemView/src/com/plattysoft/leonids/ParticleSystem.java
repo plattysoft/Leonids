@@ -2,6 +2,8 @@ package com.plattysoft.leonids;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
@@ -16,8 +18,10 @@ import android.view.animation.LinearInterpolator;
 
 public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener {
 
+	private static final long TIMMERTASK_INTERVAL = 50;
 	private ViewGroup mParentView;
 	private int mMaxParticles;
+	private Random mRandom;
 	
 	private float mSpeedMin;
 	private float mSpeedMax;
@@ -40,8 +44,15 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 
 	private ArrayList<Particle> mParticles;
 	private ArrayList<Particle> mActiveParticles;
+	private int mEmiterX;
+	private int mEmiterY;
+	private int mTimeToLive;
+	private int mCurrentTime;
+	
+	private int mDelayBetweenParticles;
 
 	public ParticleSystem(Activity a, int maxParticles, Bitmap bitmap) {
+		mRandom = new Random();
 		mParentView = (ViewGroup) a.findViewById(android.R.id.content);
 		mMaxParticles = maxParticles;
 		// Create the particles
@@ -52,6 +63,10 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		}
 	}
 
+	public void setSpeed(float speed) {
+		setSpeedRange(speed, speed);
+	}
+	
 	public void setSpeedRange(float speedMin, float speedMax) {
 		mSpeedMin = speedMin;
 		mSpeedMax = speedMax;
@@ -86,28 +101,38 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		setFadeOut(milisecondsBeforeEnd, new LinearInterpolator());
 	}
 	
+	public void emit (View emiter, int particlesPerSecond, int timeToLive) {
+		// Setup emiter
+		configureEmiter(emiter);
+		mTimeToLive = timeToLive;
+		mDelayBetweenParticles = particlesPerSecond/1000;
+		// Add a full size view to the parent view		
+		mDrawingView = new ParticleField(mParentView.getContext());
+		mParentView.addView(mDrawingView);
+		
+		mDrawingView.setParticles (mActiveParticles);
+		mCurrentTime = 0;
+		Timer t = new Timer();
+		t.schedule(new TimerTask() {			
+			@Override
+			public void run() {
+				onUpdate(mCurrentTime);
+				mCurrentTime += TIMMERTASK_INTERVAL;
+			}
+		}, 0, TIMMERTASK_INTERVAL);
+	}
+	
 	public void oneShot(View emiter, int numParticles, int timeToLive) {
 		oneShot(emiter, numParticles, timeToLive, new LinearInterpolator());
 	}
 	
 	public void oneShot(View emiter, int numParticles, int timeToLive, Interpolator interpolator) {
-		int[] location = new int[2];
-		int[] parentLocation = new int[2];
-		emiter.getLocationInWindow(location);
-		mParentView.getLocationInWindow(parentLocation);
-		float emiterX = location[0] + emiter.getWidth()/2 - parentLocation[0];
-		float emiterY = location[1] + emiter.getHeight()/2 - parentLocation[1];
-
-		Random r = new Random();
+		configureEmiter(emiter);
+		
+		mTimeToLive = timeToLive;
 		// We create particles based in the parameters
 		for (int i=0; i<numParticles && i<mMaxParticles; i++) {
-			float speed = r.nextFloat()*(mSpeedMax-mSpeedMin) + mSpeedMin;
-			int angle = r.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
-			float scale = r.nextFloat()*(mMaxScale-mMinScale) + mMinScale;
-			float rotationSpeed = r.nextFloat()*(mMaxRotation-mMinRotation) + mMinRotation;			
-			Particle p = mParticles.remove(0);
-			p.configure(timeToLive, emiterX, emiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFadeOutInterpolator);
-			mActiveParticles.add(p);
+			activateParticle(0);
 		}
 		// Add a full size view to the parent view		
 		mDrawingView = new ParticleField(mParentView.getContext());
@@ -123,10 +148,44 @@ public class ParticleSystem implements AnimatorUpdateListener, AnimatorListener 
 		animator.start();
 	}
 
+	private void configureEmiter(View emiter) {
+		int[] location = new int[2];
+		int[] parentLocation = new int[2];
+		emiter.getLocationInWindow(location);
+		mParentView.getLocationInWindow(parentLocation);
+		mEmiterX = location[0] + emiter.getWidth()/2 - parentLocation[0];
+		mEmiterY = location[1] + emiter.getHeight()/2 - parentLocation[1];
+	}
+
+	private void activateParticle(int delay) {
+		Particle p = mParticles.remove(0);
+		float speed = mRandom.nextFloat()*(mSpeedMax-mSpeedMin) + mSpeedMin;
+		int angle = mRandom.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
+		float scale = mRandom.nextFloat()*(mMaxScale-mMinScale) + mMinScale;
+		float rotationSpeed = mRandom.nextFloat()*(mMaxRotation-mMinRotation) + mMinRotation;			
+		p.configure(mTimeToLive, mEmiterX, mEmiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFadeOutInterpolator);
+		p.activate(delay);
+		mActiveParticles.add(p);
+	}
+
 	@Override
 	public void onAnimationUpdate(ValueAnimator arg0) {
+		int miliseconds = (Integer)arg0.getAnimatedValue();
+		onUpdate(miliseconds);		
+	}
+
+	private void onUpdate(int miliseconds) {
+		if (!mParticles.isEmpty() && mActiveParticles.size() * mDelayBetweenParticles < miliseconds) {
+			// Activate a new particle
+			activateParticle(miliseconds);			
+		}
 		for (int i=0; i<mActiveParticles.size(); i++) {
-			mActiveParticles.get(i).update((Integer)arg0.getAnimatedValue());
+			boolean active = mActiveParticles.get(i).update(miliseconds);
+			if (!active) {
+				Particle p = mActiveParticles.remove(i);
+				i--; // Needed to keep the index at the right position
+				mParticles.add(p);
+			}
 		}
 		mDrawingView.postInvalidate();
 	}

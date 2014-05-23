@@ -27,6 +27,7 @@
         <activity android:name="com.plattysoft.leonids.examples.OneShotIntermediateExampleActivity" />
         <activity android:name="com.plattysoft.leonids.examples.OneShotAdvancedExampleActivity" />
         <activity android:name="com.plattysoft.leonids.examples.EmiterSimpleExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.EmiterIntermediateExampleActivity" />
     </application>
 
 </manifest>

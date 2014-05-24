@@ -265,7 +265,9 @@ public class ParticleSystem {
 	}
 
 	private void onUpdate(int miliseconds) {
-		while (mEmitingTime > 0 && miliseconds < mEmitingTime && !mParticles.isEmpty() && mActivatedParticles < mParticlesPerMilisecond*miliseconds) {
+		while (((mEmitingTime > 0 && miliseconds < mEmitingTime)|| mEmitingTime == -1) && // This point should emit
+				 !mParticles.isEmpty() && // We have particles in the pool 
+				 mActivatedParticles < mParticlesPerMilisecond*miliseconds) { // and we are under the number of particles that should be launched
 			// Activate a new particle
 			activateParticle(miliseconds);			
 		}

@@ -15,12 +15,12 @@ class Particle {
 	private float mCurrentX;
 	private float mCurrentY;
 	
-	float mScale = 1;
+	float mScale = 1f;
 	int mAlpha;
 	
-	float mInitialRotation = 0;
+	float mInitialRotation = 0f;
 	
-	float mRotationSpeed = 0;
+	float mRotationSpeed = 0f;
 	
 	private float mSpeedX;
 	private float mSpeedY;

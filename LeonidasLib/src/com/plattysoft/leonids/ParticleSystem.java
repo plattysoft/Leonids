@@ -29,8 +29,6 @@ public class ParticleSystem {
 	
 	private int mMinAngle = 0;
 	private int mMaxAngle = 360;
-	private float mMinScale = 1.0f;
-	private float mMaxScale = 1.0f;
 
 	private ParticleField mDrawingView;
 

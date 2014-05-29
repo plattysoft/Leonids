@@ -12,8 +12,9 @@ public class ExampleListActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		String sampleList[] = new String [] {"One Shot Simple", "One Shot Intermediate", "One Shot Advanced", 
+		String sampleList[] = new String [] {"One Shot Simple", "One Shot Advanced", 
 				"Emiter Simple", "Emiter Intermediate", "Emiter Time Limited"
+				, "Fireworks"
 				, "Confetti"
 //				, "Animated Particles"
 				};
@@ -27,19 +28,19 @@ public class ExampleListActivity extends ListActivity {
 			startActivity(new Intent(this, OneShotSimpleExampleActivity.class));
 			break;
 		case 1:
-			startActivity(new Intent(this, OneShotIntermediateExampleActivity.class));
-			break;
-		case 2:
 			startActivity(new Intent(this, OneShotAdvancedExampleActivity.class));
 			break;
-		case 3:
+		case 2:
 			startActivity(new Intent(this, EmiterSimpleExampleActivity.class));
 			break;
-		case 4:
+		case 3:
 			startActivity(new Intent(this, EmiterIntermediateExampleActivity.class));
 			break;
-		case 5:
+		case 4:
 			startActivity(new Intent(this, EmiterTimeLimitedExampleActivity.class));
+			break;
+		case 5:
+			startActivity(new Intent(this, FireworksExampleActivity.class));
 			break;
 		case 6:
 			startActivity(new Intent(this, ConfettiExampleActivity.class));

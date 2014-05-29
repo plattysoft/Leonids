@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AccelerateInterpolator;
 
-public class OneShotIntermediateExampleActivity extends Activity implements OnClickListener {
+public class FireworksExampleActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +26,16 @@ public class OneShotIntermediateExampleActivity extends Activity implements OnCl
 		ParticleSystem ps = new ParticleSystem(this, 100, ((BitmapDrawable) d).getBitmap());
 		ps.setScaleRange(0.7f, 1.3f);
 		ps.setSpeedRange(0.2f, 0.5f);
+		ps.setRotationSpeed(90, 180);
 		ps.setFadeOut(200, new AccelerateInterpolator());
-		ps.oneShot(arg0, 100, 800);
+		ps.oneShot(arg0, 70, 800);
+		d = getResources().getDrawable(R.drawable.star_white);
+		ParticleSystem ps2 = new ParticleSystem(this, 100, ((BitmapDrawable) d).getBitmap());
+		ps2.setScaleRange(0.7f, 1.3f);
+		ps2.setSpeedRange(0.2f, 0.5f);
+		ps.setRotationSpeed(90, 180);
+		ps2.setFadeOut(200, new AccelerateInterpolator());
+		ps2.oneShot(arg0, 70, 800);
 	}
 
 }

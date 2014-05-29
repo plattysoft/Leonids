@@ -41,6 +41,9 @@ class Particle {
 
 	private int mStartingMilisecond;
 
+	private int mBitmapHalfWidth;
+	private int mBitmapHalfHeight;
+
 	public Particle(Bitmap image) {
 		mImage = image;
 		mMatrix = new Matrix();
@@ -51,10 +54,13 @@ class Particle {
 		float angleInRads = (float) (angle*Math.PI/180f);
 		float velocityAngleInRads = (float) (velocityAngle*Math.PI/180f);
 		
+		mBitmapHalfWidth = mImage.getWidth()/2;
+		mBitmapHalfHeight = mImage.getHeight()/2;
+		
 		mCurrentX = emiterX;
 		mCurrentY = emiterY;
-		mInitialX = emiterX - mImage.getWidth()/2*scale;
-		mInitialY = emiterY - mImage.getHeight()/2*scale;
+		mInitialX = emiterX - mBitmapHalfWidth/2*scale;
+		mInitialY = emiterY - mBitmapHalfHeight/2*scale;
 		mSpeedX = (float) (speed * Math.cos(angleInRads));
 		mSpeedY = (float) (speed * Math.sin(angleInRads));
 		mVelocityX = (float) (velocity * Math.cos(velocityAngleInRads));
@@ -88,8 +94,8 @@ class Particle {
 	
 	public void draw (Canvas c) {
 		mMatrix.reset();
+		mMatrix.postRotate(mRotation, mBitmapHalfWidth, mBitmapHalfHeight);
 		mMatrix.postScale(mScale, mScale);
-		mMatrix.postRotate(mRotation);
 		mMatrix.postTranslate(mCurrentX, mCurrentY);
 		
 		mPaint.setAlpha(mAlpha);		

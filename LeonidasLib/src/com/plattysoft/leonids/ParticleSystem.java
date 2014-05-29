@@ -255,7 +255,13 @@ public class ParticleSystem {
 	private void activateParticle(int delay) {
 		Particle p = mParticles.remove(0);
 		float speed = mRandom.nextFloat()*(mSpeedMax-mSpeedMin) + mSpeedMin;
-		int angle = mRandom.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
+		int angle;
+		if (mMaxAngle == mMinAngle) {
+			angle = mMinAngle;
+		}
+		else {
+			angle = mRandom.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
+		}
 		float scale = mRandom.nextFloat()*(mMaxScale-mMinScale) + mMinScale;
 		float rotationSpeed = mRandom.nextFloat()*(mMaxRotation-mMinRotation) + mMinRotation;			
 		p.configure(mTimeToLive, mEmiterX, mEmiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFadeOutInterpolator);

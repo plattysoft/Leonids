@@ -1,5 +1,7 @@
 package com.plattysoft.leonids;
 
+import java.util.List;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -12,7 +14,10 @@ class Particle {
 	
 	private float mCurrentX;
 	private float mCurrentY;
-	private float mScale;
+	
+	float mScale;
+	int mAlpha;
+	
 	private float mSpeedX;
 	private float mSpeedY;
 
@@ -33,7 +38,6 @@ class Particle {
 	private float mVelocityY;
 
 	private long mMilisecondBeforeEndFade;
-	private int mAlpha;
 
 	private long mTimeToLive;
 
@@ -43,6 +47,8 @@ class Particle {
 
 	private int mBitmapHalfWidth;
 	private int mBitmapHalfHeight;
+
+	private List<ParticleModifier> mModifiers;
 
 	public Particle(Bitmap image) {
 		mImage = image;
@@ -89,6 +95,9 @@ class Particle {
 		if (realMiliseconds > mTimeToLive) {
 			return false;
 		}
+		for (int i=0; i<mModifiers.size(); i++) {
+			mModifiers.get(i).apply(this, realMiliseconds, mTimeToLive);
+		}
 		return true;
 	}
 	
@@ -102,8 +111,10 @@ class Particle {
 		c.drawBitmap(mImage, mMatrix, mPaint);
 	}
 
-	public Particle activate(int startingMilisecond) {
+	public Particle activate(int startingMilisecond, List<ParticleModifier> modifiers) {
 		mStartingMilisecond = startingMilisecond;
+		// We do store a reference to the list, there is no need to copy, since the modifiers do not carte about states 
+		mModifiers = modifiers;
 		return this;
 	}
 }

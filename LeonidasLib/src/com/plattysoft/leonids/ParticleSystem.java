@@ -1,6 +1,7 @@
 package com.plattysoft.leonids;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,10 +53,13 @@ public class ParticleSystem {
 	private float mParticlesPerMilisecond;
 	private int mActivatedParticles;
 	private int mEmitingTime;
+	
+	private List<ParticleModifier> mModifiers;
 
 	public ParticleSystem(Activity a, int maxParticles, Bitmap bitmap) {
 		mRandom = new Random();
 		mParentView = (ViewGroup) a.findViewById(android.R.id.content);
+		mModifiers = new ArrayList<ParticleModifier>();
 		mMaxParticles = maxParticles;
 		// Create the particles
 		mActiveParticles = new ArrayList<Particle>(); 
@@ -65,6 +69,17 @@ public class ParticleSystem {
 		}
 	}
 
+	/**
+	 * Adds a modifier to the Particle system, it will be executed on each update.
+	 * 
+	 * @param modifier
+	 * @return
+	 */
+	public ParticleSystem addModifier(ParticleModifier modifier) {
+		mModifiers.add(modifier);
+		return this;
+	}
+	
 	public ParticleSystem setSpeed(float speed) {
 		return setSpeedRange(speed, speed);
 	}
@@ -78,6 +93,21 @@ public class ParticleSystem {
 	public ParticleSystem setAngleRange(int minAngle, int maxAngle) {
 		mMinAngle = minAngle;
 		mMaxAngle = maxAngle;
+		// Make sure the angles are in the [0-360) range
+		while (mMinAngle < 0) {
+			mMinAngle+=360;
+		}
+		mMinAngle = mMinAngle%360;
+		while (mMaxAngle < 0) {
+			mMaxAngle+=360;
+		}
+		mMaxAngle = mMaxAngle%360;
+		// Also make sure that mMinAngle is the smaller
+		if (mMinAngle > mMaxAngle) {
+			int tmp = mMinAngle;
+			mMinAngle = mMaxAngle;
+			mMaxAngle = tmp;
+		}
 		return this;
 	}
 	
@@ -265,7 +295,7 @@ public class ParticleSystem {
 		float scale = mRandom.nextFloat()*(mMaxScale-mMinScale) + mMinScale;
 		float rotationSpeed = mRandom.nextFloat()*(mMaxRotation-mMinRotation) + mMinRotation;			
 		p.configure(mTimeToLive, mEmiterX, mEmiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFadeOutInterpolator);
-		p.activate(delay);
+		p.activate(delay, mModifiers);
 		mActiveParticles.add(p);
 		mActivatedParticles++;
 	}

@@ -14,6 +14,7 @@ public class ExampleListActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		String sampleList[] = new String [] {"One Shot Simple", "One Shot Intermediate", "One Shot Advanced", 
 				"Emiter Simple", "Emiter Intermediate", "Emiter Time Limited"
+				, "Confetti"
 //				, "Animated Particles"
 				};
 		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sampleList));
@@ -39,6 +40,9 @@ public class ExampleListActivity extends ListActivity {
 			break;
 		case 5:
 			startActivity(new Intent(this, EmiterTimeLimitedExampleActivity.class));
+			break;
+		case 6:
+			startActivity(new Intent(this, ConfettiExampleActivity.class));
 			break;
 		}
 	}

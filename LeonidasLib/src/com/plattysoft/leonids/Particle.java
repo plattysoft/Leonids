@@ -15,11 +15,12 @@ class Particle {
 	private float mCurrentX;
 	private float mCurrentY;
 	
-	float mScale;
+	float mScale = 1;
 	int mAlpha;
 	
-	
 	float mInitialRotation = 0;
+	
+	float mRotationSpeed = 0;
 	
 	private float mSpeedX;
 	private float mSpeedY;
@@ -32,7 +33,6 @@ class Particle {
 
 	private float mInitialY;
 
-	private float mRotationSpeed = 0;
 
 	private float mRotation;
 
@@ -58,7 +58,7 @@ class Particle {
 		mPaint = new Paint();
 	}
 
-	public void configure(long timeToLive, float emiterX, float emiterY, float speed, int angle, float scale, float rotationSpeed, float velocity, float velocityAngle, long fadeOutMiliseconds, Interpolator fadeOutInterpolator) {
+	public void configure(long timeToLive, float emiterX, float emiterY, float speed, int angle, float velocity, float velocityAngle, long fadeOutMiliseconds, Interpolator fadeOutInterpolator) {
 		float angleInRads = (float) (angle*Math.PI/180f);
 		float velocityAngleInRads = (float) (velocityAngle*Math.PI/180f);
 		
@@ -67,16 +67,14 @@ class Particle {
 		
 		mCurrentX = emiterX;
 		mCurrentY = emiterY;
-		mInitialX = emiterX - mBitmapHalfWidth/2*scale;
-		mInitialY = emiterY - mBitmapHalfHeight/2*scale;
+		mInitialX = emiterX - mBitmapHalfWidth/2*mScale;
+		mInitialY = emiterY - mBitmapHalfHeight/2*mScale;
 		mSpeedX = (float) (speed * Math.cos(angleInRads));
 		mSpeedY = (float) (speed * Math.sin(angleInRads));
 		mVelocityX = (float) (velocity * Math.cos(velocityAngleInRads));
 		mVelocityY = (float) (velocity * Math.sin(velocityAngleInRads));
-		mRotationSpeed = rotationSpeed;
 		mMilisecondBeforeEndFade = fadeOutMiliseconds;
 		mFadeOutInterpolator = fadeOutInterpolator;
-		mScale = scale;
 		mTimeToLive = timeToLive;
 		// Scale the bitmap if scale != 1
 	}

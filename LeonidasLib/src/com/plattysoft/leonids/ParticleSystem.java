@@ -37,9 +37,6 @@ public class ParticleSystem {
 	private long mMilisecondsBeforeEnd = 0;
 	private Interpolator mFadeOutInterpolator = new LinearInterpolator();
 
-	private float mMinRotation = 0;
-	private float mMaxRotation = 0;
-
 	private float mVelocity = 0;
 	private float mVelocityAngle = 0;
 
@@ -88,7 +85,7 @@ public class ParticleSystem {
 		return setSpeedRange(speed, speed);
 	}
 	
-	public ParticleSystem setSpeedRange(float speedMin, float speedMax) {
+	public ParticleSystem setSpeedRange(float speedMin, float speedMax) {		
 		mSpeedMin = speedMin;
 		mSpeedMax = speedMax;
 		return this;
@@ -121,14 +118,12 @@ public class ParticleSystem {
 	}
 	
 	public ParticleSystem setScaleRange(float minScale, float maxScale) {
-		mMinScale = minScale;
-		mMaxScale = maxScale;
+		mInitializers.add(new ScaleInitializer(minScale, maxScale));
 		return this;
 	}
 	
 	public ParticleSystem setRotationSpeed(float minRotationSpeed, float maxRotationSpeed) {
-		mMinRotation = minRotationSpeed;
-		mMaxRotation = maxRotationSpeed;
+		mInitializers.add(new RotationSpeedInitializer(minRotationSpeed, maxRotationSpeed));
 		return this;
 	}
 	
@@ -301,12 +296,11 @@ public class ParticleSystem {
 		else {
 			angle = mRandom.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
 		}
-		float scale = mRandom.nextFloat()*(mMaxScale-mMinScale) + mMinScale;
-		float rotationSpeed = mRandom.nextFloat()*(mMaxRotation-mMinRotation) + mMinRotation;			
-		p.configure(mTimeToLive, mEmiterX, mEmiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFadeOutInterpolator);
+		// Initialization goes before configuration, scale is required before can be configured properly
 		for (int i=0; i<mInitializers.size(); i++) {
 			mInitializers.get(i).initParticle(p, mRandom);
 		}
+		p.configure(mTimeToLive, mEmiterX, mEmiterY, speed, angle, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFadeOutInterpolator);
 		p.activate(delay, mModifiers);
 		mActiveParticles.add(p);
 		mActivatedParticles++;

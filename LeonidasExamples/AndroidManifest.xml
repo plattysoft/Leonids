@@ -30,6 +30,7 @@
         <activity android:name="com.plattysoft.leonids.examples.EmiterIntermediateExampleActivity" />
         <activity android:name="com.plattysoft.leonids.examples.EmiterTimeLimitedExampleActivity" />
         <activity android:name="com.plattysoft.leonids.examples.ConfettiExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.DustExampleActivity" />
     </application>
 
 </manifest>

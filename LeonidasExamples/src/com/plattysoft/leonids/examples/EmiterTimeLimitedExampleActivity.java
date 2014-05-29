@@ -24,7 +24,7 @@ public class EmiterTimeLimitedExampleActivity extends Activity implements OnClic
 		Drawable d = getResources().getDrawable(R.drawable.star_pink);
 		ParticleSystem ps = new ParticleSystem(this, 100, ((BitmapDrawable) d).getBitmap());
 		ps.setScaleRange(0.7f, 1.3f);
-		ps.setAngleRange(0, 180);
+		ps.setSpeedAngleRange(0, 180);
 		ps.setSpeedRange(0.2f, 0.5f);
 		ps.setRotationSpeed(90, 180);
 		ps.setVelocity(0.0004f, 90);

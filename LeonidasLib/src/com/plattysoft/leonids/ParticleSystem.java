@@ -55,11 +55,15 @@ public class ParticleSystem {
 	private int mEmitingTime;
 	
 	private List<ParticleModifier> mModifiers;
+	private List<ParticleInitializer> mInitializers;
 
 	public ParticleSystem(Activity a, int maxParticles, Bitmap bitmap) {
 		mRandom = new Random();
 		mParentView = (ViewGroup) a.findViewById(android.R.id.content);
+		
 		mModifiers = new ArrayList<ParticleModifier>();
+		mInitializers = new ArrayList<ParticleInitializer>();
+		
 		mMaxParticles = maxParticles;
 		// Create the particles
 		mActiveParticles = new ArrayList<Particle>(); 
@@ -90,7 +94,7 @@ public class ParticleSystem {
 		return this;
 	}
 	
-	public ParticleSystem setAngleRange(int minAngle, int maxAngle) {
+	public ParticleSystem setSpeedAngleRange(int minAngle, int maxAngle) {
 		mMinAngle = minAngle;
 		mMaxAngle = maxAngle;
 		// Make sure the angles are in the [0-360) range
@@ -108,6 +112,11 @@ public class ParticleSystem {
 			mMinAngle = mMaxAngle;
 			mMaxAngle = tmp;
 		}
+		return this;
+	}
+	
+	public ParticleSystem setInitialRotationRange (int minAngle, int maxAngle) {
+		mInitializers.add(new RotationInitiazer(minAngle, maxAngle));
 		return this;
 	}
 	
@@ -295,6 +304,9 @@ public class ParticleSystem {
 		float scale = mRandom.nextFloat()*(mMaxScale-mMinScale) + mMinScale;
 		float rotationSpeed = mRandom.nextFloat()*(mMaxRotation-mMinRotation) + mMinRotation;			
 		p.configure(mTimeToLive, mEmiterX, mEmiterY, speed, angle, scale, rotationSpeed, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFadeOutInterpolator);
+		for (int i=0; i<mInitializers.size(); i++) {
+			mInitializers.get(i).initParticle(p, mRandom);
+		}
 		p.activate(delay, mModifiers);
 		mActiveParticles.add(p);
 		mActivatedParticles++;

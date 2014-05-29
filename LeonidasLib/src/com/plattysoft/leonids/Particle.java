@@ -18,6 +18,9 @@ class Particle {
 	float mScale;
 	int mAlpha;
 	
+	
+	float mInitialRotation = 0;
+	
 	private float mSpeedX;
 	private float mSpeedY;
 
@@ -30,7 +33,6 @@ class Particle {
 	private float mInitialY;
 
 	private float mRotationSpeed = 0;
-	private float mInitialRotation = 0;
 
 	private float mRotation;
 
@@ -96,7 +98,7 @@ class Particle {
 			return false;
 		}
 		for (int i=0; i<mModifiers.size(); i++) {
-			mModifiers.get(i).apply(this, realMiliseconds, mTimeToLive);
+			mModifiers.get(i).apply(this, realMiliseconds);
 		}
 		return true;
 	}

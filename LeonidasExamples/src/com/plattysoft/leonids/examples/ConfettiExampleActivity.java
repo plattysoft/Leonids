@@ -22,7 +22,7 @@ public class ConfettiExampleActivity extends Activity implements OnClickListener
 	public void onClick(View arg0) {
 		Drawable confetti2 = getResources().getDrawable(R.drawable.confeti2);
 		ParticleSystem ps = new ParticleSystem(this, 80, ((BitmapDrawable) confetti2).getBitmap());
-		ps.setAngleRange(180, 180);
+		ps.setSpeedAngleRange(180, 180);
 		ps.setSpeedRange(0f, 0.3f);
 		ps.setRotationSpeed(144, 144);
 		ps.setVelocity(0.00005f, 90);		
@@ -30,7 +30,7 @@ public class ConfettiExampleActivity extends Activity implements OnClickListener
 		
 		Drawable confetti3 = getResources().getDrawable(R.drawable.confeti3);
 		ParticleSystem ps2 = new ParticleSystem(this, 80, ((BitmapDrawable) confetti3).getBitmap());
-		ps2.setAngleRange(0, 0);
+		ps2.setSpeedAngleRange(0, 0);
 		ps2.setSpeedRange(0f, 0.3f);
 		ps2.setRotationSpeed(144, 144);
 		ps2.setVelocity(0.00005f, 90);		

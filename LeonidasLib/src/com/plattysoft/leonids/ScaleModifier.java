@@ -6,20 +6,20 @@ public class ScaleModifier implements ParticleModifier {
 	private float mFinalValue;
 	private long mEndTime;
 	private long mStartTime;
-	private long mDuration;
+	private float mValueIncrement;
 
 	public ScaleModifier (float initialValue, float finalValue, long startMilis, long endMilis) {
 		mInitialValue = initialValue;
 		mFinalValue = finalValue;
 		mStartTime = startMilis;
 		mEndTime = endMilis;
-		mDuration = endMilis - startMilis;
+		mValueIncrement = (mFinalValue-mInitialValue)/(endMilis - startMilis);
 	}
 	
 	@Override
-	public void apply(Particle particle, long miliseconds, long timeToLive) {
+	public void apply(Particle particle, long miliseconds) {
 		if (miliseconds > mStartTime && miliseconds < mEndTime) {			
-			float newScale = mInitialValue + mFinalValue*(miliseconds-mStartTime)/mDuration;
+			float newScale = mInitialValue + mValueIncrement*(miliseconds-mStartTime);
 			particle.mScale = newScale;
 		}
 	}

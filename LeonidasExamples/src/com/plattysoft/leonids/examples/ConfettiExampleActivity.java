@@ -24,7 +24,7 @@ public class ConfettiExampleActivity extends Activity implements OnClickListener
 		ParticleSystem ps = new ParticleSystem(this, 80, ((BitmapDrawable) confetti2).getBitmap());
 		ps.setAngleRange(180, 180);
 		ps.setSpeedRange(0f, 0.3f);
-		ps.setRotationSpeed(0, 180);
+		ps.setRotationSpeed(144, 144);
 		ps.setVelocity(0.00005f, 90);		
 		ps.emit(findViewById(R.id.emiter_top_right), 8, 10000);
 		
@@ -32,7 +32,7 @@ public class ConfettiExampleActivity extends Activity implements OnClickListener
 		ParticleSystem ps2 = new ParticleSystem(this, 80, ((BitmapDrawable) confetti3).getBitmap());
 		ps2.setAngleRange(0, 0);
 		ps2.setSpeedRange(0f, 0.3f);
-		ps2.setRotationSpeed(0, 180);
+		ps2.setRotationSpeed(144, 144);
 		ps2.setVelocity(0.00005f, 90);		
 		ps2.emit(findViewById(R.id.emiter_top_left), 8, 10000);
 	}

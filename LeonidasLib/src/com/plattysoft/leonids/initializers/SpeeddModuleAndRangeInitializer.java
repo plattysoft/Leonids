@@ -20,11 +20,9 @@ public class SpeeddModuleAndRangeInitializer implements ParticleInitializer {
 		while (mMinAngle < 0) {
 			mMinAngle+=360;
 		}
-		mMinAngle = mMinAngle%360;
 		while (mMaxAngle < 0) {
 			mMaxAngle+=360;
 		}
-		mMaxAngle = mMaxAngle%360;
 		// Also make sure that mMinAngle is the smaller
 		if (mMinAngle > mMaxAngle) {
 			int tmp = mMinAngle;

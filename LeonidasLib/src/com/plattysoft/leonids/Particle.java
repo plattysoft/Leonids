@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.util.Log;
 
 public class Particle {
 
@@ -57,10 +58,11 @@ public class Particle {
 		mBitmapHalfWidth = mImage.getWidth()/2;
 		mBitmapHalfHeight = mImage.getHeight()/2;
 		
-		mCurrentX = emiterX;
-		mCurrentY = emiterY;
 		mInitialX = emiterX - mBitmapHalfWidth;
 		mInitialY = emiterY - mBitmapHalfHeight;
+		mCurrentX = mInitialX;
+		mCurrentY = mInitialY;
+		
 		mTimeToLive = timeToLive;
 	}
 
@@ -81,9 +83,9 @@ public class Particle {
 	public void draw (Canvas c) {
 		mMatrix.reset();
 		mMatrix.postRotate(mRotation, mBitmapHalfWidth, mBitmapHalfHeight);
-		mMatrix.postScale(mScale, mScale);
+		mMatrix.postScale(mScale, mScale, mBitmapHalfWidth, mBitmapHalfHeight);
 		mMatrix.postTranslate(mCurrentX, mCurrentY);
-		
+		Log.d("Draw", "scale:"+mScale+", (x,y)"+mCurrentX+", "+mCurrentY);
 		mPaint.setAlpha(mAlpha);		
 		c.drawBitmap(mImage, mMatrix, mPaint);
 	}

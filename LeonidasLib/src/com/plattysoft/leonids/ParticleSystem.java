@@ -14,7 +14,7 @@ import com.plattysoft.leonids.initializers.SpeeddByComponentsInitializer;
 import com.plattysoft.leonids.initializers.SpeeddModuleAndRangeInitializer;
 import com.plattysoft.leonids.modifiers.AlphaModifier;
 import com.plattysoft.leonids.modifiers.ParticleModifier;
-import com.plattysoft.leonids.modifiers.VelocityModifier;
+import com.plattysoft.leonids.modifiers.AccelerationModifier;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
@@ -182,8 +182,8 @@ public class ParticleSystem {
 		return this;
 	}
 	
-	public ParticleSystem setVelocity(float velocity, float angle) {
-		mModifiers.add(new VelocityModifier(velocity, angle));
+	public ParticleSystem setAcceleration(float acceleration, float angle) {
+		mModifiers.add(new AccelerationModifier(acceleration, angle));
 		return this;
 	}
 	

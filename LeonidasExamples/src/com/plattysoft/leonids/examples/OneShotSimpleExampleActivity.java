@@ -1,14 +1,11 @@
 package com.plattysoft.leonids.examples;
 
-import com.plattysoft.leonids.examples.R;
-import com.plattysoft.leonids.ParticleSystem;
-
-import android.os.Bundle;
 import android.app.Activity;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import com.plattysoft.leonids.ParticleSystem;
 
 public class OneShotSimpleExampleActivity extends Activity implements OnClickListener {
 
@@ -21,8 +18,7 @@ public class OneShotSimpleExampleActivity extends Activity implements OnClickLis
 
 	@Override
 	public void onClick(View arg0) {
-		Drawable d = getResources().getDrawable(R.drawable.star_pink);
-		ParticleSystem ps = new ParticleSystem(this, 100, d);		
+		ParticleSystem ps = new ParticleSystem(this, 100, R.drawable.star_pink);		
 		ps.setSpeedRange(0.2f, 0.5f);
 		ps.oneShot(arg0, 100, 800);
 	}

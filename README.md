@@ -60,6 +60,17 @@ It uses an initializer for the Speed as module and angle ranges, a fixed speed r
 
 ## Available Methods
 
+List of the methods available on the class ParticleSystem.
+
+### Constructors
+
+* _ParticleSystem(Activity a, int maxParticles, int drawableRedId, long timeToLive)_: Creates a particle system based on a drawable resource. Avilable resources are Bitmaps (BitmapDrawable) and Animations (AnimationDrawable)
+* _ParticleSystem(Activity a, int maxParticles, Drawable drawable, long timeToLive)_: Creates a particle system based on a drawable. Avilable drawables are Bitmaps (BitmapDrawable) and Animations (AnimationDrawable)
+* _ParticleSystem(Activity a, int maxParticles, Bitmap bitmap, long timeToLive)_: Creates a particle system based on a Bitmap.
+* _ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation, long timeToLive)_: Creates a particle system based on an AnimationDrawable.
+
+### Configuration
+
 Available methods on the Particle system for configuration are:
 
 * _setSpeedRange(float speedMin, float speedMax)_: Uses 0-360 as the angle range
@@ -79,6 +90,16 @@ For more complex modifiers, you can use the method _addModifier(ParticleModifier
 * _AlphaModifier (int initialValue, int finalValue, long startMilis, long endMilis, Interpolator interpolator)_
 * _ScaleModifier (float initialValue, float finalValue, long startMilis, long endMilis)_
 * _ScaleModifier (float initialValue, float finalValue, long startMilis, long endMilis, Interpolator interpolator)_
+
+### One shot
+
+* _oneShot(View emiter, int numParticles)_: Makes one shot on numParticles particles using the emitter view.
+* _oneShot(View emiter, int numParticles, Interpolator interpolator)_: Makes one shot on numParticles particles using the emitter view, time is interpolated using the interpolator.
+
+### Emitters
+
+* _emit (View emiter, int particlesPerSecond)_: Emits the number of particles per second from the emitter.
+* _emit (View emiter, int particlesPerSecond, int emitingTime)_: Emits the number of particles per second from the emiter dutin the emiting time.
 
 ## Other details
 

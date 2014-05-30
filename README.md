@@ -31,4 +31,57 @@ Then you configure the particle system. In this case we specify that the particl
 
 Finally, we call oneShot, passing the view from which the particles will be launched and saying how many particles we want to be shot.
 
-[Check the wiki for more details](https://github.com/plattysoft/Leonids/wiki/How-to-use-Leonids).
+![](http://www.plattysoft.com/wp-content/uploads/2014/05/Leonids_one_shot.gif)
+
+## Emitters
+
+You can configure emitters, which have a constant ratio of particles being emited per second.
+This is the code for the Confeti example:
+
+```java
+new ParticleSystem(this, 80, R.drawable.confeti2, 10000)
+.setSpeedModuleAndAngleRange(0f, 0.3f, 180, 180)
+.setRotationSpeed(144)
+.setAcceleration(0.00005f, 90)
+.emit(findViewById(R.id.emiter_top_right), 8);
+
+new ParticleSystem(this, 80, R.drawable.confeti3, 10000)
+.setSpeedModuleAndAngleRange(0f, 0.3f, 0, 0)
+.setRotationSpeed(144)
+.setAcceleration(0.00005f, 90)
+.emit(findViewById(R.id.emiter_top_left), 8);
+```
+
+It uses an initializer for the Speed as module and angle ranges, a fixed speed rotaion and extenal acceleration.
+
+![](http://www.plattysoft.com/wp-content/uploads/2014/05/leonids_confeti.gif)
+
+## Available Methods
+
+Available methods on the Particle system for configuration are:
+
+* _setSpeedRange(float speedMin, float speedMax)_: Uses 0-360 as the angle range
+* _setSpeedModuleAndAngleRange(float speedMin, float speedMax, int minAngle, int maxAngle)_
+* _setSpeedByComponentsRange(float speedMinX, float speedMaxX, float speedMinY, float speedMaxY)_
+* _setInitialRotationRange (int minAngle, int maxAngle)_
+* _setScaleRange(float minScale, float maxScale)_
+* _setRotationSpeed(float rotationSpeed)_
+* _setRotationSpeedRange(float minRotationSpeed, float maxRotationSpeed)_
+* _setAcceleration(float acceleration, float angle)_
+* _setFadeOut(long milisecondsBeforeEnd, Interpolator interpolator)_: Utility method for a simple fade out effect using an interpolator
+* _setFadeOut(long duration)_:Utility method for a simple fade out
+
+For more complex modifiers, you can use the method _addModifier(ParticleModifier modifier)_. Available modifiers are:
+
+* _AlphaModifier (int initialValue, int finalValue, long startMilis, long endMilis)_
+* _AlphaModifier (int initialValue, int finalValue, long startMilis, long endMilis, Interpolator interpolator)_
+* _ScaleModifier (float initialValue, float finalValue, long startMilis, long endMilis)_
+* _ScaleModifier (float initialValue, float finalValue, long startMilis, long endMilis, Interpolator interpolator)_
+
+## Other details
+
+Leonids requires minSDK 11 because it uses ValueAnimators. It should be very easy, however to use the compatibility library and make it work on Gingerbread.
+
+The library is Free Software, you can use it, extended with no requirement to open source your changes. You can also make paid apps using it.
+
+Each Particle System only uses one image for the particles. If you want different particles to be emitted, you need to create a Particle System for each one of them.

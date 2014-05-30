@@ -116,7 +116,7 @@ public class ParticleSystem {
 		return this;
 	}
 	
-	public ParticleSystem setSpeedRange(float speedMin, float speedMax) {
+	public ParticleSystem setSpeedRange(float speedMin, float speedMax) { 
 		mInitializers.add(new SpeeddModuleAndRangeInitializer(speedMin, speedMax, 0, 360));		
 		return this;
 	}

@@ -1,8 +1,8 @@
 package com.plattysoft.leonids.examples;
 
-import com.plattysoft.leonids.AlphaModifier;
+import com.plattysoft.leonids.modifiers.AlphaModifier;
 import com.plattysoft.leonids.ParticleSystem;
-import com.plattysoft.leonids.ScaleModifier;
+import com.plattysoft.leonids.modifiers.ScaleModifier;
 
 import android.app.Activity;
 import android.graphics.drawable.BitmapDrawable;
@@ -24,8 +24,7 @@ public class DustExampleActivity extends Activity implements OnClickListener {
 	public void onClick(View arg0) {
 		Drawable confetti2 = getResources().getDrawable(R.drawable.dust);
 		ParticleSystem ps = new ParticleSystem(this, 4, ((BitmapDrawable) confetti2).getBitmap());
-		ps.setSpeedRange(0.2f, 0.3f);
-		ps.setSpeedAngleRange(-70, -110);
+		ps.setSpeedModuleAndAngleRange(0.2f, 0.3f, -70, -110);
 		ps.setRotationSpeed(144, 144);
 		ps.setVelocity(0.00003f, 330);
 		ps.setInitialRotationRange(0, 360);

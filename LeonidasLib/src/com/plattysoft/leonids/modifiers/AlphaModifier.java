@@ -11,9 +11,9 @@ public class AlphaModifier implements ParticleModifier {
 	private int mFinalValue;
 	private long mStartTime;
 	private long mEndTime;
-	private Interpolator mInterpolator;
 	private float mDuration;
 	private float mValueIncrement;
+	private Interpolator mInterpolator;
 
 	public AlphaModifier(int initialValue, int finalValue, long startMilis, long endMilis, Interpolator interpolator) {
 		mInitialValue = initialValue;

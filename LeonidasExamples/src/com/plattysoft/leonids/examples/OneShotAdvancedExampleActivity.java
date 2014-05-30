@@ -24,8 +24,8 @@ public class OneShotAdvancedExampleActivity extends Activity implements OnClickL
 		ParticleSystem ps = new ParticleSystem(this, 100, R.drawable.star_pink, 800);
 		ps.setScaleRange(0.7f, 1.3f);
 		ps.setSpeedRange(0.2f, 0.5f);
-		ps.setRotationSpeed(90, 180);
 		ps.setVelocity(0.0002f, 90);
+		ps.setRotationSpeed(90, 180);
 		ps.setFadeOut(200, new AccelerateInterpolator());
 		ps.oneShot(arg0, 100);
 	}

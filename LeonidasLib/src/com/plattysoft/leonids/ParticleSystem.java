@@ -10,6 +10,7 @@ import com.plattysoft.leonids.initializers.ParticleInitializer;
 import com.plattysoft.leonids.initializers.RotationInitiazer;
 import com.plattysoft.leonids.initializers.RotationSpeedInitializer;
 import com.plattysoft.leonids.initializers.ScaleInitializer;
+import com.plattysoft.leonids.initializers.SpeeddByComponentsInitializer;
 import com.plattysoft.leonids.initializers.SpeeddModuleAndRangeInitializer;
 import com.plattysoft.leonids.modifiers.ParticleModifier;
 import com.plattysoft.leonids.modifiers.VelocityModifier;
@@ -86,7 +87,12 @@ public class ParticleSystem {
 	public ParticleSystem setSpeedModuleAndAngleRange(float speedMin, float speedMax, int minAngle, int maxAngle) {
 		mInitializers.add(new SpeeddModuleAndRangeInitializer(speedMin, speedMax, minAngle, maxAngle));		
 		return this;
-	}	
+	}
+	
+	public ParticleSystem setSpeedByComponentsRange(float speedMinX, float speedMaxX, float speedMinY, float speedMaxY) {
+		mInitializers.add(new SpeeddByComponentsInitializer(speedMinX, speedMaxX, speedMinY, speedMaxY));		
+		return this;
+	}
 	
 	public ParticleSystem setInitialRotationRange (int minAngle, int maxAngle) {
 		mInitializers.add(new RotationInitiazer(minAngle, maxAngle));

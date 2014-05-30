@@ -18,9 +18,9 @@ public class EmiterSimpleExampleActivity extends Activity implements OnClickList
 
 	@Override
 	public void onClick(View arg0) {
-		new ParticleSystem(this, 50, R.drawable.star_pink)
+		new ParticleSystem(this, 50, R.drawable.star_pink, 1000)
 		.setSpeedRange(0.2f, 0.5f)
-		.emit(arg0, 100, 1000);		
+		.emit(arg0, 100);
 	}
 
 }

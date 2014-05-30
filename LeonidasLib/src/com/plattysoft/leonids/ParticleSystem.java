@@ -45,17 +45,17 @@ public class ParticleSystem {
 	private ArrayList<Particle> mActiveParticles;
 	private int mEmiterX;
 	private int mEmiterY;
-	private int mTimeToLive;
-	private int mCurrentTime;
+	private long mTimeToLive;
+	private long mCurrentTime;
 	
 	private float mParticlesPerMilisecond;
 	private int mActivatedParticles;
-	private int mEmitingTime;
+	private long mEmitingTime;
 	
 	private List<ParticleModifier> mModifiers;
 	private List<ParticleInitializer> mInitializers;
 
-	private ParticleSystem(Activity a, int maxParticles) {
+	private ParticleSystem(Activity a, int maxParticles, long timeToLive) {
 		mRandom = new Random();
 		mParentView = (ViewGroup) a.findViewById(android.R.id.content);
 		
@@ -66,14 +66,31 @@ public class ParticleSystem {
 		// Create the particles
 		mActiveParticles = new ArrayList<Particle>(); 
 		mParticles = new ArrayList<Particle> ();
+		mTimeToLive = timeToLive;
 	}
 	
-	public ParticleSystem(Activity a, int maxParticles, int drawableRedId) {
-		this(a, maxParticles, a.getResources().getDrawable(drawableRedId));
+	/**
+	 * Creates a particle system with the given parameters
+	 * 
+	 * @param a The parent activity
+	 * @param maxParticles The maximum number of particles
+	 * @param drawableRedId The drawable resource to use as particle (supports Bitmaps and Animations)
+	 * @param timeToLive The time to live for the particles
+	 */
+	public ParticleSystem(Activity a, int maxParticles, int drawableRedId, long timeToLive) {
+		this(a, maxParticles, a.getResources().getDrawable(drawableRedId), timeToLive);
 	}
 	
-	public ParticleSystem(Activity a, int maxParticles, Drawable drawable) {
-		this(a, maxParticles);
+	/**
+	 * Utility constructor that receives a Drawable
+	 * 
+	 * @param a The parent activity
+	 * @param maxParticles The maximum number of particles
+	 * @param drawable The drawable to use as particle (supports Bitmaps and Animations)
+	 * @param timeToLive The time to live for the particles
+	 */
+	public ParticleSystem(Activity a, int maxParticles, Drawable drawable, long timeToLive) {
+		this(a, maxParticles, timeToLive);
 		if (drawable instanceof BitmapDrawable) {
 			Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
 			for (int i=0; i<mMaxParticles; i++) {
@@ -91,15 +108,31 @@ public class ParticleSystem {
 		}
 	}
 	
-	public ParticleSystem(Activity a, int maxParticles, Bitmap bitmap) {
-		this(a, maxParticles);		
+	/**
+	 * Utility constructor that receives a Bitmap
+	 * 
+	 * @param a The parent activity
+	 * @param maxParticles The maximum number of particles
+	 * @param bitmap The bitmap to use as particle
+	 * @param timeToLive The time to live for the particles
+	 */
+	public ParticleSystem(Activity a, int maxParticles, Bitmap bitmap, long timeToLive) {
+		this(a, maxParticles, timeToLive);		
 		for (int i=0; i<mMaxParticles; i++) {
 			mParticles.add (new Particle (bitmap));
 		}
 	}
 
-	public ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation) {
-		this(a, maxParticles);
+	/**
+	 * Utility constructor that receives an AnimationDrawble
+	 * 
+	 * @param a The parent activity
+	 * @param maxParticles The maximum number of particles
+	 * @param animation The animation to use as particle
+	 * @param timeToLive The time to live for the particles
+	 */
+	public ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation, long timeToLive) {
+		this(a, maxParticles, timeToLive);
 		// Create the particles
 		for (int i=0; i<mMaxParticles; i++) {
 			mParticles.add (new AnimatedParticle (animation));
@@ -181,11 +214,10 @@ public class ParticleSystem {
 	 * @param timeToLive miliseconds the particles will be displayed
 	 * @param emitingTime time the emiter will be emiting particles
 	 */
-	public void emit (View emiter, int particlesPerSecond, int timeToLive, int emitingTime) {
+	public void emit (View emiter, int particlesPerSecond, int emitingTime) {
 		// Setup emiter
 		configureEmiter(emiter);
 		mActivatedParticles = 0;
-		mTimeToLive = timeToLive;
 		mParticlesPerMilisecond = particlesPerSecond/1000f;
 		// Add a full size view to the parent view		
 		mDrawingView = new ParticleField(mParentView.getContext());
@@ -194,7 +226,7 @@ public class ParticleSystem {
 		mDrawingView.setParticles (mActiveParticles);
 		mCurrentTime = 0;
 		mEmitingTime = emitingTime;
-		startAnimator(new LinearInterpolator(), emitingTime+timeToLive);
+		startAnimator(new LinearInterpolator(), emitingTime+mTimeToLive);
 	}
 	
 	/**
@@ -203,13 +235,11 @@ public class ParticleSystem {
 	 * 
 	 * @param emiter  View from which center the particles will be emited
 	 * @param particlesPerSecond Number of particles per second that will be emited (evenly distributed)
-	 * @param timeToLive miliseconds the particles will be displayed
 	 */
-	public void emit (View emiter, int particlesPerSecond, int timeToLive) {
+	public void emit (View emiter, int particlesPerSecond) {
 		// Setup emiter
 		configureEmiter(emiter);
 		mActivatedParticles = 0;
-		mTimeToLive = timeToLive;
 		mParticlesPerMilisecond = particlesPerSecond/1000f;
 		// Add a full size view to the parent view		
 		mDrawingView = new ParticleField(mParentView.getContext());
@@ -232,10 +262,9 @@ public class ParticleSystem {
 	 * 
 	 * @param emiter View from which center the particles will be emited
 	 * @param numParticles number of particles launched on the one shot
-	 * @param timeToLive miliseconds the particles will be displayed
 	 */
-	public void oneShot(View emiter, int numParticles, int timeToLive) {
-		oneShot(emiter, numParticles, timeToLive, new LinearInterpolator());
+	public void oneShot(View emiter, int numParticles) {
+		oneShot(emiter, numParticles, new LinearInterpolator());
 	}
 	
 	/**
@@ -243,14 +272,12 @@ public class ParticleSystem {
 	 * 
 	 * @param emiter View from which center the particles will be emited
 	 * @param numParticles number of particles launched on the one shot
-	 * @param timeToLive miliseconds the particles will be displayed
 	 * @param interpolator the interpolator for the time
 	 */
-	public void oneShot(View emiter, int numParticles, int timeToLive, Interpolator interpolator) {
+	public void oneShot(View emiter, int numParticles, Interpolator interpolator) {
 		configureEmiter(emiter);
 		mActivatedParticles = 0;
-		mTimeToLive = timeToLive;
-		mEmitingTime = timeToLive;
+		mEmitingTime = mTimeToLive;
 		// We create particles based in the parameters
 		for (int i=0; i<numParticles && i<mMaxParticles; i++) {
 			activateParticle(0);
@@ -264,8 +291,8 @@ public class ParticleSystem {
 		startAnimator(interpolator, mTimeToLive);
 	}
 
-	private void startAnimator(Interpolator interpolator, int animnationTime) {
-		ValueAnimator animator = ValueAnimator.ofInt(new int[] {0, animnationTime});
+	private void startAnimator(Interpolator interpolator, long animnationTime) {
+		ValueAnimator animator = ValueAnimator.ofInt(new int[] {0, (int) animnationTime});
 		animator.setDuration(animnationTime);
 		animator.addUpdateListener(new AnimatorUpdateListener() {			
 			@Override
@@ -304,7 +331,7 @@ public class ParticleSystem {
 		mEmiterY = location[1] + emiter.getHeight()/2 - parentLocation[1];
 	}
 
-	private void activateParticle(int delay) {
+	private void activateParticle(long delay) {
 		Particle p = mParticles.remove(0);		
 		// Initialization goes before configuration, scale is required before can be configured properly
 		for (int i=0; i<mInitializers.size(); i++) {
@@ -316,7 +343,7 @@ public class ParticleSystem {
 		mActivatedParticles++;
 	}
 
-	private void onUpdate(int miliseconds) {
+	private void onUpdate(long miliseconds) {
 		while (((mEmitingTime > 0 && miliseconds < mEmitingTime)|| mEmitingTime == -1) && // This point should emit
 				 !mParticles.isEmpty() && // We have particles in the pool 
 				 mActivatedParticles < mParticlesPerMilisecond*miliseconds) { // and we are under the number of particles that should be launched

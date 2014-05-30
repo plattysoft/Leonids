@@ -19,13 +19,13 @@ public class EmiterTimeLimitedExampleActivity extends Activity implements OnClic
 
 	@Override
 	public void onClick(View arg0) {
-		ParticleSystem ps = new ParticleSystem(this, 100, R.drawable.star_pink);
+		ParticleSystem ps = new ParticleSystem(this, 100, R.drawable.star_pink, 1000);
 		ps.setScaleRange(0.7f, 1.3f);
 		ps.setSpeedModuleAndAngleRange(0.2f, 0.5f, 0, 180);
 		ps.setRotationSpeed(90, 180);
 		ps.setVelocity(0.0004f, 90);
 		ps.setFadeOut(200, new AccelerateInterpolator());
-		ps.emit(arg0, 100, 1000, 2000);		
+		ps.emit(arg0, 100, 2000);
 	}
 
 }

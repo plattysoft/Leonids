@@ -44,7 +44,7 @@ public class Particle {
 
 	private Interpolator mFadeOutInterpolator;
 
-	protected int mStartingMilisecond;
+	protected long mStartingMilisecond;
 
 	private int mBitmapHalfWidth;
 	private int mBitmapHalfHeight;
@@ -106,7 +106,7 @@ public class Particle {
 		c.drawBitmap(mImage, mMatrix, mPaint);
 	}
 
-	public Particle activate(int startingMilisecond, List<ParticleModifier> modifiers) {
+	public Particle activate(long startingMilisecond, List<ParticleModifier> modifiers) {
 		mStartingMilisecond = startingMilisecond;
 		// We do store a reference to the list, there is no need to copy, since the modifiers do not carte about states 
 		mModifiers = modifiers;

@@ -18,9 +18,9 @@ public class OneShotSimpleExampleActivity extends Activity implements OnClickLis
 
 	@Override
 	public void onClick(View arg0) {
-		ParticleSystem ps = new ParticleSystem(this, 100, R.drawable.star_pink);		
+		ParticleSystem ps = new ParticleSystem(this, 100, R.drawable.star_pink, 800);		
 		ps.setSpeedRange(0.2f, 0.5f);
-		ps.oneShot(arg0, 100, 800);
+		ps.oneShot(arg0, 100);
 	}
 
 }

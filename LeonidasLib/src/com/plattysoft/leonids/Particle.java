@@ -24,8 +24,8 @@ public class Particle {
 	
 	public float mRotationSpeed = 0f;
 	
-	private float mSpeedX;
-	private float mSpeedY;
+	public float mSpeedX = 0f;
+	public float mSpeedY = 0f;
 
 	private Matrix mMatrix;
 
@@ -57,8 +57,7 @@ public class Particle {
 		mPaint = new Paint();
 	}
 
-	public void configure(long timeToLive, float emiterX, float emiterY, float speed, int angle, long fadeOutMiliseconds, Interpolator fadeOutInterpolator) {
-		float angleInRads = (float) (angle*Math.PI/180f);
+	public void configure(long timeToLive, float emiterX, float emiterY, long fadeOutMiliseconds, Interpolator fadeOutInterpolator) {
 		
 		mBitmapHalfWidth = mImage.getWidth()/2;
 		mBitmapHalfHeight = mImage.getHeight()/2;
@@ -67,8 +66,6 @@ public class Particle {
 		mCurrentY = emiterY;
 		mInitialX = emiterX - mBitmapHalfWidth;
 		mInitialY = emiterY - mBitmapHalfHeight;
-		mSpeedX = (float) (speed * Math.cos(angleInRads));
-		mSpeedY = (float) (speed * Math.sin(angleInRads));
 		mMilisecondBeforeEndFade = fadeOutMiliseconds;
 		mFadeOutInterpolator = fadeOutInterpolator;
 		mTimeToLive = timeToLive;

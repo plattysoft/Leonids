@@ -10,6 +10,7 @@ import com.plattysoft.leonids.initializers.ParticleInitializer;
 import com.plattysoft.leonids.initializers.RotationInitiazer;
 import com.plattysoft.leonids.initializers.RotationSpeedInitializer;
 import com.plattysoft.leonids.initializers.ScaleInitializer;
+import com.plattysoft.leonids.initializers.SpeeddModuleAndRangeInitializer;
 import com.plattysoft.leonids.modifiers.ParticleModifier;
 import com.plattysoft.leonids.modifiers.VelocityModifier;
 
@@ -30,12 +31,6 @@ public class ParticleSystem {
 	private ViewGroup mParentView;
 	private int mMaxParticles;
 	private Random mRandom;
-	
-	private float mSpeedMin;
-	private float mSpeedMax;
-	
-	private int mMinAngle = 0;
-	private int mMaxAngle = 360;
 
 	private ParticleField mDrawingView;
 
@@ -83,36 +78,10 @@ public class ParticleSystem {
 		return this;
 	}
 	
-	public ParticleSystem setSpeed(float speed) {
-		return setSpeedRange(speed, speed);
-	}
-	
-	public ParticleSystem setSpeedRange(float speedMin, float speedMax) {		
-		mSpeedMin = speedMin;
-		mSpeedMax = speedMax;
+	public ParticleSystem setSpeedModuleAndAngleRange(float speedMin, float speedMax, int minAngle, int maxAngle) {
+		mInitializers.add(new SpeeddModuleAndRangeInitializer(speedMin, speedMax, minAngle, maxAngle));		
 		return this;
-	}
-	
-	public ParticleSystem setSpeedAngleRange(int minAngle, int maxAngle) {
-		mMinAngle = minAngle;
-		mMaxAngle = maxAngle;
-		// Make sure the angles are in the [0-360) range
-		while (mMinAngle < 0) {
-			mMinAngle+=360;
-		}
-		mMinAngle = mMinAngle%360;
-		while (mMaxAngle < 0) {
-			mMaxAngle+=360;
-		}
-		mMaxAngle = mMaxAngle%360;
-		// Also make sure that mMinAngle is the smaller
-		if (mMinAngle > mMaxAngle) {
-			int tmp = mMinAngle;
-			mMinAngle = mMaxAngle;
-			mMaxAngle = tmp;
-		}
-		return this;
-	}
+	}	
 	
 	public ParticleSystem setInitialRotationRange (int minAngle, int maxAngle) {
 		mInitializers.add(new RotationInitiazer(minAngle, maxAngle));
@@ -288,20 +257,12 @@ public class ParticleSystem {
 	}
 
 	private void activateParticle(int delay) {
-		Particle p = mParticles.remove(0);
-		float speed = mRandom.nextFloat()*(mSpeedMax-mSpeedMin) + mSpeedMin;
-		int angle;
-		if (mMaxAngle == mMinAngle) {
-			angle = mMinAngle;
-		}
-		else {
-			angle = mRandom.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
-		}
+		Particle p = mParticles.remove(0);		
 		// Initialization goes before configuration, scale is required before can be configured properly
 		for (int i=0; i<mInitializers.size(); i++) {
 			mInitializers.get(i).initParticle(p, mRandom);
 		}
-		p.configure(mTimeToLive, mEmiterX, mEmiterY, speed, angle, mMilisecondsBeforeEnd, mFadeOutInterpolator);
+		p.configure(mTimeToLive, mEmiterX, mEmiterY, mMilisecondsBeforeEnd, mFadeOutInterpolator);
 		p.activate(delay, mModifiers);
 		mActiveParticles.add(p);
 		mActivatedParticles++;

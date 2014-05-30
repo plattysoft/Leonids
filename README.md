@@ -5,7 +5,7 @@ Leonids is a particle system library that works with the standard Android UI.
 
 The library is extremely lightweight, it is just a jar file of 18Kb you can add to your project.
 
-# Why this library?
+## Why this library?
 
 Particle systems are often used in games for a wide range of purposes: Explosions, fire, smoke, etc. This effects can also be used on normal apps to add an element of "juiciness" or Playful Design.
 
@@ -15,7 +15,7 @@ This means that if you are building an Android app and you want a particle syste
 
 Leonids is made to fill this gap, bringing particle sytems to developers that use the standard Android UI.
 
-# Basic usage
+## Basic usage
 
 Creating and firing a one-shot particle system is very easy, just 3 lines of code.
 
@@ -31,4 +31,4 @@ Then you configure the particle system. In this case we specify that the particl
 
 Finally, we call oneShot, passing the view from which the particles will be launched and saying how many particles we want to be shot.
 
-Check the wiki for more details.
+[Check the wiki for more details](https://github.com/plattysoft/Leonids/wiki/How-to-use-Leonids).

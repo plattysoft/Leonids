@@ -54,6 +54,9 @@ public class ExampleListActivity extends ListActivity {
 		case 8:
 			startActivity(new Intent(this, DustExampleActivity.class));
 			break;
+		case 9:
+			startActivity(new Intent(this, StarsExampleActivity.class));
+			break;
 		}
 	}
 

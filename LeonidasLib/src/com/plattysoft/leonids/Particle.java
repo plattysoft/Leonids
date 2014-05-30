@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.util.Log;
 
 public class Particle {
 
@@ -85,7 +84,6 @@ public class Particle {
 		mMatrix.postRotate(mRotation, mBitmapHalfWidth, mBitmapHalfHeight);
 		mMatrix.postScale(mScale, mScale, mBitmapHalfWidth, mBitmapHalfHeight);
 		mMatrix.postTranslate(mCurrentX, mCurrentY);
-		Log.d("Draw", "scale:"+mScale+", (x,y)"+mCurrentX+", "+mCurrentY);
 		mPaint.setAlpha(mAlpha);		
 		c.drawBitmap(mImage, mMatrix, mPaint);
 	}

@@ -68,6 +68,10 @@ public class ParticleSystem {
 		mParticles = new ArrayList<Particle> ();
 	}
 	
+	public ParticleSystem(Activity a, int maxParticles, int drawableRedId) {
+		this(a, maxParticles, a.getResources().getDrawable(drawableRedId));
+	}
+	
 	public ParticleSystem(Activity a, int maxParticles, Drawable drawable) {
 		this(a, maxParticles);
 		if (drawable instanceof BitmapDrawable) {

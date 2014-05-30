@@ -69,8 +69,8 @@ public class Particle {
 		
 		mCurrentX = emiterX;
 		mCurrentY = emiterY;
-		mInitialX = emiterX - mBitmapHalfWidth/2*mScale;
-		mInitialY = emiterY - mBitmapHalfHeight/2*mScale;
+		mInitialX = emiterX - mBitmapHalfWidth;
+		mInitialY = emiterY - mBitmapHalfHeight;
 		mSpeedX = (float) (speed * Math.cos(angleInRads));
 		mSpeedY = (float) (speed * Math.sin(angleInRads));
 		mVelocityX = (float) (velocity * Math.cos(velocityAngleInRads));

@@ -23,7 +23,7 @@ public class DustExampleActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View arg0) {
 		Drawable confetti2 = getResources().getDrawable(R.drawable.dust);
-		ParticleSystem ps = new ParticleSystem(this, 4, ((BitmapDrawable) confetti2).getBitmap());
+		ParticleSystem ps = new ParticleSystem(this, 4, confetti2);
 		ps.setSpeedModuleAndAngleRange(0.2f, 0.3f, -70, -110);
 		ps.setRotationSpeed(144, 144);
 		ps.setVelocity(0.00003f, 330);

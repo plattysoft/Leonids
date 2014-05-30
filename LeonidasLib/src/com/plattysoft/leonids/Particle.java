@@ -12,7 +12,7 @@ import android.view.animation.Interpolator;
 
 public class Particle {
 
-	private Bitmap mImage;
+	protected Bitmap mImage;
 	
 	public float mCurrentX;
 	public float mCurrentY;
@@ -44,21 +44,24 @@ public class Particle {
 
 	private Interpolator mFadeOutInterpolator;
 
-	private int mStartingMilisecond;
+	protected int mStartingMilisecond;
 
 	private int mBitmapHalfWidth;
 	private int mBitmapHalfHeight;
 
 	private List<ParticleModifier> mModifiers;
 
-	public Particle(Bitmap image) {
-		mImage = image;
+	protected Particle() {		
 		mMatrix = new Matrix();
 		mPaint = new Paint();
 	}
+	
+	public Particle (Bitmap bitmap) {
+		this();
+		mImage = bitmap;
+	}
 
 	public void configure(long timeToLive, float emiterX, float emiterY, long fadeOutMiliseconds, Interpolator fadeOutInterpolator) {
-		
 		mBitmapHalfWidth = mImage.getWidth()/2;
 		mBitmapHalfHeight = mImage.getHeight()/2;
 		
@@ -69,7 +72,6 @@ public class Particle {
 		mMilisecondBeforeEndFade = fadeOutMiliseconds;
 		mFadeOutInterpolator = fadeOutInterpolator;
 		mTimeToLive = timeToLive;
-		// Scale the bitmap if scale != 1
 	}
 
 	public boolean update (long miliseconds) {

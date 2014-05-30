@@ -21,14 +21,14 @@ public class ConfettiExampleActivity extends Activity implements OnClickListener
 	@Override
 	public void onClick(View arg0) {
 		Drawable confetti2 = getResources().getDrawable(R.drawable.confeti2);
-		ParticleSystem ps = new ParticleSystem(this, 80, ((BitmapDrawable) confetti2).getBitmap());
+		ParticleSystem ps = new ParticleSystem(this, 80, confetti2);
 		ps.setSpeedModuleAndAngleRange(0f, 0.3f, 180, 180);
 		ps.setRotationSpeed(144, 144);
 		ps.setVelocity(0.00005f, 90);		
 		ps.emit(findViewById(R.id.emiter_top_right), 8, 10000);
 		
 		Drawable confetti3 = getResources().getDrawable(R.drawable.confeti3);
-		ParticleSystem ps2 = new ParticleSystem(this, 80, ((BitmapDrawable) confetti3).getBitmap());
+		ParticleSystem ps2 = new ParticleSystem(this, 80, confetti3);
 		ps2.setSpeedModuleAndAngleRange(0f, 0.3f, 0, 0);
 		ps2.setRotationSpeed(144, 144);
 		ps2.setVelocity(0.00005f, 90);		

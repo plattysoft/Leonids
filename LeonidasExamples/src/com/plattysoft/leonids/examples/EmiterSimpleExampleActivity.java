@@ -21,7 +21,7 @@ public class EmiterSimpleExampleActivity extends Activity implements OnClickList
 	@Override
 	public void onClick(View arg0) {
 		Drawable d = getResources().getDrawable(R.drawable.star_pink);
-		ParticleSystem ps = new ParticleSystem(this, 50, ((BitmapDrawable) d).getBitmap());
+		ParticleSystem ps = new ParticleSystem(this, 50, d);
 		ps.setSpeedRange(0.2f, 0.5f);
 		ps.emit(arg0, 100, 1000);		
 	}

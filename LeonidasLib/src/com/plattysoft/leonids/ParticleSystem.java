@@ -21,6 +21,9 @@ import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
@@ -52,7 +55,7 @@ public class ParticleSystem {
 	private List<ParticleModifier> mModifiers;
 	private List<ParticleInitializer> mInitializers;
 
-	public ParticleSystem(Activity a, int maxParticles, Bitmap bitmap) {
+	private ParticleSystem(Activity a, int maxParticles) {
 		mRandom = new Random();
 		mParentView = (ViewGroup) a.findViewById(android.R.id.content);
 		
@@ -63,11 +66,41 @@ public class ParticleSystem {
 		// Create the particles
 		mActiveParticles = new ArrayList<Particle>(); 
 		mParticles = new ArrayList<Particle> ();
+	}
+	
+	public ParticleSystem(Activity a, int maxParticles, Drawable drawable) {
+		this(a, maxParticles);
+		if (drawable instanceof BitmapDrawable) {
+			Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+			for (int i=0; i<mMaxParticles; i++) {
+				mParticles.add (new Particle (bitmap));
+			}
+		}
+		else if (drawable instanceof AnimationDrawable) {
+			AnimationDrawable animation = (AnimationDrawable) drawable;
+			for (int i=0; i<mMaxParticles; i++) {
+				mParticles.add (new AnimatedParticle (animation));
+			}
+		}
+		else {
+			// Not supported, no particles are being created
+		}
+	}
+	
+	public ParticleSystem(Activity a, int maxParticles, Bitmap bitmap) {
+		this(a, maxParticles);		
 		for (int i=0; i<mMaxParticles; i++) {
 			mParticles.add (new Particle (bitmap));
 		}
 	}
 
+	public ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation) {
+		this(a, maxParticles);
+		// Create the particles
+		for (int i=0; i<mMaxParticles; i++) {
+			mParticles.add (new AnimatedParticle (animation));
+		}
+	}
 	/**
 	 * Adds a modifier to the Particle system, it will be executed on each update.
 	 * 

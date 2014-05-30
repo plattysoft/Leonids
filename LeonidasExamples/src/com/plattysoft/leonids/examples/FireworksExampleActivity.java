@@ -23,14 +23,14 @@ public class FireworksExampleActivity extends Activity implements OnClickListene
 	@Override
 	public void onClick(View arg0) {
 		Drawable d = getResources().getDrawable(R.drawable.star_pink);
-		ParticleSystem ps = new ParticleSystem(this, 100, ((BitmapDrawable) d).getBitmap());
+		ParticleSystem ps = new ParticleSystem(this, 100, d);
 		ps.setScaleRange(0.7f, 1.3f);
 		ps.setSpeedRange(0.2f, 0.5f);
 		ps.setRotationSpeed(90, 180);
 		ps.setFadeOut(200, new AccelerateInterpolator());
 		ps.oneShot(arg0, 70, 800);
 		d = getResources().getDrawable(R.drawable.star_white);
-		ParticleSystem ps2 = new ParticleSystem(this, 100, ((BitmapDrawable) d).getBitmap());
+		ParticleSystem ps2 = new ParticleSystem(this, 100, d);
 		ps2.setScaleRange(0.7f, 1.3f);
 		ps2.setSpeedRange(0.2f, 0.5f);
 		ps.setRotationSpeed(90, 180);

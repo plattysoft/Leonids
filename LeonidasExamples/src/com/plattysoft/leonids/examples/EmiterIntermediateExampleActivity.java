@@ -22,7 +22,7 @@ public class EmiterIntermediateExampleActivity extends Activity implements OnCli
 	@Override
 	public void onClick(View arg0) {
 		Drawable d = getResources().getDrawable(R.drawable.star_pink);
-		ParticleSystem ps = new ParticleSystem(this, 100, ((BitmapDrawable) d).getBitmap());
+		ParticleSystem ps = new ParticleSystem(this, 100, d);
 		ps.setScaleRange(0.7f, 1.3f);
 		ps.setSpeedModuleAndAngleRange(0.2f, 0.5f, 0, 180);
 		ps.setRotationSpeed(90, 180);

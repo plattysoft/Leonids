@@ -17,7 +17,7 @@ public class Particle {
 	public float mCurrentY;
 	
 	public float mScale = 1f;
-	public int mAlpha;
+	public int mAlpha = 255;
 	
 	public float mInitialRotation = 0f;
 	

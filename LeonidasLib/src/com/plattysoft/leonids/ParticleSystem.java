@@ -12,6 +12,7 @@ import com.plattysoft.leonids.initializers.RotationSpeedInitializer;
 import com.plattysoft.leonids.initializers.ScaleInitializer;
 import com.plattysoft.leonids.initializers.SpeeddByComponentsInitializer;
 import com.plattysoft.leonids.initializers.SpeeddModuleAndRangeInitializer;
+import com.plattysoft.leonids.modifiers.AlphaModifier;
 import com.plattysoft.leonids.modifiers.ParticleModifier;
 import com.plattysoft.leonids.modifiers.VelocityModifier;
 
@@ -37,10 +38,7 @@ public class ParticleSystem {
 	private Random mRandom;
 
 	private ParticleField mDrawingView;
-
-	private long mMilisecondsBeforeEnd = 0;
-	private Interpolator mFadeOutInterpolator = new LinearInterpolator();
-
+	
 	private ArrayList<Particle> mParticles;
 	private ArrayList<Particle> mActiveParticles;
 	private int mEmiterX;
@@ -191,8 +189,7 @@ public class ParticleSystem {
 	 * @param interpolator the interpolator for the fade out (default is linear)
 	 */
 	public ParticleSystem setFadeOut(long milisecondsBeforeEnd, Interpolator interpolator) {
-		mMilisecondsBeforeEnd = milisecondsBeforeEnd;
-		mFadeOutInterpolator = interpolator;
+		mModifiers.add(new AlphaModifier(255, 0, mTimeToLive-milisecondsBeforeEnd, mTimeToLive, interpolator));
 		return this;
 	}
 	
@@ -337,7 +334,7 @@ public class ParticleSystem {
 		for (int i=0; i<mInitializers.size(); i++) {
 			mInitializers.get(i).initParticle(p, mRandom);
 		}
-		p.configure(mTimeToLive, mEmiterX, mEmiterY, mMilisecondsBeforeEnd, mFadeOutInterpolator);
+		p.configure(mTimeToLive, mEmiterX, mEmiterY);
 		p.activate(delay, mModifiers);
 		mActiveParticles.add(p);
 		mActivatedParticles++;

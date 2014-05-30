@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.view.animation.Interpolator;
 
 public class Particle {
 
@@ -28,21 +27,14 @@ public class Particle {
 	public float mSpeedY = 0f;
 
 	private Matrix mMatrix;
-
 	private Paint mPaint;
 
 	private float mInitialX;
-
 	private float mInitialY;
-
 
 	private float mRotation;
 
-	private long mMilisecondBeforeEndFade;
-
 	private long mTimeToLive;
-
-	private Interpolator mFadeOutInterpolator;
 
 	protected long mStartingMilisecond;
 
@@ -61,7 +53,7 @@ public class Particle {
 		mImage = bitmap;
 	}
 
-	public void configure(long timeToLive, float emiterX, float emiterY, long fadeOutMiliseconds, Interpolator fadeOutInterpolator) {
+	public void configure(long timeToLive, float emiterX, float emiterY) {
 		mBitmapHalfWidth = mImage.getWidth()/2;
 		mBitmapHalfHeight = mImage.getHeight()/2;
 		
@@ -69,27 +61,17 @@ public class Particle {
 		mCurrentY = emiterY;
 		mInitialX = emiterX - mBitmapHalfWidth;
 		mInitialY = emiterY - mBitmapHalfHeight;
-		mMilisecondBeforeEndFade = fadeOutMiliseconds;
-		mFadeOutInterpolator = fadeOutInterpolator;
 		mTimeToLive = timeToLive;
 	}
 
 	public boolean update (long miliseconds) {
 		long realMiliseconds = miliseconds - mStartingMilisecond;
-		mCurrentX = mInitialX+mSpeedX*realMiliseconds;
-		mCurrentY = mInitialY+mSpeedY*realMiliseconds;
-		mRotation = mInitialRotation + mRotationSpeed*realMiliseconds/1000;
-		// Alpha goes from 255 (no transparency) to 0 transparent		
-		if (mMilisecondBeforeEndFade > 0 && mTimeToLive - realMiliseconds < mMilisecondBeforeEndFade) {
-			float interpolaterdValue = mFadeOutInterpolator.getInterpolation((mTimeToLive - realMiliseconds)*1f/mMilisecondBeforeEndFade);
-			mAlpha = (int) (interpolaterdValue*255);
-		}
-		else {
-			mAlpha = 255;
-		}
 		if (realMiliseconds > mTimeToLive) {
 			return false;
 		}
+		mCurrentX = mInitialX+mSpeedX*realMiliseconds;
+		mCurrentY = mInitialY+mSpeedY*realMiliseconds;
+		mRotation = mInitialRotation + mRotationSpeed*realMiliseconds/1000;
 		for (int i=0; i<mModifiers.size(); i++) {
 			mModifiers.get(i).apply(this, realMiliseconds);
 		}

@@ -1,5 +1,8 @@
 package com.plattysoft.leonids.modifiers;
 
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
+
 import com.plattysoft.leonids.Particle;
 
 public class AlphaModifier implements ParticleModifier {
@@ -8,20 +11,27 @@ public class AlphaModifier implements ParticleModifier {
 	private int mFinalValue;
 	private long mStartTime;
 	private long mEndTime;
-	private float mValueIncrement;
+	private Interpolator mInterpolator;
+	private long mDuration;
 
-	public AlphaModifier (int initialValue, int finalValue, long startMilis, long endMilis) {
+	public AlphaModifier(int initialValue, int finalValue, long startMilis, long endMilis, Interpolator interpolator) {
 		mInitialValue = initialValue;
 		mFinalValue = finalValue;
-		mStartTime = startMilis;
+		mStartTime = startMilis;		
 		mEndTime = endMilis;
-		mValueIncrement = ((float)(mFinalValue-mInitialValue))/(endMilis - startMilis);
+		mDuration = mEndTime - mStartTime;
+		mInterpolator = interpolator;
 	}
 	
+	public AlphaModifier (int initialValue, int finalValue, long startMilis, long endMilis) {
+		this(initialValue, finalValue, startMilis, endMilis, new LinearInterpolator());
+	}
+
 	@Override
 	public void apply(Particle particle, long miliseconds) {
 		if (miliseconds > mStartTime && miliseconds < mEndTime) {			
-			int newAlphaValue = (int) (mInitialValue + mValueIncrement*(miliseconds-mStartTime));
+			float interpolaterdValue = mInterpolator.getInterpolation((mEndTime - miliseconds)*1f/mDuration);
+			int newAlphaValue = (int) (mInitialValue + mFinalValue*interpolaterdValue);
 			particle.mAlpha = newAlphaValue;
 		}
 	}

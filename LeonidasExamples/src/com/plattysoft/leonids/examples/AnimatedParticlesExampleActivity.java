@@ -20,7 +20,7 @@ public class AnimatedParticlesExampleActivity extends Activity implements OnClic
 	public void onClick(View arg0) {
 		new ParticleSystem(this, 100, R.drawable.animated_confetti, 5000)		
 		.setSpeedRange(0.2f, 0.5f)
-		.setRotationSpeed(90, 180)
+		.setRotationSpeedRange(90, 180)
 		.setInitialRotationRange(0, 360)
 		.oneShot(arg0, 100);
 	}

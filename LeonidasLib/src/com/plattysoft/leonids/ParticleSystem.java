@@ -172,7 +172,12 @@ public class ParticleSystem {
 		return this;
 	}
 	
-	public ParticleSystem setRotationSpeed(float minRotationSpeed, float maxRotationSpeed) {
+	public ParticleSystem setRotationSpeed(float rotationSpeed) {
+		mInitializers.add(new RotationSpeedInitializer(rotationSpeed, rotationSpeed));
+		return this;
+	}
+	
+	public ParticleSystem setRotationSpeedRange(float minRotationSpeed, float maxRotationSpeed) {
 		mInitializers.add(new RotationSpeedInitializer(minRotationSpeed, maxRotationSpeed));
 		return this;
 	}

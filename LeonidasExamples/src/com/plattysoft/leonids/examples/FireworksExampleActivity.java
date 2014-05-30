@@ -23,14 +23,14 @@ public class FireworksExampleActivity extends Activity implements OnClickListene
 		ParticleSystem ps = new ParticleSystem(this, 100, R.drawable.star_pink, 800);
 		ps.setScaleRange(0.7f, 1.3f);
 		ps.setSpeedRange(0.2f, 0.5f);
-		ps.setRotationSpeed(90, 180);
+		ps.setRotationSpeedRange(90, 180);
 		ps.setFadeOut(200, new AccelerateInterpolator());
 		ps.oneShot(arg0, 70);
 
 		ParticleSystem ps2 = new ParticleSystem(this, 100, R.drawable.star_white, 800);
 		ps2.setScaleRange(0.7f, 1.3f);
 		ps2.setSpeedRange(0.2f, 0.5f);
-		ps.setRotationSpeed(90, 180);
+		ps.setRotationSpeedRange(90, 180);
 		ps2.setFadeOut(200, new AccelerateInterpolator());
 		ps2.oneShot(arg0, 70);
 	}

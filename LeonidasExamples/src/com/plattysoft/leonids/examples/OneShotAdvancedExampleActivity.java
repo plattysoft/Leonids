@@ -25,7 +25,7 @@ public class OneShotAdvancedExampleActivity extends Activity implements OnClickL
 		ps.setScaleRange(0.7f, 1.3f);
 		ps.setSpeedRange(0.2f, 0.5f);
 		ps.setVelocity(0.0002f, 90);
-		ps.setRotationSpeed(90, 180);
+		ps.setRotationSpeedRange(90, 180);
 		ps.setFadeOut(200, new AccelerateInterpolator());
 		ps.oneShot(arg0, 100);
 	}

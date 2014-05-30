@@ -23,7 +23,7 @@ public class StarsExampleActivity extends Activity implements OnClickListener {
 		.setSpeedByComponentsRange(-0.3f, 0.3f, -0.3f, 0.1f)
 //		.setVelocity(0.1f, 90)
 		.setInitialRotationRange(0, 360)
-		.setRotationSpeed(120, 120)
+		.setRotationSpeed(120)
 		.setFadeOut(2000)
 		.addModifier(new ScaleModifier(0f, 1.5f, 0, 1500))
 		.oneShot(arg0, 10);

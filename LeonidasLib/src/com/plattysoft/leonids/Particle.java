@@ -2,25 +2,27 @@ package com.plattysoft.leonids;
 
 import java.util.List;
 
+import com.plattysoft.leonids.modifiers.ParticleModifier;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.view.animation.Interpolator;
 
-class Particle {
+public class Particle {
 
 	private Bitmap mImage;
 	
 	private float mCurrentX;
 	private float mCurrentY;
 	
-	float mScale = 1f;
-	int mAlpha;
+	public float mScale = 1f;
+	public int mAlpha;
 	
-	float mInitialRotation = 0f;
+	public float mInitialRotation = 0f;
 	
-	float mRotationSpeed = 0f;
+	public float mRotationSpeed = 0f;
 	
 	private float mSpeedX;
 	private float mSpeedY;

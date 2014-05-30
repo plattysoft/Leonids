@@ -1,4 +1,6 @@
-package com.plattysoft.leonids;
+package com.plattysoft.leonids.modifiers;
+
+import com.plattysoft.leonids.Particle;
 
 public class ScaleModifier implements ParticleModifier {
 

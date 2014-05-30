@@ -1,6 +1,8 @@
-package com.plattysoft.leonids;
+package com.plattysoft.leonids.initializers;
 
 import java.util.Random;
+
+import com.plattysoft.leonids.Particle;
 
 public class RotationSpeedInitializer implements ParticleInitializer {
 

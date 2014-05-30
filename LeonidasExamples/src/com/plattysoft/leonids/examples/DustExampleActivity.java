@@ -21,9 +21,8 @@ public class DustExampleActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View arg0) {
 		ParticleSystem ps = new ParticleSystem(this, 4, R.drawable.dust);
-		ps.setSpeedModuleAndAngleRange(0.2f, 0.3f, -70, -110);
-		ps.setRotationSpeed(144, 144);
-		ps.setVelocity(0.00003f, 330);
+		ps.setSpeedByComponentsRange(-0.07f, 0.07f, -0.18f, -0.24f);		
+		ps.setVelocity(0.00003f, 30);
 		ps.setInitialRotationRange(0, 360);
 		ps.addModifier(new AlphaModifier(255, 0, 1000, 3000));
 		ps.addModifier(new ScaleModifier(0.5f, 2f, 0, 1000));

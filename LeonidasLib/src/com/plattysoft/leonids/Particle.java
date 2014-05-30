@@ -14,8 +14,8 @@ public class Particle {
 
 	private Bitmap mImage;
 	
-	private float mCurrentX;
-	private float mCurrentY;
+	public float mCurrentX;
+	public float mCurrentY;
 	
 	public float mScale = 1f;
 	public int mAlpha;
@@ -38,9 +38,6 @@ public class Particle {
 
 	private float mRotation;
 
-	private float mVelocityX;
-	private float mVelocityY;
-
 	private long mMilisecondBeforeEndFade;
 
 	private long mTimeToLive;
@@ -60,9 +57,8 @@ public class Particle {
 		mPaint = new Paint();
 	}
 
-	public void configure(long timeToLive, float emiterX, float emiterY, float speed, int angle, float velocity, float velocityAngle, long fadeOutMiliseconds, Interpolator fadeOutInterpolator) {
+	public void configure(long timeToLive, float emiterX, float emiterY, float speed, int angle, long fadeOutMiliseconds, Interpolator fadeOutInterpolator) {
 		float angleInRads = (float) (angle*Math.PI/180f);
-		float velocityAngleInRads = (float) (velocityAngle*Math.PI/180f);
 		
 		mBitmapHalfWidth = mImage.getWidth()/2;
 		mBitmapHalfHeight = mImage.getHeight()/2;
@@ -73,8 +69,6 @@ public class Particle {
 		mInitialY = emiterY - mBitmapHalfHeight;
 		mSpeedX = (float) (speed * Math.cos(angleInRads));
 		mSpeedY = (float) (speed * Math.sin(angleInRads));
-		mVelocityX = (float) (velocity * Math.cos(velocityAngleInRads));
-		mVelocityY = (float) (velocity * Math.sin(velocityAngleInRads));
 		mMilisecondBeforeEndFade = fadeOutMiliseconds;
 		mFadeOutInterpolator = fadeOutInterpolator;
 		mTimeToLive = timeToLive;
@@ -83,8 +77,8 @@ public class Particle {
 
 	public boolean update (long miliseconds) {
 		long realMiliseconds = miliseconds - mStartingMilisecond;
-		mCurrentX = mInitialX+mSpeedX*realMiliseconds+mVelocityX*realMiliseconds*realMiliseconds;
-		mCurrentY = mInitialY+mSpeedY*realMiliseconds+mVelocityY*realMiliseconds*realMiliseconds;
+		mCurrentX = mInitialX+mSpeedX*realMiliseconds;
+		mCurrentY = mInitialY+mSpeedY*realMiliseconds;
 		mRotation = mInitialRotation + mRotationSpeed*realMiliseconds/1000;
 		// Alpha goes from 255 (no transparency) to 0 transparent		
 		if (mMilisecondBeforeEndFade > 0 && mTimeToLive - realMiliseconds < mMilisecondBeforeEndFade) {

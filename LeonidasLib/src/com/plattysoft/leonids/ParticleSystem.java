@@ -11,6 +11,7 @@ import com.plattysoft.leonids.initializers.RotationInitiazer;
 import com.plattysoft.leonids.initializers.RotationSpeedInitializer;
 import com.plattysoft.leonids.initializers.ScaleInitializer;
 import com.plattysoft.leonids.modifiers.ParticleModifier;
+import com.plattysoft.leonids.modifiers.VelocityModifier;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
@@ -40,9 +41,6 @@ public class ParticleSystem {
 
 	private long mMilisecondsBeforeEnd = 0;
 	private Interpolator mFadeOutInterpolator = new LinearInterpolator();
-
-	private float mVelocity = 0;
-	private float mVelocityAngle = 0;
 
 	private ArrayList<Particle> mParticles;
 	private ArrayList<Particle> mActiveParticles;
@@ -132,8 +130,7 @@ public class ParticleSystem {
 	}
 	
 	public ParticleSystem setVelocity(float velocity, float angle) {
-		mVelocity = velocity;
-		mVelocityAngle = angle;
+		mModifiers.add(new VelocityModifier(velocity, angle));
 		return this;
 	}
 	
@@ -304,7 +301,7 @@ public class ParticleSystem {
 		for (int i=0; i<mInitializers.size(); i++) {
 			mInitializers.get(i).initParticle(p, mRandom);
 		}
-		p.configure(mTimeToLive, mEmiterX, mEmiterY, speed, angle, mVelocity, mVelocityAngle, mMilisecondsBeforeEnd, mFadeOutInterpolator);
+		p.configure(mTimeToLive, mEmiterX, mEmiterY, speed, angle, mMilisecondsBeforeEnd, mFadeOutInterpolator);
 		p.activate(delay, mModifiers);
 		mActiveParticles.add(p);
 		mActivatedParticles++;

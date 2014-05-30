@@ -63,6 +63,8 @@ public class Particle {
 		mCurrentY = mInitialY;
 		
 		mTimeToLive = timeToLive;
+		mScale = 1;
+		mAlpha = 255;
 	}
 
 	public boolean update (long miliseconds) {

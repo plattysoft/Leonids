@@ -64,10 +64,14 @@ List of the methods available on the class ParticleSystem.
 
 ### Constructors
 
-* _ParticleSystem(Activity a, int maxParticles, int drawableRedId, long timeToLive)_: Creates a particle system based on a drawable resource. Avilable resources are Bitmaps (BitmapDrawable) and Animations (AnimationDrawable)
-* _ParticleSystem(Activity a, int maxParticles, Drawable drawable, long timeToLive)_: Creates a particle system based on a drawable. Avilable drawables are Bitmaps (BitmapDrawable) and Animations (AnimationDrawable)
-* _ParticleSystem(Activity a, int maxParticles, Bitmap bitmap, long timeToLive)_: Creates a particle system based on a Bitmap.
-* _ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation, long timeToLive)_: Creates a particle system based on an AnimationDrawable.
+All constructors use the activity, the maximum number of particles and the time to live. The difference is in how the image for the particles is specified. 
+
+Supported drawables are: BitmapDrawable and AnimationDrawable.
+
+* _ParticleSystem(Activity a, int maxParticles, int drawableRedId, long timeToLive)_
+* _ParticleSystem(Activity a, int maxParticles, Drawable drawable, long timeToLive)_
+* _ParticleSystem(Activity a, int maxParticles, Bitmap bitmap, long timeToLive)_
+* _ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation, long timeToLive)_
 
 ### Configuration
 
@@ -93,13 +97,17 @@ For more complex modifiers, you can use the method _addModifier(ParticleModifier
 
 ### One shot
 
-* _oneShot(View emiter, int numParticles)_: Makes one shot on numParticles particles using the emitter view.
-* _oneShot(View emiter, int numParticles, Interpolator interpolator)_: Makes one shot on numParticles particles using the emitter view, time is interpolated using the interpolator.
+Make one shot using from the anchor view using the number of particles specified, an interpolator is optional
+
+* _oneShot(View anchor, int numParticles)_
+* _oneShot(View anchor, int numParticles, Interpolator interpolator)_
 
 ### Emitters
 
-* _emit (View emiter, int particlesPerSecond)_: Emits the number of particles per second from the emitter.
-* _emit (View emiter, int particlesPerSecond, int emitingTime)_: Emits the number of particles per second from the emiter dutin the emiting time.
+Emits the number of particles per second from the emitter. If emittingTime is set, the emitter stops after that time, otherwise it is continuous.
+
+* _emit (View emitter, int particlesPerSecond)_
+* _emit (View emitter, int particlesPerSecond, int emittingTime)_
 
 ## Other details
 

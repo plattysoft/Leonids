@@ -52,6 +52,8 @@ public class ParticleSystem {
 	
 	private List<ParticleModifier> mModifiers;
 	private List<ParticleInitializer> mInitializers;
+	private ValueAnimator mAnimator;
+	private Timer mTimer;
 
 	private ParticleSystem(Activity a, int maxParticles, long timeToLive) {
 		mRandom = new Random();
@@ -249,8 +251,8 @@ public class ParticleSystem {
 		mEmitingTime = -1; // Meaning infinite
 		mDrawingView.setParticles (mActiveParticles);
 		mCurrentTime = 0;
-		Timer t = new Timer();
-		t.schedule(new TimerTask() {			
+		mTimer = new Timer();
+		mTimer.schedule(new TimerTask() {			
 			@Override
 			public void run() {
 				onUpdate(mCurrentTime);
@@ -294,16 +296,16 @@ public class ParticleSystem {
 	}
 
 	private void startAnimator(Interpolator interpolator, long animnationTime) {
-		ValueAnimator animator = ValueAnimator.ofInt(new int[] {0, (int) animnationTime});
-		animator.setDuration(animnationTime);
-		animator.addUpdateListener(new AnimatorUpdateListener() {			
+		mAnimator = ValueAnimator.ofInt(new int[] {0, (int) animnationTime});
+		mAnimator.setDuration(animnationTime);
+		mAnimator.addUpdateListener(new AnimatorUpdateListener() {			
 			@Override
 			public void onAnimationUpdate(ValueAnimator animation) {
 				int miliseconds = (Integer) animation.getAnimatedValue();
 				onUpdate(miliseconds);
 			}
 		});
-		animator.addListener(new AnimatorListener() {			
+		mAnimator.addListener(new AnimatorListener() {			
 			@Override
 			public void onAnimationStart(Animator animation) {}
 			
@@ -320,8 +322,8 @@ public class ParticleSystem {
 				cleanupAnimation();				
 			}
 		});
-		animator.setInterpolator(interpolator);
-		animator.start();
+		mAnimator.setInterpolator(interpolator);
+		mAnimator.start();
 	}
 
 	private void configureEmiter(View emiter) {
@@ -368,5 +370,16 @@ public class ParticleSystem {
 		mDrawingView = null;
 		mParentView.postInvalidate();
 		mParticles.addAll(mActiveParticles);
+	}
+	
+	public void cancel() {
+		if (mAnimator != null && mAnimator.isRunning()) {
+			mAnimator.cancel();
+		}
+		if (mTimer != null) {
+			mTimer.cancel();
+			mTimer.purge();
+			cleanupAnimation();
+		}
 	}
 }

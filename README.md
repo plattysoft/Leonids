@@ -60,6 +60,21 @@ It uses an initializer for the Speed as module and angle ranges, a fixed speed r
 
 ## Available Methods
 
+List of the methods available on the class ParticleSystem.
+
+### Constructors
+
+All constructors use the activity, the maximum number of particles and the time to live. The difference is in how the image for the particles is specified. 
+
+Supported drawables are: BitmapDrawable and AnimationDrawable.
+
+* _ParticleSystem(Activity a, int maxParticles, int drawableRedId, long timeToLive)_
+* _ParticleSystem(Activity a, int maxParticles, Drawable drawable, long timeToLive)_
+* _ParticleSystem(Activity a, int maxParticles, Bitmap bitmap, long timeToLive)_
+* _ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation, long timeToLive)_
+
+### Configuration
+
 Available methods on the Particle system for configuration are:
 
 * _setSpeedRange(float speedMin, float speedMax)_: Uses 0-360 as the angle range
@@ -79,6 +94,20 @@ For more complex modifiers, you can use the method _addModifier(ParticleModifier
 * _AlphaModifier (int initialValue, int finalValue, long startMilis, long endMilis, Interpolator interpolator)_
 * _ScaleModifier (float initialValue, float finalValue, long startMilis, long endMilis)_
 * _ScaleModifier (float initialValue, float finalValue, long startMilis, long endMilis, Interpolator interpolator)_
+
+### One shot
+
+Make one shot using from the anchor view using the number of particles specified, an interpolator is optional
+
+* _oneShot(View anchor, int numParticles)_
+* _oneShot(View anchor, int numParticles, Interpolator interpolator)_
+
+### Emitters
+
+Emits the number of particles per second from the emitter. If emittingTime is set, the emitter stops after that time, otherwise it is continuous.
+
+* _emit (View emitter, int particlesPerSecond)_
+* _emit (View emitter, int particlesPerSecond, int emittingTime)_
 
 ## Other details
 

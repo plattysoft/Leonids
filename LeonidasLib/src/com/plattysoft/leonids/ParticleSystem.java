@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.plattysoft.leonids.initializers.AccelerationInitializer;
 import com.plattysoft.leonids.initializers.ParticleInitializer;
 import com.plattysoft.leonids.initializers.RotationInitiazer;
 import com.plattysoft.leonids.initializers.RotationSpeedInitializer;
@@ -14,7 +15,6 @@ import com.plattysoft.leonids.initializers.SpeeddByComponentsInitializer;
 import com.plattysoft.leonids.initializers.SpeeddModuleAndRangeInitializer;
 import com.plattysoft.leonids.modifiers.AlphaModifier;
 import com.plattysoft.leonids.modifiers.ParticleModifier;
-import com.plattysoft.leonids.modifiers.AccelerationModifier;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
@@ -184,8 +184,13 @@ public class ParticleSystem {
 		return this;
 	}
 	
-	public ParticleSystem setAcceleration(float acceleration, float angle) {
-		mModifiers.add(new AccelerationModifier(acceleration, angle));
+	public ParticleSystem setAccelerationModuleAndAndAngleRange(float minAcceleration, float maxAcceleration, int minAngle, int maxAngle) {
+		mInitializers.add(new AccelerationInitializer(minAcceleration, maxAcceleration, minAngle, maxAngle));
+		return this;
+	}
+	
+	public ParticleSystem setAcceleration(float acceleration, int angle) {
+		mInitializers.add(new AccelerationInitializer(acceleration, acceleration, angle, angle));
 		return this;
 	}
 	

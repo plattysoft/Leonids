@@ -26,6 +26,9 @@ public class Particle {
 	public float mSpeedX = 0f;
 	public float mSpeedY = 0f;
 
+	public float mAccelerationX;
+	public float mAccelerationY;
+
 	private Matrix mMatrix;
 	private Paint mPaint;
 
@@ -42,6 +45,7 @@ public class Particle {
 	private int mBitmapHalfHeight;
 
 	private List<ParticleModifier> mModifiers;
+
 
 	protected Particle() {		
 		mMatrix = new Matrix();
@@ -72,8 +76,8 @@ public class Particle {
 		if (realMiliseconds > mTimeToLive) {
 			return false;
 		}
-		mCurrentX = mInitialX+mSpeedX*realMiliseconds;
-		mCurrentY = mInitialY+mSpeedY*realMiliseconds;
+		mCurrentX = mInitialX+mSpeedX*realMiliseconds+mAccelerationX*realMiliseconds*realMiliseconds;
+		mCurrentY = mInitialY+mSpeedY*realMiliseconds+mAccelerationY*realMiliseconds*realMiliseconds;
 		mRotation = mInitialRotation + mRotationSpeed*realMiliseconds/1000;
 		for (int i=0; i<mModifiers.size(); i++) {
 			mModifiers.get(i).apply(this, realMiliseconds);

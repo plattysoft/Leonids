@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Leonids : A Particle System that can be used with the standard Android UI" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Leonids</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/plattysoft/Leonids">View on GitHub</a>
+
+          <h1 id="project_title">Leonids</h1>
+          <h2 id="project_tagline">A Particle System that can be used with the standard Android UI</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/plattysoft/Leonids/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/plattysoft/Leonids/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="leonids" class="anchor" href="#leonids"><span class="octicon octicon-link"></span></a>Leonids</h1>
+
+<p>Leonids is a particle system library that works with the standard Android UI.</p>
+
+<p>The library is extremely lightweight, <a href="https://github.com/plattysoft/Leonids/releases/download/1.1.1/LeonidsLib.jar">LeonidsLib.jar</a> is just 18Kb you can add to your project.</p>
+
+<p>You can download <a href="https://play.google.com/store/apps/details?id=com.plattysoft.leonids.examples">Leonids Demo from Google Play</a> to check out what can be done with it.</p>
+
+<h2>
+<a name="why-this-library" class="anchor" href="#why-this-library"><span class="octicon octicon-link"></span></a>Why this library?</h2>
+
+<p>Particle systems are often used in games for a wide range of purposes: Explosions, fire, smoke, etc. This effects can also be used on normal apps to add an element of "juiciness" or Playful Design.</p>
+
+<p>Precisely because its main use is games, all engines have support for particle systems, but there is no such thing for standard Android UI.</p>
+
+<p>This means that if you are building an Android app and you want a particle system, you have to include a graphics engine and use OpenGL -which is quite an overkill- or you have to implement it yourself.</p>
+
+<p>Leonids is made to fill this gap, bringing particle sytems to developers that use the standard Android UI.</p>
+
+<h2>
+<a name="basic-usage" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Basic usage</h2>
+
+<p>Creating and firing a one-shot particle system is very easy, just 3 lines of code.</p>
+
+<div class="highlight highlight-java"><pre><span class="k">new</span> <span class="nf">ParticleSystem</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">numParticles</span><span class="o">,</span> <span class="n">drawableResId</span><span class="o">,</span> <span class="n">timeToLive</span><span class="o">)</span>
+<span class="o">.</span><span class="na">setSpeedRange</span><span class="o">(</span><span class="mf">0.2f</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">)</span>
+<span class="o">.</span><span class="na">oneShot</span><span class="o">(</span><span class="n">anchorView</span><span class="o">,</span> <span class="n">numParticles</span><span class="o">);</span>
+</pre></div>
+
+<p>When you create the particle system, you tell how many particles will it use as a maximum, the resourceId of the drawable you want to use for the particles and for how long the particles will live.</p>
+
+<p>Then you configure the particle system. In this case we specify that the particles will have a speed between 0.2 and 0.5 pixels per milisecond (support for dips will be included in the future). Since we did not provide an angle range, it will be considered as "any angle".</p>
+
+<p>Finally, we call oneShot, passing the view from which the particles will be launched and saying how many particles we want to be shot.</p>
+
+<p><img src="images/Leonids_one_shot.gif" alt=""></p>
+
+<h2>
+<a name="emitters" class="anchor" href="#emitters"><span class="octicon octicon-link"></span></a>Emitters</h2>
+
+<p>You can configure emitters, which have a constant ratio of particles being emited per second.
+This is the code for the Confeti example:</p>
+
+<div class="highlight highlight-java"><pre><span class="k">new</span> <span class="nf">ParticleSystem</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="mi">80</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">confeti2</span><span class="o">,</span> <span class="mi">10000</span><span class="o">)</span>
+<span class="o">.</span><span class="na">setSpeedModuleAndAngleRange</span><span class="o">(</span><span class="mi">0</span><span class="n">f</span><span class="o">,</span> <span class="mf">0.3f</span><span class="o">,</span> <span class="mi">180</span><span class="o">,</span> <span class="mi">180</span><span class="o">)</span>
+<span class="o">.</span><span class="na">setRotationSpeed</span><span class="o">(</span><span class="mi">144</span><span class="o">)</span>
+<span class="o">.</span><span class="na">setAcceleration</span><span class="o">(</span><span class="mf">0.00005f</span><span class="o">,</span> <span class="mi">90</span><span class="o">)</span>
+<span class="o">.</span><span class="na">emit</span><span class="o">(</span><span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">emiter_top_right</span><span class="o">),</span> <span class="mi">8</span><span class="o">);</span>
+
+<span class="k">new</span> <span class="nf">ParticleSystem</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="mi">80</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">confeti3</span><span class="o">,</span> <span class="mi">10000</span><span class="o">)</span>
+<span class="o">.</span><span class="na">setSpeedModuleAndAngleRange</span><span class="o">(</span><span class="mi">0</span><span class="n">f</span><span class="o">,</span> <span class="mf">0.3f</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span>
+<span class="o">.</span><span class="na">setRotationSpeed</span><span class="o">(</span><span class="mi">144</span><span class="o">)</span>
+<span class="o">.</span><span class="na">setAcceleration</span><span class="o">(</span><span class="mf">0.00005f</span><span class="o">,</span> <span class="mi">90</span><span class="o">)</span>
+<span class="o">.</span><span class="na">emit</span><span class="o">(</span><span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">emiter_top_left</span><span class="o">),</span> <span class="mi">8</span><span class="o">);</span>
+</pre></div>
+
+<p>It uses an initializer for the Speed as module and angle ranges, a fixed speed rotaion and extenal acceleration.</p>
+
+<p><img src="images/leonids_confeti.gif" alt=""></p>
+
+<h2>
+<a name="available-methods" class="anchor" href="#available-methods"><span class="octicon octicon-link"></span></a>Available Methods</h2>
+
+<p>List of the methods available on the class ParticleSystem.</p>
+
+<h3>
+<a name="constructors" class="anchor" href="#constructors"><span class="octicon octicon-link"></span></a>Constructors</h3>
+
+<p>All constructors use the activity, the maximum number of particles and the time to live. The difference is in how the image for the particles is specified. </p>
+
+<p>Supported drawables are: BitmapDrawable and AnimationDrawable.</p>
+
+<ul>
+<li><em>ParticleSystem(Activity a, int maxParticles, int drawableRedId, long timeToLive)</em></li>
+<li><em>ParticleSystem(Activity a, int maxParticles, Drawable drawable, long timeToLive)</em></li>
+<li><em>ParticleSystem(Activity a, int maxParticles, Bitmap bitmap, long timeToLive)</em></li>
+<li><em>ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation, long timeToLive)</em></li>
+</ul><h3>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h3>
+
+<p>Available methods on the Particle system for configuration are:</p>
+
+<ul>
+<li>
+<em>setSpeedRange(float speedMin, float speedMax)</em>: Uses 0-360 as the angle range</li>
+<li><em>setSpeedModuleAndAngleRange(float speedMin, float speedMax, int minAngle, int maxAngle)</em></li>
+<li><em>setSpeedByComponentsRange(float speedMinX, float speedMaxX, float speedMinY, float speedMaxY)</em></li>
+<li><em>setInitialRotationRange (int minAngle, int maxAngle)</em></li>
+<li><em>setScaleRange(float minScale, float maxScale)</em></li>
+<li><em>setRotationSpeed(float rotationSpeed)</em></li>
+<li><em>setRotationSpeedRange(float minRotationSpeed, float maxRotationSpeed)</em></li>
+<li><em>setAcceleration(float acceleration, float angle)</em></li>
+<li>
+<em>setFadeOut(long milisecondsBeforeEnd, Interpolator interpolator)</em>: Utility method for a simple fade out effect using an interpolator</li>
+<li>
+<em>setFadeOut(long duration)</em>:Utility method for a simple fade out</li>
+</ul><p>For more complex modifiers, you can use the method <em>addModifier(ParticleModifier modifier)</em>. Available modifiers are:</p>
+
+<ul>
+<li><em>AlphaModifier (int initialValue, int finalValue, long startMilis, long endMilis)</em></li>
+<li><em>AlphaModifier (int initialValue, int finalValue, long startMilis, long endMilis, Interpolator interpolator)</em></li>
+<li><em>ScaleModifier (float initialValue, float finalValue, long startMilis, long endMilis)</em></li>
+<li><em>ScaleModifier (float initialValue, float finalValue, long startMilis, long endMilis, Interpolator interpolator)</em></li>
+</ul><h3>
+<a name="one-shot" class="anchor" href="#one-shot"><span class="octicon octicon-link"></span></a>One shot</h3>
+
+<p>Make one shot using from the anchor view using the number of particles specified, an interpolator is optional</p>
+
+<ul>
+<li><em>oneShot(View anchor, int numParticles)</em></li>
+<li><em>oneShot(View anchor, int numParticles, Interpolator interpolator)</em></li>
+</ul><h3>
+<a name="emitters-1" class="anchor" href="#emitters-1"><span class="octicon octicon-link"></span></a>Emitters</h3>
+
+<p>Emits the number of particles per second from the emitter. If emittingTime is set, the emitter stops after that time, otherwise it is continuous.</p>
+
+<ul>
+<li><em>emit (View emitter, int particlesPerSecond)</em></li>
+<li><em>emit (View emitter, int particlesPerSecond, int emittingTime)</em></li>
+</ul><h2>
+<a name="other-details" class="anchor" href="#other-details"><span class="octicon octicon-link"></span></a>Other details</h2>
+
+<p>Leonids requires minSDK 11 because it uses ValueAnimators. It should be very easy, however to use the compatibility library and make it work on Gingerbread.</p>
+
+<p>The library is Free Software, you can use it, extended with no requirement to open source your changes. You can also make paid apps using it.</p>
+
+<p>Each Particle System only uses one image for the particles. If you want different particles to be emitted, you need to create a Particle System for each one of them.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Leonids maintained by <a href="https://github.com/plattysoft">plattysoft</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

@@ -3,7 +3,7 @@ Leonids
 
 Leonids is a particle system library that works with the standard Android UI.
 
-The library is extremely lightweight, [LeonidsLib.jar](LeonidsLib.jar) is just 18Kb you can add to your project.
+The library is extremely lightweight, [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.1.1/LeonidsLib.jar) is just 18Kb you can add to your project.
 
 You can download [Leonids Demo from Google Play](https://play.google.com/store/apps/details?id=com.plattysoft.leonids.examples) to check out what can be done with it.
 
@@ -33,7 +33,7 @@ Then you configure the particle system. In this case we specify that the particl
 
 Finally, we call oneShot, passing the view from which the particles will be launched and saying how many particles we want to be shot.
 
-![](images/Leonids_one_shot.gif)
+![](https://raw.githubusercontent.com/plattysoft/Leonids/master/images/Leonids_one_shot.gif)
 
 ## Emitters
 
@@ -56,7 +56,7 @@ new ParticleSystem(this, 80, R.drawable.confeti3, 10000)
 
 It uses an initializer for the Speed as module and angle ranges, a fixed speed rotaion and extenal acceleration.
 
-![](images/leonids_confeti.gif)
+![](https://raw.githubusercontent.com/plattysoft/Leonids/master/images/leonids_confeti.gif)
 
 ## Available Methods
 

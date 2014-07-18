@@ -20,7 +20,8 @@ public class AccelerationInitializer implements ParticleInitializer {
 
 	@Override
 	public void initParticle(Particle p, Random r) {
-		float angle = r.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
+		int randomParam = mMaxAngle - mMinAngle;
+		float angle = r.nextInt(randomParam<=0?randomParam+1:randomParam) + mMinAngle;
 		float angleInRads = (float) (angle*Math.PI/180f);
 		float value = r.nextFloat()*(mMaxValue-mMinValue)+mMinValue;
 		p.mAccelerationX = (float) (value * Math.cos(angleInRads));

@@ -57,6 +57,11 @@ public class Particle {
 		mImage = bitmap;
 	}
 
+	public void init() {
+		mScale = 1;
+		mAlpha = 255;	
+	}
+	
 	public void configure(long timeToLive, float emiterX, float emiterY) {
 		mBitmapHalfWidth = mImage.getWidth()/2;
 		mBitmapHalfHeight = mImage.getHeight()/2;
@@ -67,8 +72,6 @@ public class Particle {
 		mCurrentY = mInitialY;
 		
 		mTimeToLive = timeToLive;
-		mScale = 1;
-		mAlpha = 255;
 	}
 
 	public boolean update (long miliseconds) {

@@ -341,7 +341,8 @@ public class ParticleSystem {
 	}
 
 	private void activateParticle(long delay) {
-		Particle p = mParticles.remove(0);		
+		Particle p = mParticles.remove(0);	
+		p.init();
 		// Initialization goes before configuration, scale is required before can be configured properly
 		for (int i=0; i<mInitializers.size(); i++) {
 			mInitializers.get(i).initParticle(p, mRandom);

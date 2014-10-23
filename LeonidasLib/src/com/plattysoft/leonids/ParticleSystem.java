@@ -243,7 +243,7 @@ public class ParticleSystem {
 		mParentView.addView(mDrawingView);
 		
 		mDrawingView.setParticles (mActiveParticles);
-        updateParticlesBeforeStartTime(particlesPerSecond);
+        	updateParticlesBeforeStartTime(particlesPerSecond);
 		mEmitingTime = emitingTime;
 		startAnimator(new LinearInterpolator(), emitingTime+mTimeToLive);
 	}
@@ -265,7 +265,7 @@ public class ParticleSystem {
 		mParentView.addView(mDrawingView);
 		mEmitingTime = -1; // Meaning infinite
 		mDrawingView.setParticles (mActiveParticles);
-        updateParticlesBeforeStartTime(particlesPerSecond);
+        	updateParticlesBeforeStartTime(particlesPerSecond);
 		mTimer = new Timer();
 		mTimer.schedule(new TimerTask() {			
 			@Override

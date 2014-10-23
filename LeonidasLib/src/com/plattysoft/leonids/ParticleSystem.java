@@ -44,7 +44,7 @@ public class ParticleSystem {
 	private int mEmiterX;
 	private int mEmiterY;
 	private long mTimeToLive;
-	private long mCurrentTime;
+	private long mCurrentTime = 0;
 	
 	private float mParticlesPerMilisecond;
 	private int mActivatedParticles;
@@ -194,6 +194,16 @@ public class ParticleSystem {
 		return this;
 	}
 	
+    public ParticleSystem setParentViewGroup(ViewGroup viewGroup) {
+        mParentView = viewGroup;
+        return this;
+    }
+
+    public ParticleSystem setStartTime(int time) {
+        mCurrentTime = time;
+        return this;
+    }
+
 	/**
 	 * Configures a fade out for the particles when they disappear
 	 * 
@@ -233,7 +243,7 @@ public class ParticleSystem {
 		mParentView.addView(mDrawingView);
 		
 		mDrawingView.setParticles (mActiveParticles);
-		mCurrentTime = 0;
+        updateParticlesBeforeStartTime(particlesPerSecond);
 		mEmitingTime = emitingTime;
 		startAnimator(new LinearInterpolator(), emitingTime+mTimeToLive);
 	}
@@ -255,7 +265,7 @@ public class ParticleSystem {
 		mParentView.addView(mDrawingView);
 		mEmitingTime = -1; // Meaning infinite
 		mDrawingView.setParticles (mActiveParticles);
-		mCurrentTime = 0;
+        updateParticlesBeforeStartTime(particlesPerSecond);
 		mTimer = new Timer();
 		mTimer.schedule(new TimerTask() {			
 			@Override
@@ -265,6 +275,28 @@ public class ParticleSystem {
 			}
 		}, 0, TIMMERTASK_INTERVAL);
 	}
+
+    public void emit (int emitterX, int emitterY, int particlesPerSecond) {
+        mEmiterX = emitterX;
+        mEmiterY = emitterY;
+
+        mActivatedParticles = 0;
+        mParticlesPerMilisecond = particlesPerSecond/1000f;
+        // Add a full size view to the parent view
+        mDrawingView = new ParticleField(mParentView.getContext());
+        mParentView.addView(mDrawingView);
+        mEmitingTime = -1; // Meaning infinite
+        mDrawingView.setParticles (mActiveParticles);
+        updateParticlesBeforeStartTime(particlesPerSecond);
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                onUpdate(mCurrentTime);
+                mCurrentTime += TIMMERTASK_INTERVAL;
+            }
+        }, 0, TIMMERTASK_INTERVAL);
+    }
 	
 	/**
 	 * Launches particles in one Shot
@@ -388,4 +420,14 @@ public class ParticleSystem {
 			cleanupAnimation();
 		}
 	}
+
+    private void updateParticlesBeforeStartTime(int particlesPerSecond) {
+        if (particlesPerSecond == 0) return;
+        long currentTimeInMs = mCurrentTime / 1000;
+        long framesCount = currentTimeInMs / particlesPerSecond;
+        long frameTimeInMs = mCurrentTime / framesCount;
+        for (int i = 1; i <= framesCount; i++) {
+            onUpdate(frameTimeInMs * i + 1);
+        }
+    }
 }

@@ -22,7 +22,7 @@ public class DustExampleActivity extends Activity implements OnClickListener {
 	public void onClick(View arg0) {
 		new ParticleSystem(this, 4, R.drawable.dust, 3000)
 		.setSpeedByComponentsRange(-0.035f, 0.035f, -0.09f, -0.12f)		
-		.setAcceleration(0.00003f, 30)
+		.setAcceleration(0.000015f, 30)
 		.setInitialRotationRange(0, 360)
 		.addModifier(new AlphaModifier(255, 0, 1000, 3000))
 		.addModifier(new ScaleModifier(0.5f, 2f, 0, 1000))

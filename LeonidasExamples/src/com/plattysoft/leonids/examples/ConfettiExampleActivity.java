@@ -21,13 +21,13 @@ public class ConfettiExampleActivity extends Activity implements OnClickListener
 		new ParticleSystem(this, 80, R.drawable.confeti2, 10000)
 		.setSpeedModuleAndAngleRange(0f, 0.15f, 180, 180)
 		.setRotationSpeed(144)
-		.setAcceleration(0.00005f, 90)		
+		.setAcceleration(0.000025f, 90)		
 		.emit(findViewById(R.id.emiter_top_right), 8);
 				
 		new ParticleSystem(this, 80, R.drawable.confeti3, 10000)
 		.setSpeedModuleAndAngleRange(0f, 0.15f, 0, 0)
 		.setRotationSpeed(144)
-		.setAcceleration(0.00005f, 90)		
+		.setAcceleration(0.000025f, 90)		
 		.emit(findViewById(R.id.emiter_top_left), 8);
 	}
 }

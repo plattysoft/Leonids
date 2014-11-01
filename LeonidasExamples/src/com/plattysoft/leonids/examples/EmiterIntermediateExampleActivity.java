@@ -23,7 +23,7 @@ public class EmiterIntermediateExampleActivity extends Activity implements OnCli
 		ps.setScaleRange(0.7f, 1.3f);
 		ps.setSpeedModuleAndAngleRange(0.1f, 0.25f, 0, 180);
 		ps.setRotationSpeedRange(90, 180);
-		ps.setAcceleration(0.0004f, 90);
+		ps.setAcceleration(0.0002f, 90);
 		ps.setFadeOut(200, new AccelerateInterpolator());
 		ps.emit(arg0, 100);
 	}

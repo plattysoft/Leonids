@@ -195,7 +195,8 @@ public class ParticleSystem {
 	}
 	
 	public ParticleSystem setAccelerationModuleAndAndAngleRange(float minAcceleration, float maxAcceleration, int minAngle, int maxAngle) {
-		mInitializers.add(new AccelerationInitializer(minAcceleration, maxAcceleration, minAngle, maxAngle));
+		mInitializers.add(new AccelerationInitializer(dpToPx(minAcceleration), dpToPx(maxAcceleration), 
+				minAngle, maxAngle));
 		return this;
 	}
 	

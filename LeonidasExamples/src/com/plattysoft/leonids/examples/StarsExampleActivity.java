@@ -20,7 +20,7 @@ public class StarsExampleActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View arg0) {
 		new ParticleSystem(this, 10, R.drawable.star, 3000)		
-		.setSpeedByComponentsRange(-0.3f, 0.3f, -0.3f, 0.1f)
+		.setSpeedByComponentsRange(-0.15f, 0.15f, -0.15f, 0.05f)
 		.setAcceleration(0.00001f, 90)
 		.setInitialRotationRange(0, 360)
 		.setRotationSpeed(120)

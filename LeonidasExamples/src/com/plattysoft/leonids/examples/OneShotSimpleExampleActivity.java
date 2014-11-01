@@ -19,7 +19,7 @@ public class OneShotSimpleExampleActivity extends Activity implements OnClickLis
 	@Override
 	public void onClick(View arg0) {
 		new ParticleSystem(this, 100, R.drawable.star_pink, 800)		
-		.setSpeedRange(0.2f, 0.5f)
+		.setSpeedRange(0.1f, 0.25f)
 		.oneShot(arg0, 100);
 	}
 

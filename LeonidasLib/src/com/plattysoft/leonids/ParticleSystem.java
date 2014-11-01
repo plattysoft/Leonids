@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
@@ -54,6 +55,8 @@ public class ParticleSystem {
 	private List<ParticleInitializer> mInitializers;
 	private ValueAnimator mAnimator;
 	private Timer mTimer;
+
+	private float mDpToPxScale;
 
 	private ParticleSystem(Activity a, int maxParticles, long timeToLive) {
 		mRandom = new Random();
@@ -106,6 +109,12 @@ public class ParticleSystem {
 		else {
 			// Not supported, no particles are being created
 		}
+		DisplayMetrics displayMetrics = a.getResources().getDisplayMetrics();
+		mDpToPxScale = (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT);
+	}
+	
+	public float dpToPx(float dp) {
+	    return dp * mDpToPxScale;
 	}
 	
 	/**
@@ -150,17 +159,18 @@ public class ParticleSystem {
 	}
 	
 	public ParticleSystem setSpeedRange(float speedMin, float speedMax) { 
-		mInitializers.add(new SpeeddModuleAndRangeInitializer(speedMin, speedMax, 0, 360));		
+		mInitializers.add(new SpeeddModuleAndRangeInitializer(dpToPx(speedMin), dpToPx(speedMax), 0, 360));		
 		return this;
 	}
-	
+
 	public ParticleSystem setSpeedModuleAndAngleRange(float speedMin, float speedMax, int minAngle, int maxAngle) {
-		mInitializers.add(new SpeeddModuleAndRangeInitializer(speedMin, speedMax, minAngle, maxAngle));		
+		mInitializers.add(new SpeeddModuleAndRangeInitializer(dpToPx(speedMin), dpToPx(speedMax), minAngle, maxAngle));		
 		return this;
 	}
 	
 	public ParticleSystem setSpeedByComponentsRange(float speedMinX, float speedMaxX, float speedMinY, float speedMaxY) {
-		mInitializers.add(new SpeeddByComponentsInitializer(speedMinX, speedMaxX, speedMinY, speedMaxY));		
+		mInitializers.add(new SpeeddByComponentsInitializer(dpToPx(speedMinX), dpToPx(speedMaxX), 
+				dpToPx(speedMinY), dpToPx(speedMaxY)));		
 		return this;
 	}
 	

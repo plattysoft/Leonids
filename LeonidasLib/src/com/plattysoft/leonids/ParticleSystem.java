@@ -444,15 +444,15 @@ public class ParticleSystem {
 		// Now, vertical gravity and range
 		if (hasGravity(gravity, Gravity.TOP)) {
 			mEmiterYMin = location[1] - mParentLocation[1];
-			mEmiterYMax = mEmiterXMin;
+			mEmiterYMax = mEmiterYMin;
 		}
 		else if (hasGravity(gravity, Gravity.BOTTOM)) {
 			mEmiterYMin = location[1] + emiter.getHeight() - mParentLocation[1];
-			mEmiterYMax = mEmiterXMin;
+			mEmiterYMax = mEmiterYMin;
 		}
 		else if (hasGravity(gravity, Gravity.CENTER_VERTICAL)){
 			mEmiterYMin = location[1] + emiter.getHeight()/2 - mParentLocation[1];
-			mEmiterYMax = mEmiterXMin;
+			mEmiterYMax = mEmiterYMin;
 		}
 		else {
 			// All the range

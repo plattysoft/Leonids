@@ -36,9 +36,14 @@
 
 <p>Leonids is a particle system library that works with the standard Android UI.</p>
 
-<p>The library is extremely lightweight, <a href="https://github.com/plattysoft/Leonids/releases/download/1.1.1/LeonidsLib.jar">LeonidsLib.jar</a> is just 18Kb you can add to your project.</p>
+<p>The library is extremely lightweight, <a href="https://github.com/plattysoft/Leonids/releases/download/1.2/LeonidsLib.jar">LeonidsLib.jar</a> is just 81Kb.</p>
 
 <p>You can download <a href="https://play.google.com/store/apps/details?id=com.plattysoft.leonids.examples">Leonids Demo from Google Play</a> to check out what can be done with it.</p>
+
+<h2>
+<a id="setup" class="anchor" href="#setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup</h2>
+
+<p>Just put <a href="https://github.com/plattysoft/Leonids/releases/download/1.2/LeonidsLib.jar">LeonidsLib.jar</a> into the libs folder of your app.</p>
 
 <h2>
 <a id="why-this-library" class="anchor" href="#why-this-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why this library?</h2>
@@ -154,15 +159,46 @@ This is the code for the Confeti example:</p>
 
 <p>Emits the number of particles per second from the emitter. If emittingTime is set, the emitter stops after that time, otherwise it is continuous.</p>
 
+<h4>
+<a id="basic-emitters" class="anchor" href="#basic-emitters" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic emitters</h4>
+
 <ul>
 <li><em>emit (View emitter, int particlesPerSecond)</em></li>
 <li><em>emit (View emitter, int particlesPerSecond, int emittingTime)</em></li>
 </ul>
 
+<h4>
+<a id="emit-based-on-xy-coordinates" class="anchor" href="#emit-based-on-xy-coordinates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Emit based on (x,y) coordinates</h4>
+
+<ul>
+<li><em>emit (int emitterX, int emitterY, int particlesPerSecond)</em></li>
+<li><em>emit (int emitterX, int emitterY, int particlesPerSecond, int emitingTime)</em></li>
+</ul>
+
+<h4>
+<a id="emit-with-gravity" class="anchor" href="#emit-with-gravity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Emit with Gravity</h4>
+
+<ul>
+<li><em>emitWithGravity (View emiter, int gravity, int particlesPerSecond)</em></li>
+<li><em>emitWithGravity (View emiter, int gravity, int particlesPerSecond, int emitingTime)</em></li>
+</ul>
+
+<h4>
+<a id="update-stop-and-cancel" class="anchor" href="#update-stop-and-cancel" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update, stop, and cancel</h4>
+
+<ul>
+<li>
+<em>updateEmitPoint (int emitterX, int emitterY)</em> Updates dynamically the point of emission.</li>
+<li>
+<em>stopEmitting ()</em> Stops the emission of new particles, but the active ones are updated.</li>
+<li>
+<em>cancel ()</em> Stops the emission of new particles and cancles the active ones.</li>
+</ul>
+
 <h2>
 <a id="other-details" class="anchor" href="#other-details" aria-hidden="true"><span class="octicon octicon-link"></span></a>Other details</h2>
 
-<p>Leonids requires minSDK 11 because it uses ValueAnimators. It should be very easy, however to use the compatibility library and make it work on Gingerbread.</p>
+<p>Leonids requires minSDK 11 because it uses ValueAnimators. It should be very easy, however to use nineoldandroids and make it work on Gingerbread.</p>
 
 <p>The library is Free Software, you can use it, extended with no requirement to open source your changes. You can also make paid apps using it.</p>
 

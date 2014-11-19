@@ -437,6 +437,9 @@ public class ParticleSystem {
 		}
 		long currentTimeInMs = mCurrentTime / 1000;
 		long framesCount = currentTimeInMs / particlesPerSecond;
+		if (framesCount == 0) {
+			return;
+		}
 		long frameTimeInMs = mCurrentTime / framesCount;
 		for (int i = 1; i <= framesCount; i++) {
 			onUpdate(frameTimeInMs * i + 1);

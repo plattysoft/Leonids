@@ -26,6 +26,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
@@ -244,11 +245,12 @@ public class ParticleSystem {
 	 * no new particles will be created
 	 * 
 	 * @param emiter  View from which center the particles will be emited
+	 * @param gravity Which position among the view the emission takes place
 	 * @param particlesPerSecond Number of particles per second that will be emited (evenly distributed)
 	 * @param timeToLive miliseconds the particles will be displayed
 	 * @param emitingTime time the emiter will be emiting particles
 	 */
-	public void emit (View emiter, int particlesPerSecond, int emitingTime) {
+	public void emitWithGravity (View emiter, int gravity, int particlesPerSecond, int emitingTime) {
 		// Setup emiter
 		configureEmiter(emiter);
 		startEmiting(particlesPerSecond, emitingTime);
@@ -260,13 +262,39 @@ public class ParticleSystem {
 	 * 
 	 * @param emiter  View from which center the particles will be emited
 	 * @param particlesPerSecond Number of particles per second that will be emited (evenly distributed)
+	 * @param timeToLive miliseconds the particles will be displayed
+	 * @param emitingTime time the emiter will be emiting particles
+	 */
+	public void emit (View emiter, int particlesPerSecond, int emitingTime) {
+		emitWithGravity(emiter, Gravity.CENTER, particlesPerSecond, emitingTime);
+	}
+	
+	/**
+	 * Starts emiting particles from a specific view. If at some point the number goes over the amount of particles availabe on create
+	 * no new particles will be created
+	 * 
+	 * @param emiter  View from which center the particles will be emited
+	 * @param particlesPerSecond Number of particles per second that will be emited (evenly distributed)
 	 */
 	public void emit (View emiter, int particlesPerSecond) {
+		// Setup emiter
+		emitWithGravity(emiter, Gravity.CENTER, particlesPerSecond);
+	}
+
+	/**
+	 * Starts emiting particles from a specific view. If at some point the number goes over the amount of particles availabe on create
+	 * no new particles will be created
+	 * 
+	 * @param emiter  View from which center the particles will be emited
+	 * @param gravity Which position among the view the emission takes place
+	 * @param particlesPerSecond Number of particles per second that will be emited (evenly distributed)
+	 */
+	public void emitWithGravity (View emiter, int gravity, int particlesPerSecond) {
 		// Setup emiter
 		configureEmiter(emiter);
 		startEmiting(particlesPerSecond);
 	}
-
+	
 	private void startEmiting(int particlesPerSecond) {
 		mActivatedParticles = 0;
 		mParticlesPerMilisecond = particlesPerSecond/1000f;

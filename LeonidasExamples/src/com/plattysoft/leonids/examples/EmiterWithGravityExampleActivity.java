@@ -20,11 +20,10 @@ public class EmiterWithGravityExampleActivity extends Activity implements OnClic
 
 	@Override
 	public void onClick(View arg0) {
-		new ParticleSystem(this, 50, R.drawable.star_pink, 1000)
-		.setSpeedRange(0.1f, 0.25f)
-		.setRotationSpeedRange(90, 180)
+		new ParticleSystem(this, 100, R.drawable.star_pink, 3000)
 		.setAcceleration(0.00013f, 90)
+		.setSpeedByComponentsRange(0f, 0f, 0.05f, 0.1f)
 		.setFadeOut(200, new AccelerateInterpolator())
-		.emitWithGravity(arg0, Gravity.BOTTOM, 100);
+		.emitWithGravity(arg0, Gravity.BOTTOM, 30);
 	}
 }

@@ -119,8 +119,8 @@ Emits the number of particles per second from the emitter. If emittingTime is se
 * _emit (int emitterX, int emitterY, int particlesPerSecond, int emitingTime)_
 
 ####Emit with Gravity 
-* _emitWithGravity (View emiter, int gravity)_
 * _emitWithGravity (View emiter, int gravity, int particlesPerSecond)_
+* _emitWithGravity (View emiter, int gravity, int particlesPerSecond, int emitingTime)_
  
 ####Update, stop, and cancel
 * _updateEmitPoint (int emitterX, int emitterY)_ Updates dynamically the point of emission.

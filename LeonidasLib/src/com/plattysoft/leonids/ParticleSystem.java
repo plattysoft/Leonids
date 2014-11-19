@@ -57,6 +57,7 @@ public class ParticleSystem {
 	private Timer mTimer;
 
 	private float mDpToPxScale;
+	private int[] mParentLocation;
 
 	private ParticleSystem(Activity a, int maxParticles, long timeToLive) {
 		mRandom = new Random();
@@ -70,6 +71,9 @@ public class ParticleSystem {
 		mActiveParticles = new ArrayList<Particle>(); 
 		mParticles = new ArrayList<Particle> ();
 		mTimeToLive = timeToLive;
+		
+		mParentLocation = new int[2];		
+		mParentView.getLocationInWindow(mParentLocation);
 	}
 
 	/**
@@ -249,7 +253,7 @@ public class ParticleSystem {
 		configureEmiter(emiter);
 		startEmiting(particlesPerSecond, emitingTime);
 	}
-
+	
 	/**
 	 * Starts emiting particles from a specific view. If at some point the number goes over the amount of particles availabe on create
 	 * no new particles will be created
@@ -283,10 +287,14 @@ public class ParticleSystem {
 	}
 
 	public void emit (int emitterX, int emitterY, int particlesPerSecond, int emitingTime) {
-		mEmiterX = emitterX;
-		mEmiterY = emitterY;
-
+		configureEmiter(emitterX, emitterY);
 		startEmiting(particlesPerSecond, emitingTime);
+	}	
+	
+	private void configureEmiter(int emitterX, int emitterY) {
+		// We configure the emiter based on the window location to fix the offset of action bar if present		
+		mEmiterX = emitterX - mParentLocation[0];
+		mEmiterY = emitterY - mParentLocation[1];		
 	}
 
 	private void startEmiting(int particlesPerSecond, int emitingTime) {
@@ -303,11 +311,14 @@ public class ParticleSystem {
 	}
 
 	public void emit (int emitterX, int emitterY, int particlesPerSecond) {
-		mEmiterX = emitterX;
-		mEmiterY = emitterY;
+		configureEmiter(emitterX, emitterY);
 		startEmiting(particlesPerSecond);
 	}
 
+
+	public void updateEmitPoint (int emitterX, int emitterY) {
+		configureEmiter(emitterX, emitterY);
+	}
 	/**
 	 * Launches particles in one Shot
 	 * 
@@ -375,11 +386,9 @@ public class ParticleSystem {
 
 	private void configureEmiter(View emiter) {
 		int[] location = new int[2];
-		int[] parentLocation = new int[2];
 		emiter.getLocationInWindow(location);
-		mParentView.getLocationInWindow(parentLocation);
-		mEmiterX = location[0] + emiter.getWidth()/2 - parentLocation[0];
-		mEmiterY = location[1] + emiter.getHeight()/2 - parentLocation[1];
+		mEmiterX = location[0] + emiter.getWidth()/2 - mParentLocation[0];
+		mEmiterY = location[1] + emiter.getHeight()/2 - mParentLocation[1];
 	}
 
 	private void activateParticle(long delay) {
@@ -420,6 +429,19 @@ public class ParticleSystem {
 		mParticles.addAll(mActiveParticles);
 	}
 
+	/**
+	 * Stops emitting new particles, but will draw the existing ones until their timeToLive expire
+	 * For an cancellation and stop drawing of the particles, use cancel instead.
+	 */
+	public void stopEmitting () {
+		// The time to be emiting is the current time (as if it was a time-limited emiter
+		mEmitingTime = mCurrentTime;
+	}
+	
+	/**
+	 * Cancels the particle system and all the animations.
+	 * To stop emitting but animate until the end, use stopEmitting instead.
+	 */
 	public void cancel() {
 		if (mAnimator != null && mAnimator.isRunning()) {
 			mAnimator.cancel();

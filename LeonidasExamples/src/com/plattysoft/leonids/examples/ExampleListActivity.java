@@ -19,6 +19,7 @@ public class ExampleListActivity extends ListActivity {
 				, "Confetti [Rabbit and Eggs]"
 				, "Dust [Rabbit and Eggs]"
 				, "Stars [Rabbit and Eggs]"
+				, "Follow cursor"
 //				, "Animated Particles"
 				};
 		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sampleList));
@@ -56,6 +57,9 @@ public class ExampleListActivity extends ListActivity {
 			break;
 		case 9:
 			startActivity(new Intent(this, StarsExampleActivity.class));
+			break;
+		case 10:
+			startActivity(new Intent(this, FollowCursorExampleActivity.class));
 			break;
 		}
 	}

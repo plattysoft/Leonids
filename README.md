@@ -122,7 +122,7 @@ Emits the number of particles per second from the emitter. If emittingTime is se
 * _emitWithGravity (View emiter, int gravity)_
 * _emitWithGravity (View emiter, int gravity, int particlesPerSecond)_
  
-###Update, stop, and cancel
+####Update, stop, and cancel
 * _updateEmitPoint (int emitterX, int emitterY)_ Updates dynamically the point of emission.
 * _stopEmitting ()_ Stops the emission of new particles, but the active ones are updated.
 * _cancel ()_ Stops the emission of new particles and cancles the active ones.

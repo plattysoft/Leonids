@@ -43,8 +43,6 @@ public class ParticleSystem {
 
 	private ArrayList<Particle> mParticles;
 	private ArrayList<Particle> mActiveParticles;
-	private int mEmiterX;
-	private int mEmiterY;
 	private long mTimeToLive;
 	private long mCurrentTime = 0;
 
@@ -59,6 +57,11 @@ public class ParticleSystem {
 
 	private float mDpToPxScale;
 	private int[] mParentLocation;
+	
+	private int mEmiterXMin;
+	private int mEmiterXMax;
+	private int mEmiterYMin;
+	private int mEmiterYMax;
 
 	private ParticleSystem(Activity a, int maxParticles, long timeToLive) {
 		mRandom = new Random();
@@ -252,7 +255,7 @@ public class ParticleSystem {
 	 */
 	public void emitWithGravity (View emiter, int gravity, int particlesPerSecond, int emitingTime) {
 		// Setup emiter
-		configureEmiter(emiter);
+		configureEmiter(emiter, gravity);
 		startEmiting(particlesPerSecond, emitingTime);
 	}
 	
@@ -291,7 +294,7 @@ public class ParticleSystem {
 	 */
 	public void emitWithGravity (View emiter, int gravity, int particlesPerSecond) {
 		// Setup emiter
-		configureEmiter(emiter);
+		configureEmiter(emiter, gravity);
 		startEmiting(particlesPerSecond);
 	}
 	
@@ -321,8 +324,10 @@ public class ParticleSystem {
 	
 	private void configureEmiter(int emitterX, int emitterY) {
 		// We configure the emiter based on the window location to fix the offset of action bar if present		
-		mEmiterX = emitterX - mParentLocation[0];
-		mEmiterY = emitterY - mParentLocation[1];		
+		mEmiterXMin = emitterX - mParentLocation[0];
+		mEmiterXMax = mEmiterXMin;
+		mEmiterYMin = emitterY - mParentLocation[1];
+		mEmiterYMax = mEmiterYMin;
 	}
 
 	private void startEmiting(int particlesPerSecond, int emitingTime) {
@@ -365,7 +370,7 @@ public class ParticleSystem {
 	 * @param interpolator the interpolator for the time
 	 */
 	public void oneShot(View emiter, int numParticles, Interpolator interpolator) {
-		configureEmiter(emiter);
+		configureEmiter(emiter, Gravity.CENTER);
 		mActivatedParticles = 0;
 		mEmitingTime = mTimeToLive;
 		// We create particles based in the parameters
@@ -412,11 +417,52 @@ public class ParticleSystem {
 		mAnimator.start();
 	}
 
-	private void configureEmiter(View emiter) {
+	private void configureEmiter(View emiter, int gravity) {
+		// It works with an emision range
 		int[] location = new int[2];
 		emiter.getLocationInWindow(location);
-		mEmiterX = location[0] + emiter.getWidth()/2 - mParentLocation[0];
-		mEmiterY = location[1] + emiter.getHeight()/2 - mParentLocation[1];
+		
+		// Check horizontal gravity and set range
+		if (hasGravity(gravity, Gravity.LEFT)) {
+			mEmiterXMin = location[0] - mParentLocation[0];
+			mEmiterXMax = mEmiterXMin;
+		}
+		else if (hasGravity(gravity, Gravity.RIGHT)) {
+			mEmiterXMin = location[0] + emiter.getWidth() - mParentLocation[0];
+			mEmiterXMax = mEmiterXMin;
+		}
+		else if (hasGravity(gravity, Gravity.CENTER_HORIZONTAL)){
+			mEmiterXMin = location[0] + emiter.getWidth()/2 - mParentLocation[0];
+			mEmiterXMax = mEmiterXMin;
+		}
+		else {
+			// All the range
+			mEmiterXMin = location[0] - mParentLocation[0];
+			mEmiterXMax = location[0] + emiter.getWidth() - mParentLocation[0];
+		}
+		
+		// Now, vertical gravity and range
+		if (hasGravity(gravity, Gravity.TOP)) {
+			mEmiterYMin = location[1] - mParentLocation[1];
+			mEmiterYMax = mEmiterXMin;
+		}
+		else if (hasGravity(gravity, Gravity.BOTTOM)) {
+			mEmiterYMin = location[1] + emiter.getHeight() - mParentLocation[1];
+			mEmiterYMax = mEmiterXMin;
+		}
+		else if (hasGravity(gravity, Gravity.CENTER_VERTICAL)){
+			mEmiterYMin = location[1] + emiter.getHeight()/2 - mParentLocation[1];
+			mEmiterYMax = mEmiterXMin;
+		}
+		else {
+			// All the range
+			mEmiterYMin = location[1] - mParentLocation[1];
+			mEmiterYMax = location[1] + emiter.getWidth() - mParentLocation[1];
+		}
+	}
+
+	private boolean hasGravity(int gravity, int gravityToCheck) {
+		return (gravity & gravityToCheck) == gravityToCheck;
 	}
 
 	private void activateParticle(long delay) {
@@ -426,10 +472,19 @@ public class ParticleSystem {
 		for (int i=0; i<mInitializers.size(); i++) {
 			mInitializers.get(i).initParticle(p, mRandom);
 		}
-		p.configure(mTimeToLive, mEmiterX, mEmiterY);
+		int particleX = getFromRange (mEmiterXMin, mEmiterXMax);
+		int particleY = getFromRange (mEmiterYMin, mEmiterYMax);
+		p.configure(mTimeToLive, particleX, particleY);
 		p.activate(delay, mModifiers);
 		mActiveParticles.add(p);
 		mActivatedParticles++;
+	}
+
+	private int getFromRange(int minValue, int maxValue) {
+		if (minValue == maxValue) {
+			return minValue;
+		}
+		return mRandom.nextInt(maxValue-minValue) + minValue;
 	}
 
 	private void onUpdate(long miliseconds) {

@@ -3,9 +3,13 @@ Leonids
 
 Leonids is a particle system library that works with the standard Android UI.
 
-The library is extremely lightweight, [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.1.1/LeonidsLib.jar) is just 18Kb you can add to your project.
+The library is extremely lightweight, [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.2/LeonidsLib.jar) is just 81Kb.
 
 You can download [Leonids Demo from Google Play](https://play.google.com/store/apps/details?id=com.plattysoft.leonids.examples) to check out what can be done with it.
+
+## Setup
+
+Just put [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.2/LeonidsLib.jar) into the libs folder of your app.
 
 ## Why this library?
 
@@ -106,13 +110,26 @@ Make one shot using from the anchor view using the number of particles specified
 
 Emits the number of particles per second from the emitter. If emittingTime is set, the emitter stops after that time, otherwise it is continuous.
 
+###Basic emitters
 * _emit (View emitter, int particlesPerSecond)_
 * _emit (View emitter, int particlesPerSecond, int emittingTime)_
+
+###Emit based on (x,y) coordinates
+* _emit (int emitterX, int emitterY, int particlesPerSecond)_
 * _emit (int emitterX, int emitterY, int particlesPerSecond, int emitingTime)_
+
+###Emit with Gravity 
+* _emitWithGravity (View emiter, int gravity)_
+* _emitWithGravity (View emiter, int gravity, int particlesPerSecond)_
+ 
+###Update, stop, and cancel
+* _updateEmitPoint (int emitterX, int emitterY)_ Updates dynamically the point of emission.
+* _stopEmitting ()_ Stops the emission of new particles, but the active ones are updated.
+* _cancel ()_ Stops the emission of new particles and cancles the active ones.
 
 ## Other details
 
-Leonids requires minSDK 11 because it uses ValueAnimators. It should be very easy, however to use the compatibility library and make it work on Gingerbread.
+Leonids requires minSDK 11 because it uses ValueAnimators. It should be very easy, however to use nineoldandroids and make it work on Gingerbread.
 
 The library is Free Software, you can use it, extended with no requirement to open source your changes. You can also make paid apps using it.
 

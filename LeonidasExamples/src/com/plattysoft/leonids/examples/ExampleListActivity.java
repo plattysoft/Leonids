@@ -14,8 +14,8 @@ public class ExampleListActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		String sampleList[] = new String [] {"One Shot Simple", "One Shot Advanced", 
 				"Emiter Simple", "Emiter Intermediate", "Emiter Time Limited"
-				, "Emit with Gravity"
-				, "Follow cursor"
+				, "Emit with Gravity [NEW]"
+				, "Follow touch [NEW]"
 				, "Animated particles"
 				, "Fireworks"
 				, "Confetti [Rabbit and Eggs]"

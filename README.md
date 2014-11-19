@@ -108,6 +108,7 @@ Emits the number of particles per second from the emitter. If emittingTime is se
 
 * _emit (View emitter, int particlesPerSecond)_
 * _emit (View emitter, int particlesPerSecond, int emittingTime)_
+* _emit (int emitterX, int emitterY, int particlesPerSecond, int emitingTime)_
 
 ## Other details
 

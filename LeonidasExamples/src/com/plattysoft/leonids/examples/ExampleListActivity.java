@@ -42,13 +42,13 @@ public class ExampleListActivity extends ListActivity {
 			startActivity(new Intent(this, EmiterIntermediateExampleActivity.class));
 			break;
 		case 4:
-			startActivity(new Intent(this, EmiterWithGravityExampleActivity.class));
+			startActivity(new Intent(this, EmiterTimeLimitedExampleActivity.class));
 			break;
 		case 5:
-			startActivity(new Intent(this, FollowCursorExampleActivity.class));
+			startActivity(new Intent(this, EmiterWithGravityExampleActivity.class));
 			break;
 		case 6:
-			startActivity(new Intent(this, EmiterTimeLimitedExampleActivity.class));
+			startActivity(new Intent(this, FollowCursorExampleActivity.class));
 			break;
 		case 7:
 			startActivity(new Intent(this, AnimatedParticlesExampleActivity.class));

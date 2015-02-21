@@ -2,3 +2,6 @@ ParticleSystemView/bin
 ParticleSystemView/gen
 ParticleSystemExamples/bin
 ParticleSystemExamples/gen
+LeonidasLib/build
+.gradle/
+

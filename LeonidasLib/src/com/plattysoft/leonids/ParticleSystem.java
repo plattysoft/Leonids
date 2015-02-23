@@ -78,6 +78,9 @@ public class ParticleSystem {
 		
 		mParentLocation = new int[2];		
 		mParentView.getLocationInWindow(mParentLocation);
+		
+		DisplayMetrics displayMetrics = a.getResources().getDisplayMetrics();
+		mDpToPxScale = (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT);
 	}
 
 	/**
@@ -117,8 +120,6 @@ public class ParticleSystem {
 		else {
 			// Not supported, no particles are being created
 		}
-		DisplayMetrics displayMetrics = a.getResources().getDisplayMetrics();
-		mDpToPxScale = (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT);
 	}
 
 	public float dpToPx(float dp) {

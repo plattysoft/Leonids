@@ -159,7 +159,6 @@ public class ParticleSystem {
 	 * Adds a modifier to the Particle system, it will be executed on each update.
 	 * 
 	 * @param modifier
-	 * @return
 	 */
 	public ParticleSystem addModifier(ParticleModifier modifier) {
 		mModifiers.add(modifier);
@@ -226,7 +225,7 @@ public class ParticleSystem {
 	/**
 	 * Configures a fade out for the particles when they disappear
 	 * 
-	 * @param duration fade out duration in miliseconds
+	 * @param milisecondsBeforeEnd fade out duration in miliseconds
 	 * @param interpolator the interpolator for the fade out (default is linear)
 	 */
 	public ParticleSystem setFadeOut(long milisecondsBeforeEnd, Interpolator interpolator) {
@@ -250,7 +249,6 @@ public class ParticleSystem {
 	 * @param emiter  View from which center the particles will be emited
 	 * @param gravity Which position among the view the emission takes place
 	 * @param particlesPerSecond Number of particles per second that will be emited (evenly distributed)
-	 * @param timeToLive miliseconds the particles will be displayed
 	 * @param emitingTime time the emiter will be emiting particles
 	 */
 	public void emitWithGravity (View emiter, int gravity, int particlesPerSecond, int emitingTime) {
@@ -265,7 +263,6 @@ public class ParticleSystem {
 	 * 
 	 * @param emiter  View from which center the particles will be emited
 	 * @param particlesPerSecond Number of particles per second that will be emited (evenly distributed)
-	 * @param timeToLive miliseconds the particles will be displayed
 	 * @param emitingTime time the emiter will be emiting particles
 	 */
 	public void emit (View emiter, int particlesPerSecond, int emitingTime) {
@@ -457,7 +454,7 @@ public class ParticleSystem {
 		else {
 			// All the range
 			mEmiterYMin = location[1] - mParentLocation[1];
-			mEmiterYMax = location[1] + emiter.getWidth() - mParentLocation[1];
+			mEmiterYMax = location[1] + emiter.getHeight() - mParentLocation[1];
 		}
 	}
 

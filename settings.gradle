@@ -1,1 +1,4 @@
-include ':LeonidasLib'
+include ':LeonidasLib', ':LeonidasExamples'
+
+project(':LeonidasLib').projectDir = new File('LeonidasLib')
+project(':LeonidasExamples').projectDir = new File('LeonidasExamples')

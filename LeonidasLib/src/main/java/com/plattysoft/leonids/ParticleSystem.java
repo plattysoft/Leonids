@@ -254,7 +254,7 @@ public class ParticleSystem {
 	 */
 	public void emitWithGravity (View emiter, int gravity, int particlesPerSecond, int emitingTime) {
 		// Setup emiter
-		configureEmiter(emiter, gravity);
+		configureEmitter(emiter, gravity);
 		startEmiting(particlesPerSecond, emitingTime);
 	}
 	
@@ -292,15 +292,17 @@ public class ParticleSystem {
 	 */
 	public void emitWithGravity (View emiter, int gravity, int particlesPerSecond) {
 		// Setup emiter
-		configureEmiter(emiter, gravity);
+		configureEmitter(emiter, gravity);
 		startEmiting(particlesPerSecond);
 	}
 	
 	private void startEmiting(int particlesPerSecond) {
 		mActivatedParticles = 0;
 		mParticlesPerMilisecond = particlesPerSecond/1000f;
-		// Add a full size view to the parent view		
-		mDrawingView = new ParticleField(mParentView.getContext());
+		// Add a full size view to the parent view
+        if (mDrawingView == null) {
+            mDrawingView = new ParticleField(mParentView.getContext());
+        }
 		mParentView.addView(mDrawingView);
 		mEmitingTime = -1; // Meaning infinite
 		mDrawingView.setParticles (mActiveParticles);
@@ -368,7 +370,7 @@ public class ParticleSystem {
 	 * @param interpolator the interpolator for the time
 	 */
 	public void oneShot(View emiter, int numParticles, Interpolator interpolator) {
-		configureEmiter(emiter, Gravity.CENTER);
+		configureEmitter(emiter, Gravity.CENTER);
 		mActivatedParticles = 0;
 		mEmitingTime = mTimeToLive;
 		// We create particles based in the parameters
@@ -415,10 +417,10 @@ public class ParticleSystem {
 		mAnimator.start();
 	}
 
-	private void configureEmiter(View emiter, int gravity) {
+	public ParticleSystem configureEmitter(View emitter, int gravity) {
 		// It works with an emision range
 		int[] location = new int[2];
-		emiter.getLocationInWindow(location);
+		emitter.getLocationInWindow(location);
 		
 		// Check horizontal gravity and set range
 		if (hasGravity(gravity, Gravity.LEFT)) {
@@ -426,17 +428,17 @@ public class ParticleSystem {
 			mEmiterXMax = mEmiterXMin;
 		}
 		else if (hasGravity(gravity, Gravity.RIGHT)) {
-			mEmiterXMin = location[0] + emiter.getWidth() - mParentLocation[0];
+			mEmiterXMin = location[0] + emitter.getWidth() - mParentLocation[0];
 			mEmiterXMax = mEmiterXMin;
 		}
 		else if (hasGravity(gravity, Gravity.CENTER_HORIZONTAL)){
-			mEmiterXMin = location[0] + emiter.getWidth()/2 - mParentLocation[0];
+			mEmiterXMin = location[0] + emitter.getWidth()/2 - mParentLocation[0];
 			mEmiterXMax = mEmiterXMin;
 		}
 		else {
 			// All the range
 			mEmiterXMin = location[0] - mParentLocation[0];
-			mEmiterXMax = location[0] + emiter.getWidth() - mParentLocation[0];
+			mEmiterXMax = location[0] + emitter.getWidth() - mParentLocation[0];
 		}
 		
 		// Now, vertical gravity and range
@@ -445,33 +447,38 @@ public class ParticleSystem {
 			mEmiterYMax = mEmiterYMin;
 		}
 		else if (hasGravity(gravity, Gravity.BOTTOM)) {
-			mEmiterYMin = location[1] + emiter.getHeight() - mParentLocation[1];
+			mEmiterYMin = location[1] + emitter.getHeight() - mParentLocation[1];
 			mEmiterYMax = mEmiterYMin;
 		}
 		else if (hasGravity(gravity, Gravity.CENTER_VERTICAL)){
-			mEmiterYMin = location[1] + emiter.getHeight()/2 - mParentLocation[1];
+			mEmiterYMin = location[1] + emitter.getHeight()/2 - mParentLocation[1];
 			mEmiterYMax = mEmiterYMin;
 		}
 		else {
 			// All the range
 			mEmiterYMin = location[1] - mParentLocation[1];
-			mEmiterYMax = location[1] + emiter.getHeight() - mParentLocation[1];
+			mEmiterYMax = location[1] + emitter.getHeight() - mParentLocation[1];
 		}
+        return this;
 	}
 
 	private boolean hasGravity(int gravity, int gravityToCheck) {
 		return (gravity & gravityToCheck) == gravityToCheck;
 	}
 
-	private void activateParticle(long delay) {
+    private void activateParticle(long delay) {
+        activateParticle(delay, mEmiterXMin, mEmiterXMax, mEmiterYMin, mEmiterYMax);
+    }
+
+	private void activateParticle(long delay, int minX, int maxX, int minY, int maxY) {
 		Particle p = mParticles.remove(0);	
 		p.init();
 		// Initialization goes before configuration, scale is required before can be configured properly
 		for (int i=0; i<mInitializers.size(); i++) {
 			mInitializers.get(i).initParticle(p, mRandom);
 		}
-		int particleX = getFromRange (mEmiterXMin, mEmiterXMax);
-		int particleY = getFromRange (mEmiterYMin, mEmiterYMax);
+		int particleX = getFromRange (minX, maxX);
+		int particleY = getFromRange (minY, maxY);
 		p.configure(mTimeToLive, particleX, particleY);
 		p.activate(delay, mModifiers);
 		mActiveParticles.add(p);
@@ -504,6 +511,7 @@ public class ParticleSystem {
 	}
 
 	private void cleanupAnimation() {
+
 		mParentView.removeView(mDrawingView);
 		mDrawingView = null;
 		mParentView.postInvalidate();
@@ -548,4 +556,15 @@ public class ParticleSystem {
 			onUpdate(frameTimeInMs * i + 1);
 		}
 	}
+
+    public ParticleSystem initialParticles(int totalParticles) {
+        int minX = 0;
+        int maxX = mParentView.getWidth();
+        int minY = 0;
+        int maxY = mParentView.getHeight();
+        for (int i = 0; i < totalParticles; i++) {
+            activateParticle(0, minX, maxX, minY, maxY);
+        }
+        return this;
+    }
 }

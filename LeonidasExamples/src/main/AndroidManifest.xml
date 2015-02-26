@@ -35,6 +35,7 @@
         <activity android:name="com.plattysoft.leonids.examples.StarsExampleActivity" />
         <activity android:name="com.plattysoft.leonids.examples.FollowCursorExampleActivity" />
         <activity android:name="com.plattysoft.leonids.examples.EmiterWithGravityExampleActivity" />
+        <activity android:name=".StartWithParticlesExample" />
     </application>
 
 </manifest>

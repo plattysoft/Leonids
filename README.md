@@ -77,6 +77,13 @@ Supported drawables are: BitmapDrawable and AnimationDrawable.
 * _ParticleSystem(Activity a, int maxParticles, Bitmap bitmap, long timeToLive)_
 * _ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation, long timeToLive)_
 
+There are also constructors that recieve a view id to use as the parent so you can put the particle system on the background (or between any two views)
+
+* _ParticleSystem(Activity a, int maxParticles, int drawableRedId, long timeToLive, int parentViewId)_
+* _ParticleSystem(Activity a, int maxParticles, Drawable drawable, long timeToLive, int parentViewId)_
+* _ParticleSystem(Activity a, int maxParticles, Bitmap bitmap, long timeToLive, int parentViewId)_
+* _ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation, long timeToLive, int parentViewId)_
+
 ### Configuration
 
 Available methods on the Particle system for configuration are:
@@ -91,6 +98,10 @@ Available methods on the Particle system for configuration are:
 * _setAcceleration(float acceleration, float angle)_
 * _setFadeOut(long milisecondsBeforeEnd, Interpolator interpolator)_: Utility method for a simple fade out effect using an interpolator
 * _setFadeOut(long duration)_:Utility method for a simple fade out
+
+You can start the particle system "in the future" if you want to have the particles already created and moving using
+
+_setStartTime(int time)_
 
 For more complex modifiers, you can use the method _addModifier(ParticleModifier modifier)_. Available modifiers are:
 

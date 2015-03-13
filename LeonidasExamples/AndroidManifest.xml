@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.plattysoft.leonids.examples"
-    android:versionCode="2"
-    android:versionName="1.1" >
+    android:versionCode="3"
+    android:versionName="1.2" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -27,6 +27,7 @@
         <activity android:name="com.plattysoft.leonids.examples.FireworksExampleActivity" />
         <activity android:name="com.plattysoft.leonids.examples.OneShotAdvancedExampleActivity" />
         <activity android:name="com.plattysoft.leonids.examples.EmiterSimpleExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.EmiterBackgroundSimpleExampleActivity" />
         <activity android:name="com.plattysoft.leonids.examples.EmiterIntermediateExampleActivity" />
         <activity android:name="com.plattysoft.leonids.examples.EmiterTimeLimitedExampleActivity" />
         <activity android:name="com.plattysoft.leonids.examples.AnimatedParticlesExampleActivity" />

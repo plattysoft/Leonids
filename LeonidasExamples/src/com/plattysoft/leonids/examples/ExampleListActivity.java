@@ -12,8 +12,11 @@ public class ExampleListActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		String sampleList[] = new String [] {"One Shot Simple", "One Shot Advanced", 
-				"Emiter Simple", "Emiter Intermediate", "Emiter Time Limited"
+		String sampleList[] = new String [] {"One Shot Simple", "One Shot Advanced"
+				, "Emiter Simple"
+                , "Emiting on background [NEW]"
+                , "Emiter Intermediate"
+                , "Emiter Time Limited"
 				, "Emit with Gravity [NEW]"
 				, "Follow touch [NEW]"
 				, "Animated particles"
@@ -38,31 +41,34 @@ public class ExampleListActivity extends ListActivity {
 		case 2:
 			startActivity(new Intent(this, EmiterSimpleExampleActivity.class));
 			break;
-		case 3:
+        case 3:
+            startActivity(new Intent(this, EmiterBackgroundSimpleExampleActivity.class));
+            break;
+		case 4:
 			startActivity(new Intent(this, EmiterIntermediateExampleActivity.class));
 			break;
-		case 4:
+		case 5:
 			startActivity(new Intent(this, EmiterTimeLimitedExampleActivity.class));
 			break;
-		case 5:
+		case 6:
 			startActivity(new Intent(this, EmiterWithGravityExampleActivity.class));
 			break;
-		case 6:
+		case 7:
 			startActivity(new Intent(this, FollowCursorExampleActivity.class));
 			break;
-		case 7:
+		case 8:
 			startActivity(new Intent(this, AnimatedParticlesExampleActivity.class));
 			break;
-		case 8:
+		case 9:
 			startActivity(new Intent(this, FireworksExampleActivity.class));
 			break;
-		case 9:
+		case 10:
 			startActivity(new Intent(this, ConfettiExampleActivity.class));
 			break;
-		case 10:
+		case 11:
 			startActivity(new Intent(this, DustExampleActivity.class));
 			break;
-		case 11:
+		case 12:
 			startActivity(new Intent(this, StarsExampleActivity.class));
 			break;		
 		}

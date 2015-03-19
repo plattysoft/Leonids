@@ -3,13 +3,13 @@ Leonids
 
 Leonids is a particle system library that works with the standard Android UI.
 
-The library is extremely lightweight, [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.2/LeonidsLib.jar) is just 81Kb.
+The library is extremely lightweight, [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.3/LeonidsLib-1.3.jar) is just 81Kb.
 
 You can download [Leonids Demo from Google Play](https://play.google.com/store/apps/details?id=com.plattysoft.leonids.examples) to check out what can be done with it.
 
 ## Setup
 
-Just put [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.2/LeonidsLib.jar) into the libs folder of your app.
+Just put [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.3/LeonidsLib-1.3.jar) into the libs folder of your app.
 
 ## Why this library?
 

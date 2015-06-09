@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.plattysoft.leonids.examples"
+    android:versionCode="3"
+    android:versionName="1.2" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.plattysoft.leonids.examples.ExampleListActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name="com.plattysoft.leonids.examples.OneShotSimpleExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.FireworksExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.OneShotAdvancedExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.EmiterSimpleExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.EmiterBackgroundSimpleExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.EmiterIntermediateExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.EmiterTimeLimitedExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.AnimatedParticlesExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.ConfettiExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.DustExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.StarsExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.FollowCursorExampleActivity" />
+        <activity android:name="com.plattysoft.leonids.examples.EmiterWithGravityExampleActivity" />
+    </application>
+
+</manifest>

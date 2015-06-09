@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Leonids.iml" filepath="$PROJECT_DIR$/../Leonids.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LeonidsExamples.iml" filepath="$PROJECT_DIR$/LeonidsExamples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../particleSystemView/LeonidsLib.iml" filepath="$PROJECT_DIR$/../particleSystemView/LeonidsLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../app/app.iml" filepath="$PROJECT_DIR$/../app/app.iml" />
+    </modules>
+  </component>
+</project>

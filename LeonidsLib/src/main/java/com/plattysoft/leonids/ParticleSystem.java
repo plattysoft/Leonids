@@ -42,7 +42,7 @@ public class ParticleSystem {
 	private ParticleField mDrawingView;
 
 	private ArrayList<Particle> mParticles;
-	private ArrayList<Particle> mActiveParticles;
+	private final ArrayList<Particle> mActiveParticles = new ArrayList<Particle>();
 	private long mTimeToLive;
 	private long mCurrentTime = 0;
 
@@ -72,7 +72,7 @@ public class ParticleSystem {
 
 		mMaxParticles = maxParticles;
 		// Create the particles
-		mActiveParticles = new ArrayList<Particle>(); 
+
 		mParticles = new ArrayList<Particle> ();
 		mTimeToLive = timeToLive;
 		
@@ -142,9 +142,9 @@ public class ParticleSystem {
 				mParticles.add (new AnimatedParticle (animation));
 			}
 		}
-		else {
+//		else {
 			// Not supported, no particles are being created
-		}
+//		}
 	}
 
 	public float dpToPx(float dp) {
@@ -210,7 +210,7 @@ public class ParticleSystem {
 	/**
 	 * Adds a modifier to the Particle system, it will be executed on each update.
 	 * 
-	 * @param modifier
+	 * @param modifier modifier to be added to the ParticleSystem
 	 */
 	public ParticleSystem addModifier(ParticleModifier modifier) {
 		mModifiers.add(modifier);
@@ -357,7 +357,7 @@ public class ParticleSystem {
 		mDrawingView.setParticles (mActiveParticles);
 		updateParticlesBeforeStartTime(particlesPerSecond);
 		mTimer = new Timer();
-		mTimer.schedule(new TimerTask() {			
+		mTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
 				onUpdate(mCurrentTime);
@@ -389,7 +389,7 @@ public class ParticleSystem {
 		mDrawingView.setParticles (mActiveParticles);
 		updateParticlesBeforeStartTime(particlesPerSecond);
 		mEmitingTime = emitingTime;
-		startAnimator(new LinearInterpolator(), emitingTime+mTimeToLive);
+		startAnimator(new LinearInterpolator(), emitingTime + mTimeToLive);
 	}
 
 	public void emit (int emitterX, int emitterY, int particlesPerSecond) {
@@ -429,7 +429,7 @@ public class ParticleSystem {
 		// Add a full size view to the parent view		
 		mDrawingView = new ParticleField(mParentView.getContext());
 		mParentView.addView(mDrawingView);
-		mDrawingView.setParticles (mActiveParticles);
+		mDrawingView.setParticles(mActiveParticles);
 		// We start a property animator that will call us to do the update
 		// Animate from 0 to timeToLiveMax
 		startAnimator(interpolator, mTimeToLive);
@@ -438,7 +438,7 @@ public class ParticleSystem {
 	private void startAnimator(Interpolator interpolator, long animnationTime) {
 		mAnimator = ValueAnimator.ofInt(0, (int) animnationTime);
 		mAnimator.setDuration(animnationTime);
-		mAnimator.addUpdateListener(new AnimatorUpdateListener() {			
+		mAnimator.addUpdateListener(new AnimatorUpdateListener() {
 			@Override
 			public void onAnimationUpdate(ValueAnimator animation) {
 				int miliseconds = (Integer) animation.getAnimatedValue();
@@ -543,12 +543,14 @@ public class ParticleSystem {
 			// Activate a new particle
 			activateParticle(miliseconds);			
 		}
-		for (int i=0; i<mActiveParticles.size(); i++) {
-			boolean active = mActiveParticles.get(i).update(miliseconds);
-			if (!active) {
-				Particle p = mActiveParticles.remove(i);
-				i--; // Needed to keep the index at the right position
-				mParticles.add(p);
+		synchronized(mActiveParticles) {
+			for (int i = 0; i < mActiveParticles.size(); i++) {
+				boolean active = mActiveParticles.get(i).update(miliseconds);
+				if (!active) {
+					Particle p = mActiveParticles.remove(i);
+					i--; // Needed to keep the index at the right position
+					mParticles.add(p);
+				}
 			}
 		}
 		mDrawingView.postInvalidate();

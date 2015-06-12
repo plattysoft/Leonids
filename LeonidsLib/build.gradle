@@ -37,7 +37,7 @@ bintray {
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
-        dryRun = false
+        dryRun = true
         publish = false
         version {
             name = versionName //Bintray logical version name
@@ -93,8 +93,10 @@ task sourcesJar(type: Jar) {
 task classesJar(type: Jar) {
     //from android.sourceSets.main.java
     from 'build/intermediates/classes/release/'
-    archiveName 'LeonidsLib.jar'
+    archiveName "LeonidsLib-${versionName}.jar"
 }
+
+//task javaDoc(type: )
 
 artifacts {
     archives sourcesJar

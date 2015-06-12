@@ -3,7 +3,7 @@ Leonids
 
 Leonids is a particle system library that works with the standard Android UI.
 
-The library is extremely lightweight, [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.3/LeonidsLib-1.3.jar) is just 81Kb.
+The library is extremely lightweight, [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.3.1/LeonidsLib.jar) is just 81Kb.
 
 You can download [Leonids Demo from Google Play](https://play.google.com/store/apps/details?id=com.plattysoft.leonids.examples) to check out what can be done with it.
 
@@ -16,7 +16,7 @@ Leonids is available in jcenter as well as a jar file to fit both Android Studio
 Add the following dependency to the build.gradle of your project
 ```
 dependencies {
-    compile 'com.plattysoft.leonids:LeonidsLib:1.3'
+    compile 'com.plattysoft.leonids:LeonidsLib:1.3.1'
 }
 ```
 Note: If you get an error, you may need to update the jcenter repository to:
@@ -30,7 +30,7 @@ repositories {
 
 ### Eclipse / jar file
 
-Just put [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.3/LeonidsLib-1.3.jar) into the libs folder of your app.
+Just put [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.3.1/LeonidsLib.jar) into the libs folder of your app.
 
 ## Why this library?
 

@@ -1,4 +1,8 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+def versionName = '1.3.1'
 
 android {
     compileSdkVersion 15
@@ -10,9 +14,89 @@ android {
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+    }
+}
+
+def siteUrl = 'http://plattysoft.github.io/Leonids/'
+def gitUrl = 'https://github.com/plattysoft/Leonids.git'
+group = "com.plattysoft.leonids"
+version = versionName
+
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = "Leonids"
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        dryRun = false
+        publish = false
+        version {
+            name = versionName //Bintray logical version name
+//            released = //Optional - Date of the version release. 2 possible values: date in the format of 'yyyy-MM-dd'T'HH:mm:ss.SSSZZ' OR a java.util.Date instance
+            vcsTag = versionName
         }
     }
+}
+
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                artifactId 'LeonidsLib'
+                version = versionName
+                // Add your description here
+                name 'Leonids'
+                description = 'A Particle System Library for standard Android UI.'
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'plattysoft'
+                        name 'Platty Soft'
+                        email 'raul@plattysoft.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task classesJar(type: Jar) {
+    //from android.sourceSets.main.java
+    from 'build/intermediates/classes/release/'
+    archiveName 'LeonidsLib.jar'
+}
+
+artifacts {
+    archives sourcesJar
+    archives classesJar
 }

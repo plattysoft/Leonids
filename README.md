@@ -9,6 +9,27 @@ You can download [Leonids Demo from Google Play](https://play.google.com/store/a
 
 ## Setup
 
+Leonids is available in jcenter as well as a jar file to fit both Android Studio and Eclipse.
+
+### Android Studio / gradle
+
+Add the following dependency to the build.gradle of your project
+```
+dependencies {
+    compile 'com.plattysoft.leonids:LeonidsLib:1.3'
+}
+```
+Note: If you get an error, you may need to update the jcenter repository to:
+```
+repositories {
+    jcenter{
+        url "http://jcenter.bintray.com/"
+    }
+}
+````
+
+### Eclipse / jar file
+
 Just put [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.3/LeonidsLib-1.3.jar) into the libs folder of your app.
 
 ## Why this library?

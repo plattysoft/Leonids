@@ -89,6 +89,8 @@
 .setSpeedRange(<span class="pl-c1">0.2f</span>, <span class="pl-c1">0.5f</span>)
 .oneShot(anchorView, numParticles);</pre></div>
 
+<p>Note that the ParticleSystem checks the position of the anchor view when oneShot (or emit) is called, so it requires the views to be measured. This means that <strong>ParticleSystem won't work properly if you call oneShot or emit during onCreate</strong>. For more information check the comments on <a href="https://github.com/plattysoft/Leonids/issues/22">issue #22</a>.</p>
+
 <p>When you create the particle system, you tell how many particles will it use as a maximum, the resourceId of the drawable you want to use for the particles and for how long the particles will live.</p>
 
 <p>Then you configure the particle system. In this case we specify that the particles will have a speed between 0.2 and 0.5 pixels per milisecond (support for dips will be included in the future). Since we did not provide an angle range, it will be considered as "any angle".</p>

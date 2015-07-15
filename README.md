@@ -54,6 +54,8 @@ new ParticleSystem(this, numParticles, drawableResId, timeToLive)
 
 When you create the particle system, you tell how many particles will it use as a maximum, the resourceId of the drawable you want to use for the particles and for how long the particles will live.
 
+Note that the ParticleSystem checks the position of the anchor view when oneShot (or emit) is called, so it requires the views to be measured. This means that **ParticleSystem won't work properly if you call oneShot or emit during onCreate**. For more information check the comments on issue #22.
+
 Then you configure the particle system. In this case we specify that the particles will have a speed between 0.2 and 0.5 pixels per milisecond (support for dips will be included in the future). Since we did not provide an angle range, it will be considered as "any angle".
 
 Finally, we call oneShot, passing the view from which the particles will be launched and saying how many particles we want to be shot.

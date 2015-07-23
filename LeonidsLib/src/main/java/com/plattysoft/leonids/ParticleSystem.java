@@ -34,6 +34,7 @@ import android.view.animation.LinearInterpolator;
 
 public class ParticleSystem {
 
+	private static final long IDEAL_FRAME_DURATION = 17;
 	private static final long TIMMERTASK_INTERVAL = 50;
 	private ViewGroup mParentView;
 	private int mMaxParticles;
@@ -261,6 +262,11 @@ public class ParticleSystem {
 
 	public ParticleSystem setAcceleration(float acceleration, int angle) {
 		mInitializers.add(new AccelerationInitializer(acceleration, acceleration, angle, angle));
+		return this;
+	}
+
+	public ParticleSystem addInitializer(ParticleInitializer particleInitializer) {
+		mInitializers.add(particleInitializer);
 		return this;
 	}
 
@@ -599,6 +605,13 @@ public class ParticleSystem {
 		long frameTimeInMs = mCurrentTime / framesCount;
 		for (int i = 1; i <= framesCount; i++) {
 			onUpdate(frameTimeInMs * i + 1);
+		}
+	}
+
+	public void applyTime(long timeToApply) {
+		for(long delta = 0; delta <= timeToApply; delta+=IDEAL_FRAME_DURATION) {
+			mCurrentTime += IDEAL_FRAME_DURATION;
+			onUpdate(mCurrentTime);
 		}
 	}
 }

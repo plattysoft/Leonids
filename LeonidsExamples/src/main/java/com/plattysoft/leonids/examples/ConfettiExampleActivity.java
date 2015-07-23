@@ -17,12 +17,15 @@ public class ConfettiExampleActivity extends Activity implements OnClickListener
 	}
 
 	@Override
-	public void onClick(View arg0) {		
-		new ParticleSystem(this, 80, R.drawable.confeti2, 10000)
+	public void onClick(View arg0) {
+		ParticleSystem particleSystem = new ParticleSystem(this, 80, R.drawable.confeti2, 10000);
+		particleSystem
 		.setSpeedModuleAndAngleRange(0f, 0.1f, 180, 180)
 		.setRotationSpeed(144)
-		.setAcceleration(0.000017f, 90)		
+		.setAcceleration(0.000017f, 90)
 		.emit(findViewById(R.id.emiter_top_right), 8);
+
+		particleSystem.applyTime(15000);
 				
 		new ParticleSystem(this, 80, R.drawable.confeti3, 10000)
 		.setSpeedModuleAndAngleRange(0f, 0.1f, 0, 0)

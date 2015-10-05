@@ -103,4 +103,8 @@ public class Particle {
 		mModifiers = modifiers;
 		return this;
 	}
+
+	public Paint getPaint() {
+		return mPaint;
+	}
 }

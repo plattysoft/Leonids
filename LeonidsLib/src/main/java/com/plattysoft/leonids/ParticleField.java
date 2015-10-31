@@ -1,6 +1,7 @@
 package com.plattysoft.leonids;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,7 +10,7 @@ import android.view.View;
 
 class ParticleField extends View {
 
-	private ArrayList<Particle> mParticles;
+	private List<Particle> mParticles;
 
 	public ParticleField(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -23,7 +24,7 @@ class ParticleField extends View {
 		super(context);
 	}
 
-	public void setParticles(ArrayList<Particle> particles) {
+	public void setParticles(List<Particle> particles) {
 		mParticles = particles;
 	}
 	

@@ -1,10 +1,12 @@
 package com.plattysoft.leonids;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicLong;
 
 import com.plattysoft.leonids.initializers.AccelerationInitializer;
 import com.plattysoft.leonids.initializers.ParticleInitializer;
@@ -41,13 +43,13 @@ public class ParticleSystem {
 
 	private ParticleField mDrawingView;
 
-	private ArrayList<Particle> mParticles;
-	private final ArrayList<Particle> mActiveParticles = new ArrayList<Particle>();
+	private List<Particle> mParticles;
+	private final List<Particle> mActiveParticles;
 	private long mTimeToLive;
 	private long mCurrentTime = 0;
 
-	private float mParticlesPerMilisecond;
-	private int mActivatedParticles;
+	private float mParticlesPerMillisecond;
+	private AtomicLong mActivatedParticlesCount = new AtomicLong(0);
 	private long mEmitingTime;
 
 	private List<ParticleModifier> mModifiers;
@@ -73,12 +75,14 @@ public class ParticleSystem {
 		mMaxParticles = maxParticles;
 		// Create the particles
 
-		mParticles = new ArrayList<Particle> ();
+		// Use synchronizedList to ensure thread safe
+		mActiveParticles = Collections.synchronizedList(new ArrayList<Particle> ());
+		mParticles = Collections.synchronizedList(new ArrayList<Particle> ());
 		mTimeToLive = timeToLive;
-		
-		mParentLocation = new int[2];		
+
+		mParentLocation = new int[2];
 		mParentView.getLocationInWindow(mParentLocation);
-		
+
 		DisplayMetrics displayMetrics = a.getResources().getDisplayMetrics();
 		mDpToPxScale = (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT);
 	}
@@ -145,6 +149,32 @@ public class ParticleSystem {
 //		else {
 			// Not supported, no particles are being created
 //		}
+	}
+
+	/**
+	 * Utility constructor that receives a Particle List
+	 *
+	 * @param a The parent activity
+	 * @param particles Particles
+	 * @param timeToLive The time to live for the particles
+	 * @param parentViewId The view Id for the parent of the particle system
+	 */
+	public ParticleSystem(Activity a,List<Particle> particles, long timeToLive, int parentViewId) {
+		this(a, particles != null ? particles.size() : 0, timeToLive, parentViewId);
+		if (particles != null && particles.size() > 0) {
+			mParticles.addAll(particles);
+		}
+	}
+
+	/**
+	 * Utility constructor that receives a Particle List
+	 *
+	 * @param a The parent activity
+	 * @param particles Particles
+	 * @param timeToLive The time to live for the particles
+	 */
+	public ParticleSystem(Activity a,List<Particle> particles, long timeToLive) {
+		this(a, particles, timeToLive, android.R.id.content);
 	}
 
 	public float dpToPx(float dp) {
@@ -348,8 +378,8 @@ public class ParticleSystem {
 	}
 	
 	private void startEmiting(int particlesPerSecond) {
-		mActivatedParticles = 0;
-		mParticlesPerMilisecond = particlesPerSecond/1000f;
+		mActivatedParticlesCount.set(0);
+		mParticlesPerMillisecond = particlesPerSecond/1000f;
 		// Add a full size view to the parent view		
 		mDrawingView = new ParticleField(mParentView.getContext());
 		mParentView.addView(mDrawingView);
@@ -380,13 +410,13 @@ public class ParticleSystem {
 	}
 
 	private void startEmiting(int particlesPerSecond, int emitingTime) {
-		mActivatedParticles = 0;
-		mParticlesPerMilisecond = particlesPerSecond/1000f;
+		mActivatedParticlesCount.set(0);
+		mParticlesPerMillisecond = particlesPerSecond/1000f;
 		// Add a full size view to the parent view		
 		mDrawingView = new ParticleField(mParentView.getContext());
 		mParentView.addView(mDrawingView);
 
-		mDrawingView.setParticles (mActiveParticles);
+		mDrawingView.setParticles(mActiveParticles);
 		updateParticlesBeforeStartTime(particlesPerSecond);
 		mEmitingTime = emitingTime;
 		startAnimator(new LinearInterpolator(), emitingTime + mTimeToLive);
@@ -401,6 +431,21 @@ public class ParticleSystem {
 	public void updateEmitPoint (int emitterX, int emitterY) {
 		configureEmiter(emitterX, emitterY);
 	}
+
+	/**
+	 * Update the number of particles per second that will be emited
+	 * @param particlesPerSecond Number of particles per second that will be emited (evenly distributed)
+	 * @param updateInterval Time interval before new param works
+	 */
+	public void updateParticlesPerSecond(int particlesPerSecond, long updateInterval) {
+		if (updateInterval < 0) {
+			updateInterval = mTimeToLive;
+		}
+		mParticlesPerMillisecond = particlesPerSecond / 1000f;
+		// reset mActivatedParticlesCount to ensure Particles emitting
+		mActivatedParticlesCount.set((long) ((mCurrentTime + updateInterval) * mParticlesPerMillisecond));
+	}
+
 	/**
 	 * Launches particles in one Shot
 	 * 
@@ -420,7 +465,7 @@ public class ParticleSystem {
 	 */
 	public void oneShot(View emiter, int numParticles, Interpolator interpolator) {
 		configureEmiter(emiter, Gravity.CENTER);
-		mActivatedParticles = 0;
+		mActivatedParticlesCount.set(0);
 		mEmitingTime = mTimeToLive;
 		// We create particles based in the parameters
 		for (int i=0; i<numParticles && i<mMaxParticles; i++) {
@@ -515,7 +560,7 @@ public class ParticleSystem {
 	}
 
 	private void activateParticle(long delay) {
-		Particle p = mParticles.remove(0);	
+		Particle p = mParticles.remove(0);
 		p.init();
 		// Initialization goes before configuration, scale is required before can be configured properly
 		for (int i=0; i<mInitializers.size(); i++) {
@@ -526,7 +571,8 @@ public class ParticleSystem {
 		p.configure(mTimeToLive, particleX, particleY);
 		p.activate(delay, mModifiers);
 		mActiveParticles.add(p);
-		mActivatedParticles++;
+		mActivatedParticlesCount.getAndIncrement();
+
 	}
 
 	private int getFromRange(int minValue, int maxValue) {
@@ -539,7 +585,7 @@ public class ParticleSystem {
 	private void onUpdate(long miliseconds) {
 		while (((mEmitingTime > 0 && miliseconds < mEmitingTime)|| mEmitingTime == -1) && // This point should emit
 				!mParticles.isEmpty() && // We have particles in the pool 
-				mActivatedParticles < mParticlesPerMilisecond*miliseconds) { // and we are under the number of particles that should be launched
+				mActivatedParticlesCount.get() < mParticlesPerMillisecond *miliseconds) { // and we are under the number of particles that should be launched
 			// Activate a new particle
 			activateParticle(miliseconds);			
 		}

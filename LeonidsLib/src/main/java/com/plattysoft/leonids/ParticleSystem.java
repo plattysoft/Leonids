@@ -36,7 +36,7 @@ import android.view.animation.LinearInterpolator;
 
 public class ParticleSystem {
 
-	private static final long TIMMERTASK_INTERVAL = 50;
+	private static final long TIMERTASK_INTERVAL = 50;
 	private ViewGroup mParentView;
 	private int mMaxParticles;
 	private Random mRandom;
@@ -64,6 +64,8 @@ public class ParticleSystem {
 	private int mEmiterXMax;
 	private int mEmiterYMin;
 	private int mEmiterYMax;
+
+	private long mTimerTaskInterval = TIMERTASK_INTERVAL;
 
 	private ParticleSystem(Activity a, int maxParticles, long timeToLive, int parentResId) {
 		mRandom = new Random();
@@ -304,6 +306,15 @@ public class ParticleSystem {
 		return this;
 	}
 
+	public ParticleSystem setTimerTaskInterval(long timerTaskInterval) {
+		mTimerTaskInterval = timerTaskInterval;
+		return this;
+	}
+
+	public long getTimerTaskInterval() {
+		return mTimerTaskInterval;
+	}
+
 	/**
 	 * Configures a fade out for the particles when they disappear
 	 * 
@@ -391,9 +402,9 @@ public class ParticleSystem {
 			@Override
 			public void run() {
 				onUpdate(mCurrentTime);
-				mCurrentTime += TIMMERTASK_INTERVAL;
+				mCurrentTime += mTimerTaskInterval;
 			}
-		}, 0, TIMMERTASK_INTERVAL);
+		}, 0, mTimerTaskInterval);
 	}
 
 	public void emit (int emitterX, int emitterY, int particlesPerSecond, int emitingTime) {

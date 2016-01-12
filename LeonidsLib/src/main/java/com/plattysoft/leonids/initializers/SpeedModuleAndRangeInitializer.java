@@ -4,14 +4,14 @@ import java.util.Random;
 
 import com.plattysoft.leonids.Particle;
 
-public class SpeeddModuleAndRangeInitializer implements ParticleInitializer {
+public class SpeedModuleAndRangeInitializer implements ParticleInitializer {
 
 	private float mSpeedMin;
 	private float mSpeedMax;
 	private int mMinAngle;
 	private int mMaxAngle;
 
-	public SpeeddModuleAndRangeInitializer(float speedMin, float speedMax, int minAngle, int maxAngle) {
+	public SpeedModuleAndRangeInitializer(float speedMin, float speedMax, int minAngle, int maxAngle) {
 		mSpeedMin = speedMin;
 		mSpeedMax = speedMax;
 		mMinAngle = minAngle;

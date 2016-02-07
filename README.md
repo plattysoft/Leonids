@@ -1,5 +1,6 @@
 Leonids
 ==========================
+[![Badge](http://www.libtastic.com/static/osbadges/277.png)](http://www.libtastic.com/technology/277/)
 
 Leonids is a particle system library that works with the standard Android UI.
 

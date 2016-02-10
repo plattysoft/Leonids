@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.view.animation.Animation;
 import com.plattysoft.leonids.initializers.AccelerationInitializer;
 import com.plattysoft.leonids.initializers.ParticleInitializer;
 import com.plattysoft.leonids.initializers.RotationInitiazer;
@@ -14,6 +15,7 @@ import com.plattysoft.leonids.initializers.ScaleInitializer;
 import com.plattysoft.leonids.initializers.SpeeddByComponentsInitializer;
 import com.plattysoft.leonids.initializers.SpeeddModuleAndRangeInitializer;
 import com.plattysoft.leonids.modifiers.AlphaModifier;
+import com.plattysoft.leonids.modifiers.GlobalParticlesModifier;
 import com.plattysoft.leonids.modifiers.ParticleModifier;
 
 import android.animation.Animator;
@@ -34,7 +36,7 @@ import android.view.animation.LinearInterpolator;
 
 public class ParticleSystem {
 
-	private static final long TIMMERTASK_INTERVAL = 50;
+	private static final long TIMERTASK_INTERVAL = 50;
 	private ViewGroup mParentView;
 	private int mMaxParticles;
 	private Random mRandom;
@@ -50,6 +52,7 @@ public class ParticleSystem {
 	private int mActivatedParticles;
 	private long mEmitingTime;
 
+	private List<GlobalParticlesModifier> mGlobalParticlesModifiers;
 	private List<ParticleModifier> mModifiers;
 	private List<ParticleInitializer> mInitializers;
 	private ValueAnimator mAnimator;
@@ -64,23 +67,15 @@ public class ParticleSystem {
 	private int mEmiterYMax;
 
 	private ParticleSystem(Activity a, int maxParticles, long timeToLive, int parentResId) {
-		mRandom = new Random();
 		mParentView = (ViewGroup) a.findViewById(parentResId);
+		init(a, maxParticles, timeToLive);
+	}
 
-		mModifiers = new ArrayList<ParticleModifier>();
-		mInitializers = new ArrayList<ParticleInitializer>();
-
-		mMaxParticles = maxParticles;
-		// Create the particles
-
-		mParticles = new ArrayList<Particle> ();
-		mTimeToLive = timeToLive;
-		
-		mParentLocation = new int[2];		
-		mParentView.getLocationInWindow(mParentLocation);
-		
-		DisplayMetrics displayMetrics = a.getResources().getDisplayMetrics();
-		mDpToPxScale = (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT);
+	public ParticleSystem (Activity a, int maxParticles,  int drawableRedId, long timeToLive, ViewGroup parentView) {
+		mParentView = parentView;
+		Drawable drawable = a.getResources().getDrawable(drawableRedId);
+		addParticlesInit(drawable);
+		init(a, maxParticles, timeToLive);
 	}
 
 	/**
@@ -130,21 +125,45 @@ public class ParticleSystem {
 	 */
 	public ParticleSystem(Activity a, int maxParticles, Drawable drawable, long timeToLive, int parentViewId) {
 		this(a, maxParticles, timeToLive, parentViewId);
+		addParticlesInit(drawable);
+	}
+
+	private void addParticlesInit(Drawable drawable) {
 		if (drawable instanceof BitmapDrawable) {
 			Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
 			for (int i=0; i<mMaxParticles; i++) {
-				mParticles.add (new Particle (bitmap));
+				mParticles.add (new Particle(bitmap));
 			}
 		}
 		else if (drawable instanceof AnimationDrawable) {
 			AnimationDrawable animation = (AnimationDrawable) drawable;
 			for (int i=0; i<mMaxParticles; i++) {
-				mParticles.add (new AnimatedParticle (animation));
+				mParticles.add (new AnimatedParticle(animation));
 			}
 		}
 //		else {
-			// Not supported, no particles are being created
+		// Not supported, no particles are being created
 //		}
+	}
+
+	private void init(Activity a, int maxParticles, long timeToLive) {
+		mRandom = new Random();
+
+		mGlobalParticlesModifiers = new ArrayList<GlobalParticlesModifier>();
+		mModifiers = new ArrayList<ParticleModifier>();
+		mInitializers = new ArrayList<ParticleInitializer>();
+
+		mMaxParticles = maxParticles;
+		// Create the particles
+
+		mParticles = new ArrayList<Particle> ();
+		mTimeToLive = timeToLive;
+
+		mParentLocation = new int[2];
+		mParentView.getLocationInWindow(mParentLocation);
+
+		DisplayMetrics displayMetrics = a.getResources().getDisplayMetrics();
+		mDpToPxScale = (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT);
 	}
 
 	public float dpToPx(float dp) {
@@ -264,6 +283,16 @@ public class ParticleSystem {
 		return this;
 	}
 
+	public ParticleSystem addInitializer(ParticleInitializer particleInitializer) {
+		mInitializers.add(particleInitializer);
+		return this;
+	}
+
+	public ParticleSystem addGlobalParticlesModifier (GlobalParticlesModifier modifier) {
+		mGlobalParticlesModifiers.add(modifier);
+		return this;
+	}
+
 	public ParticleSystem setParentViewGroup(ViewGroup viewGroup) {
 		mParentView = viewGroup;
 		return this;
@@ -306,7 +335,7 @@ public class ParticleSystem {
 	public void emitWithGravity (View emiter, int gravity, int particlesPerSecond, int emitingTime) {
 		// Setup emiter
 		configureEmiter(emiter, gravity);
-		startEmiting(particlesPerSecond, emitingTime);
+		startEmitting(particlesPerSecond, emitingTime);
 	}
 	
 	/**
@@ -344,32 +373,32 @@ public class ParticleSystem {
 	public void emitWithGravity (View emiter, int gravity, int particlesPerSecond) {
 		// Setup emiter
 		configureEmiter(emiter, gravity);
-		startEmiting(particlesPerSecond);
+		startEmitting(particlesPerSecond);
 	}
-	
-	private void startEmiting(int particlesPerSecond) {
+
+	private void startEmitting(int particlesPerSecond) {
 		mActivatedParticles = 0;
 		mParticlesPerMilisecond = particlesPerSecond/1000f;
-		// Add a full size view to the parent view		
+		// Add a full size view to the parent view
 		mDrawingView = new ParticleField(mParentView.getContext());
 		mParentView.addView(mDrawingView);
 		mEmitingTime = -1; // Meaning infinite
-		mDrawingView.setParticles (mActiveParticles);
-		updateParticlesBeforeStartTime(particlesPerSecond);
+		mDrawingView.setParticles(mActiveParticles);
+		updateParticlesBeforeStartTime();
 		mTimer = new Timer();
 		mTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
 				onUpdate(mCurrentTime);
-				mCurrentTime += TIMMERTASK_INTERVAL;
+				mCurrentTime += TIMERTASK_INTERVAL;
 			}
-		}, 0, TIMMERTASK_INTERVAL);
+		}, 0, TIMERTASK_INTERVAL);
 	}
 
-	public void emit (int emitterX, int emitterY, int particlesPerSecond, int emitingTime) {
+	public void emit (int emitterX, int emitterY, int particlesPerSecond, int emittingTime) {
 		configureEmiter(emitterX, emitterY);
-		startEmiting(particlesPerSecond, emitingTime);
-	}	
+		startEmitting(particlesPerSecond, emittingTime);
+	}
 	
 	private void configureEmiter(int emitterX, int emitterY) {
 		// We configure the emiter based on the window location to fix the offset of action bar if present		
@@ -379,22 +408,22 @@ public class ParticleSystem {
 		mEmiterYMax = mEmiterYMin;
 	}
 
-	private void startEmiting(int particlesPerSecond, int emitingTime) {
+	private void startEmitting(int particlesPerSecond, int emittingTime) {
 		mActivatedParticles = 0;
-		mParticlesPerMilisecond = particlesPerSecond/1000f;
+		mParticlesPerMilisecond = particlesPerSecond / 1000f;
 		// Add a full size view to the parent view		
 		mDrawingView = new ParticleField(mParentView.getContext());
 		mParentView.addView(mDrawingView);
+		mEmitingTime = emittingTime;
+		mDrawingView.setParticles(mActiveParticles);
+		updateParticlesBeforeStartTime();
 
-		mDrawingView.setParticles (mActiveParticles);
-		updateParticlesBeforeStartTime(particlesPerSecond);
-		mEmitingTime = emitingTime;
-		startAnimator(new LinearInterpolator(), emitingTime + mTimeToLive);
+		startAnimator(new LinearInterpolator(), emittingTime + mTimeToLive);
 	}
 
 	public void emit (int emitterX, int emitterY, int particlesPerSecond) {
 		configureEmiter(emitterX, emitterY);
-		startEmiting(particlesPerSecond);
+		startEmitting(particlesPerSecond);
 	}
 
 
@@ -420,13 +449,26 @@ public class ParticleSystem {
 	 */
 	public void oneShot(View emiter, int numParticles, Interpolator interpolator) {
 		configureEmiter(emiter, Gravity.CENTER);
+		oneShot(numParticles, interpolator);
+	}
+
+	public void oneShot(int emitterX, int emitterY, int numParticles, Interpolator interpolator) {
+		configureEmiter(emitterX, emitterY);
+		oneShot(numParticles, interpolator);
+	}
+
+	public void oneShot(int emitterX, int emitterY, int numParticles) {
+		oneShot(emitterX, emitterY, numParticles, new LinearInterpolator());
+	}
+
+	private void oneShot(int numParticles, Interpolator interpolator) {
 		mActivatedParticles = 0;
 		mEmitingTime = mTimeToLive;
 		// We create particles based in the parameters
 		for (int i=0; i<numParticles && i<mMaxParticles; i++) {
 			activateParticle(0);
 		}
-		// Add a full size view to the parent view		
+		// Add a full size view to the parent view
 		mDrawingView = new ParticleField(mParentView.getContext());
 		mParentView.addView(mDrawingView);
 		mDrawingView.setParticles(mActiveParticles);
@@ -435,14 +477,15 @@ public class ParticleSystem {
 		startAnimator(interpolator, mTimeToLive);
 	}
 
-	private void startAnimator(Interpolator interpolator, long animnationTime) {
-		mAnimator = ValueAnimator.ofInt(0, (int) animnationTime);
-		mAnimator.setDuration(animnationTime);
+	private void startAnimator(Interpolator interpolator, long animationTime) {
+		mAnimator = ValueAnimator.ofInt((int) mCurrentTime, (int) animationTime);
+		mAnimator.setDuration(animationTime - mCurrentTime);
 		mAnimator.addUpdateListener(new AnimatorUpdateListener() {
 			@Override
 			public void onAnimationUpdate(ValueAnimator animation) {
-				int miliseconds = (Integer) animation.getAnimatedValue();
-				onUpdate(miliseconds);
+				int milliseconds = (Integer) animation.getAnimatedValue();
+				mCurrentTime = milliseconds;
+				onUpdate(milliseconds);
 			}
 		});
 		mAnimator.addListener(new AnimatorListener() {			
@@ -459,7 +502,7 @@ public class ParticleSystem {
 
 			@Override
 			public void onAnimationCancel(Animator animation) {
-				cleanupAnimation();				
+				cleanupAnimation();
 			}
 		});
 		mAnimator.setInterpolator(interpolator);
@@ -515,7 +558,7 @@ public class ParticleSystem {
 	}
 
 	private void activateParticle(long delay) {
-		Particle p = mParticles.remove(0);	
+		Particle p = mParticles.remove(0);
 		p.init();
 		// Initialization goes before configuration, scale is required before can be configured properly
 		for (int i=0; i<mInitializers.size(); i++) {
@@ -536,16 +579,21 @@ public class ParticleSystem {
 		return mRandom.nextInt(maxValue-minValue) + minValue;
 	}
 
-	private void onUpdate(long miliseconds) {
-		while (((mEmitingTime > 0 && miliseconds < mEmitingTime)|| mEmitingTime == -1) && // This point should emit
-				!mParticles.isEmpty() && // We have particles in the pool 
-				mActivatedParticles < mParticlesPerMilisecond*miliseconds) { // and we are under the number of particles that should be launched
+	private void update (long milliseconds) {
+		while (((mEmitingTime > 0 && milliseconds < mEmitingTime)|| mEmitingTime == -1) && // This point should emit
+				!mParticles.isEmpty() && // We have particles in the pool
+				mActivatedParticles < mParticlesPerMilisecond*milliseconds) { // and we are under the number of particles that should be launched
 			// Activate a new particle
-			activateParticle(miliseconds);			
+			activateParticle(milliseconds);
 		}
 		synchronized(mActiveParticles) {
+			if (!mGlobalParticlesModifiers.isEmpty()) {
+				for (int i = 0, size = mGlobalParticlesModifiers.size(); i<size; i++) {
+					mGlobalParticlesModifiers.get(i).apply(mActiveParticles, milliseconds);
+				}
+			}
 			for (int i = 0; i < mActiveParticles.size(); i++) {
-				boolean active = mActiveParticles.get(i).update(miliseconds);
+				boolean active = mActiveParticles.get(i).update(milliseconds);
 				if (!active) {
 					Particle p = mActiveParticles.remove(i);
 					i--; // Needed to keep the index at the right position
@@ -553,6 +601,10 @@ public class ParticleSystem {
 				}
 			}
 		}
+	}
+
+	private void onUpdate(long milliseconds) {
+		update(milliseconds);
 		mDrawingView.postInvalidate();
 	}
 
@@ -587,18 +639,14 @@ public class ParticleSystem {
 		}
 	}
 
-	private void updateParticlesBeforeStartTime(int particlesPerSecond) {
-		if (particlesPerSecond == 0) {
-			return;
+	private void updateParticlesBeforeStartTime() {
+		for(long delta = 0; delta <= mCurrentTime; delta+=17) {
+			update(delta);
 		}
-		long currentTimeInMs = mCurrentTime / 1000;
-		long framesCount = currentTimeInMs / particlesPerSecond;
-		if (framesCount == 0) {
-			return;
-		}
-		long frameTimeInMs = mCurrentTime / framesCount;
-		for (int i = 1; i <= framesCount; i++) {
-			onUpdate(frameTimeInMs * i + 1);
-		}
+	}
+
+	public void startParentViewAnimation(Animation animation) {
+		if (mDrawingView == null) return;
+		mDrawingView.startAnimation(animation);
 	}
 }

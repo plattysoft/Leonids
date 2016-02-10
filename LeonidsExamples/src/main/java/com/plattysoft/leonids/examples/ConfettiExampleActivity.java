@@ -1,11 +1,10 @@
 package com.plattysoft.leonids.examples;
 
-import com.plattysoft.leonids.ParticleSystem;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import com.plattysoft.leonids.ParticleSystem;
 
 public class ConfettiExampleActivity extends Activity implements OnClickListener {
 	
@@ -17,11 +16,13 @@ public class ConfettiExampleActivity extends Activity implements OnClickListener
 	}
 
 	@Override
-	public void onClick(View arg0) {		
-		new ParticleSystem(this, 80, R.drawable.confeti2, 10000)
+	public void onClick(View arg0) {
+		ParticleSystem particleSystem = new ParticleSystem(this, 80, R.drawable.confeti2, 10000);
+		particleSystem
 		.setSpeedModuleAndAngleRange(0f, 0.1f, 180, 180)
 		.setRotationSpeed(144)
-		.setAcceleration(0.000017f, 90)		
+		.setAcceleration(0.000017f, 90)
+		.setStartTime(15000)
 		.emit(findViewById(R.id.emiter_top_right), 8);
 				
 		new ParticleSystem(this, 80, R.drawable.confeti3, 10000)

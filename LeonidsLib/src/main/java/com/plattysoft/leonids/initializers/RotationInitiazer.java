@@ -16,7 +16,8 @@ public class RotationInitiazer implements ParticleInitializer {
 
 	@Override
 	public void initParticle(Particle p, Random r) {
-		int value = r.nextInt(mMaxAngle-mMinAngle)+mMinAngle;
+		int value = mMinAngle == mMaxAngle ? mMinAngle : r.nextInt(mMaxAngle-mMinAngle)
+				+mMinAngle;
 		p.mInitialRotation = value;
 	}
 

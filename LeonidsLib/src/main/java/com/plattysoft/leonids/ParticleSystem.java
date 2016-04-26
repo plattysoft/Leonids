@@ -32,6 +32,8 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
+import java.lang.ref.WeakReference;
+
 public class ParticleSystem {
 
 	private static final long TIMMERTASK_INTERVAL = 50;
@@ -54,6 +56,7 @@ public class ParticleSystem {
 	private List<ParticleInitializer> mInitializers;
 	private ValueAnimator mAnimator;
 	private Timer mTimer;
+    private final ParticleTimerTask mTimerTask = new ParticleTimerTask(this);
 
 	private float mDpToPxScale;
 	private int[] mParentLocation;
@@ -63,7 +66,25 @@ public class ParticleSystem {
 	private int mEmiterYMin;
 	private int mEmiterYMax;
 
-	private ParticleSystem(Activity a, int maxParticles, long timeToLive, int parentResId) {
+    private static class ParticleTimerTask extends TimerTask {
+
+        private final WeakReference<ParticleSystem> mPs;
+
+        public ParticleTimerTask(ParticleSystem ps) {
+            mPs = new WeakReference<ParticleSystem>(ps);
+        }
+
+        @Override
+        public void run() {
+            if(mPs.get() != null) {
+                ParticleSystem ps = mPs.get();
+                ps.onUpdate(ps.mCurrentTime);
+                ps.mCurrentTime += TIMMERTASK_INTERVAL;
+            }
+        }
+    }
+
+    private ParticleSystem(Activity a, int maxParticles, long timeToLive, int parentResId) {
 		mRandom = new Random();
         mParentLocation = new int[2];
 
@@ -439,13 +460,7 @@ public class ParticleSystem {
 		mDrawingView.setParticles (mActiveParticles);
 		updateParticlesBeforeStartTime(particlesPerSecond);
 		mTimer = new Timer();
-		mTimer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				onUpdate(mCurrentTime);
-				mCurrentTime += TIMMERTASK_INTERVAL;
-			}
-		}, 0, TIMMERTASK_INTERVAL);
+		mTimer.schedule(mTimerTask, 0, TIMMERTASK_INTERVAL);
 	}
 
 	public void emit (int emitterX, int emitterY, int particlesPerSecond, int emitingTime) {
@@ -521,12 +536,12 @@ public class ParticleSystem {
 		mAnimator = ValueAnimator.ofInt(0, (int) animnationTime);
 		mAnimator.setDuration(animnationTime);
 		mAnimator.addUpdateListener(new AnimatorUpdateListener() {
-			@Override
-			public void onAnimationUpdate(ValueAnimator animation) {
-				int miliseconds = (Integer) animation.getAnimatedValue();
-				onUpdate(miliseconds);
-			}
-		});
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int miliseconds = (Integer) animation.getAnimatedValue();
+                onUpdate(miliseconds);
+            }
+        });
 		mAnimator.addListener(new AnimatorListener() {			
 			@Override
 			public void onAnimationStart(Animator animation) {}
@@ -543,7 +558,7 @@ public class ParticleSystem {
 			public void onAnimationCancel(Animator animation) {
 				cleanupAnimation();				
 			}
-		});
+        });
 		mAnimator.setInterpolator(interpolator);
 		mAnimator.start();
 	}

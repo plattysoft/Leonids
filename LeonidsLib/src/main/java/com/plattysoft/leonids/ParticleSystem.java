@@ -1,21 +1,5 @@
 package com.plattysoft.leonids;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import com.plattysoft.leonids.initializers.AccelerationInitializer;
-import com.plattysoft.leonids.initializers.ParticleInitializer;
-import com.plattysoft.leonids.initializers.RotationInitiazer;
-import com.plattysoft.leonids.initializers.RotationSpeedInitializer;
-import com.plattysoft.leonids.initializers.ScaleInitializer;
-import com.plattysoft.leonids.initializers.SpeeddByComponentsInitializer;
-import com.plattysoft.leonids.initializers.SpeeddModuleAndRangeInitializer;
-import com.plattysoft.leonids.modifiers.AlphaModifier;
-import com.plattysoft.leonids.modifiers.ParticleModifier;
-
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ValueAnimator;
@@ -32,11 +16,28 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
+import com.plattysoft.leonids.initializers.AccelerationInitializer;
+import com.plattysoft.leonids.initializers.ParticleInitializer;
+import com.plattysoft.leonids.initializers.RotationInitiazer;
+import com.plattysoft.leonids.initializers.RotationSpeedInitializer;
+import com.plattysoft.leonids.initializers.ScaleInitializer;
+import com.plattysoft.leonids.initializers.SpeeddByComponentsInitializer;
+import com.plattysoft.leonids.initializers.SpeeddModuleAndRangeInitializer;
+import com.plattysoft.leonids.modifiers.AlphaModifier;
+import com.plattysoft.leonids.modifiers.ParticleModifier;
+
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ParticleSystem {
 
-	private static final long TIMMERTASK_INTERVAL = 50;
+	private static final long DEFAULT_UPDATE_INTERVAL = 50;
+
+	private long mUpdateInterval = DEFAULT_UPDATE_INTERVAL;
 	private ViewGroup mParentView;
 	private int mMaxParticles;
 	private Random mRandom;
@@ -79,7 +80,7 @@ public class ParticleSystem {
             if(mPs.get() != null) {
                 ParticleSystem ps = mPs.get();
                 ps.onUpdate(ps.mCurrentTime);
-                ps.mCurrentTime += TIMMERTASK_INTERVAL;
+                ps.mCurrentTime += ps.mUpdateInterval;
             }
         }
     }
@@ -235,6 +236,16 @@ public class ParticleSystem {
 	 */
 	public ParticleSystem addModifier(ParticleModifier modifier) {
 		mModifiers.add(modifier);
+		return this;
+	}
+
+	/**
+	 * Sets update interval for the particle system.
+	 *
+	 * @param interval new interval in milliseconds.
+	 */
+	public ParticleSystem setUpdateInterval(long interval) {
+		mUpdateInterval = interval;
 		return this;
 	}
 
@@ -460,7 +471,7 @@ public class ParticleSystem {
 		mDrawingView.setParticles (mActiveParticles);
 		updateParticlesBeforeStartTime(particlesPerSecond);
 		mTimer = new Timer();
-		mTimer.schedule(mTimerTask, 0, TIMMERTASK_INTERVAL);
+		mTimer.schedule(mTimerTask, 0, mUpdateInterval);
 	}
 
 	public void emit (int emitterX, int emitterY, int particlesPerSecond, int emitingTime) {

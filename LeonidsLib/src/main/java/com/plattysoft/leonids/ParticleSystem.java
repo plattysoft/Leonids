@@ -106,7 +106,36 @@ public class ParticleSystem {
 
 	/**
 	 * Creates a particle system with the given parameters
-	 * 
+	 *
+	 * @param parentView The parent view group
+	 * @param drawable The drawable to use as a particle
+	 * @param maxParticles The maximum number of particles
+	 * @param timeToLive The time to live for the particles
+	 */
+	public ParticleSystem(ViewGroup parentView, Drawable drawable, int maxParticles, long timeToLive) {
+		mRandom = new Random();
+		mParentLocation = new int[2];
+
+		setParentViewGroup(parentView);
+
+		mModifiers = new ArrayList<ParticleModifier>();
+		mInitializers = new ArrayList<ParticleInitializer>();
+
+		mMaxParticles = maxParticles;
+		// Create the particles
+
+		mParticles = new ArrayList<Particle> ();
+		mTimeToLive = timeToLive;
+
+		DisplayMetrics displayMetrics = parentView.getContext().getResources().getDisplayMetrics();
+		mDpToPxScale = (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT);
+
+		createInitialParticles(drawable);
+	}
+
+	/**
+	 * Creates a particle system with the given parameters
+	 *
 	 * @param a The parent activity
 	 * @param maxParticles The maximum number of particles
 	 * @param drawableRedId The drawable resource to use as particle (supports Bitmaps and Animations)
@@ -151,6 +180,10 @@ public class ParticleSystem {
 	 */
 	public ParticleSystem(Activity a, int maxParticles, Drawable drawable, long timeToLive, int parentViewId) {
 		this(a, maxParticles, timeToLive, parentViewId);
+		createInitialParticles(drawable);
+	}
+
+	private void createInitialParticles(Drawable drawable) {
 		if (drawable instanceof BitmapDrawable) {
 			Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
 			for (int i=0; i<mMaxParticles; i++) {
@@ -164,7 +197,7 @@ public class ParticleSystem {
 			}
 		}
 //		else {
-			// Not supported, no particles are being created
+		// Not supported, no particles are being created
 //		}
 	}
 
@@ -498,6 +531,11 @@ public class ParticleSystem {
 	public void updateEmitPoint (int emitterX, int emitterY) {
 		configureEmiter(emitterX, emitterY);
 	}
+
+	public void updateEmitPoint (View emiter, int gravity) {
+		configureEmiter(emiter, gravity);
+	}
+
 	/**
 	 * Launches particles in one Shot
 	 * 

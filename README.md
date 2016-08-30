@@ -108,6 +108,10 @@ There are also constructors that recieve a view id to use as the parent so you c
 * _ParticleSystem(Activity a, int maxParticles, Bitmap bitmap, long timeToLive, int parentViewId)_
 * _ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation, long timeToLive, int parentViewId)_
 
+And another constructor that receives a parent viewgroup and drawable for use in places where it is not practical to pass a reference to an Activity
+
+* _ParticleSystem(ViewGroup parentView, Drawable drawable, int maxParticles, long timeToLive)_
+
 ### Configuration
 
 Available methods on the Particle system for configuration are:
@@ -159,6 +163,7 @@ Emits the number of particles per second from the emitter. If emittingTime is se
  
 ####Update, stop, and cancel
 * _updateEmitPoint (int emitterX, int emitterY)_ Updates dynamically the point of emission.
+* _updateEmitPoint (View emiter, int gravity)_ Updates dynamically the point of emission using gravity.
 * _stopEmitting ()_ Stops the emission of new particles, but the active ones are updated.
 * _cancel ()_ Stops the emission of new particles and cancles the active ones.
 

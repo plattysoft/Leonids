@@ -1,21 +1,5 @@
 package com.plattysoft.leonids;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import com.plattysoft.leonids.initializers.AccelerationInitializer;
-import com.plattysoft.leonids.initializers.ParticleInitializer;
-import com.plattysoft.leonids.initializers.RotationInitiazer;
-import com.plattysoft.leonids.initializers.RotationSpeedInitializer;
-import com.plattysoft.leonids.initializers.ScaleInitializer;
-import com.plattysoft.leonids.initializers.SpeeddByComponentsInitializer;
-import com.plattysoft.leonids.initializers.SpeeddModuleAndRangeInitializer;
-import com.plattysoft.leonids.modifiers.AlphaModifier;
-import com.plattysoft.leonids.modifiers.ParticleModifier;
-
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ValueAnimator;
@@ -32,11 +16,28 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
+import com.plattysoft.leonids.initializers.AccelerationInitializer;
+import com.plattysoft.leonids.initializers.ParticleInitializer;
+import com.plattysoft.leonids.initializers.RotationInitiazer;
+import com.plattysoft.leonids.initializers.RotationSpeedInitializer;
+import com.plattysoft.leonids.initializers.ScaleInitializer;
+import com.plattysoft.leonids.initializers.SpeeddByComponentsInitializer;
+import com.plattysoft.leonids.initializers.SpeeddModuleAndRangeInitializer;
+import com.plattysoft.leonids.modifiers.AlphaModifier;
+import com.plattysoft.leonids.modifiers.ParticleModifier;
+
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ParticleSystem {
 
-	private static final long TIMMERTASK_INTERVAL = 50;
+	private static final long DEFAULT_UPDATE_INTERVAL = 50;
+
+	private long mUpdateInterval = DEFAULT_UPDATE_INTERVAL;
 	private ViewGroup mParentView;
 	private int mMaxParticles;
 	private Random mRandom;
@@ -44,7 +45,7 @@ public class ParticleSystem {
 	private ParticleField mDrawingView;
 
 	private ArrayList<Particle> mParticles;
-	private final ArrayList<Particle> mActiveParticles = new ArrayList<Particle>();
+	private final ArrayList<Particle> mActiveParticles = new ArrayList<>();
 	private long mTimeToLive;
 	private long mCurrentTime = 0;
 
@@ -71,7 +72,7 @@ public class ParticleSystem {
         private final WeakReference<ParticleSystem> mPs;
 
         public ParticleTimerTask(ParticleSystem ps) {
-            mPs = new WeakReference<ParticleSystem>(ps);
+            mPs = new WeakReference<>(ps);
         }
 
         @Override
@@ -79,7 +80,7 @@ public class ParticleSystem {
             if(mPs.get() != null) {
                 ParticleSystem ps = mPs.get();
                 ps.onUpdate(ps.mCurrentTime);
-                ps.mCurrentTime += TIMMERTASK_INTERVAL;
+                ps.mCurrentTime += ps.mUpdateInterval;
             }
         }
     }
@@ -91,13 +92,13 @@ public class ParticleSystem {
         mParentView = (ViewGroup) a.findViewById(parentResId);
 		setParentViewGroup(mParentView);
 
-		mModifiers = new ArrayList<ParticleModifier>();
-		mInitializers = new ArrayList<ParticleInitializer>();
+		mModifiers = new ArrayList<>();
+		mInitializers = new ArrayList<>();
 
 		mMaxParticles = maxParticles;
 		// Create the particles
 
-		mParticles = new ArrayList<Particle> ();
+		mParticles = new ArrayList<> ();
 		mTimeToLive = timeToLive;
 		
 		DisplayMetrics displayMetrics = a.getResources().getDisplayMetrics();
@@ -232,9 +233,21 @@ public class ParticleSystem {
 	 * Adds a modifier to the Particle system, it will be executed on each update.
 	 * 
 	 * @param modifier modifier to be added to the ParticleSystem
+	 * @return this
 	 */
 	public ParticleSystem addModifier(ParticleModifier modifier) {
 		mModifiers.add(modifier);
+		return this;
+	}
+
+	/**
+	 * Sets update interval for the particle system.
+	 *
+	 * @param interval new interval in milliseconds.
+	 * @return this
+	 */
+	public ParticleSystem setUpdateInterval(long interval) {
+		mUpdateInterval = interval;
 		return this;
 	}
 
@@ -331,11 +344,11 @@ public class ParticleSystem {
      * components in x and y direction are controlled by the acceleration angle. The acceleration
      * is measured in density pixels per square millisecond. The angle is measured in degrees
      * with 0° pointing to the right and going clockwise.
-     * @param minAcceleration
-     * @param maxAcceleration
-     * @param minAngle
-     * @param maxAngle
-     * @return
+     * @param minAcceleration minAcceleration
+     * @param maxAcceleration maxAcceleration
+     * @param minAngle minAngle
+     * @param maxAngle maxAngle
+     * @return this
      */
 	public ParticleSystem setAccelerationModuleAndAndAngleRange(float minAcceleration, float maxAcceleration, int minAngle, int maxAngle) {
         mInitializers.add(new AccelerationInitializer(dpToPx(minAcceleration), dpToPx(maxAcceleration),
@@ -382,6 +395,7 @@ public class ParticleSystem {
 	 * 
 	 * @param milisecondsBeforeEnd fade out duration in milliseconds
 	 * @param interpolator the interpolator for the fade out (default is linear)
+     * @return this
 	 */
 	public ParticleSystem setFadeOut(long milisecondsBeforeEnd, Interpolator interpolator) {
 		mModifiers.add(new AlphaModifier(255, 0, mTimeToLive-milisecondsBeforeEnd, mTimeToLive, interpolator));
@@ -392,6 +406,7 @@ public class ParticleSystem {
 	 * Configures a fade out for the particles when they disappear
 	 * 
 	 * @param duration fade out duration in milliseconds
+     * @return this
 	 */
 	public ParticleSystem setFadeOut(long duration) {
 		return setFadeOut(duration, new LinearInterpolator());
@@ -460,7 +475,7 @@ public class ParticleSystem {
 		mDrawingView.setParticles (mActiveParticles);
 		updateParticlesBeforeStartTime(particlesPerSecond);
 		mTimer = new Timer();
-		mTimer.schedule(mTimerTask, 0, TIMMERTASK_INTERVAL);
+		mTimer.schedule(mTimerTask, 0, mUpdateInterval);
 	}
 
 	public void emit (int emitterX, int emitterY, int particlesPerSecond, int emitingTime) {

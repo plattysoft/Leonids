@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 17
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         applicationId "com.plattysoft.leonids.examples"
         minSdkVersion 11
-        targetSdkVersion 17
+        targetSdkVersion 24
     }
 
     buildTypes {
@@ -20,6 +20,4 @@ android {
 
 dependencies {
     compile project(':LeonidsLib')
-//    compile files('libs/LeonidsLib.jar')
-//    compile 'com.plattysoft.leonids:LeonidsLib:1.3.1'
 }

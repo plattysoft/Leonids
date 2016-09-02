@@ -110,7 +110,7 @@ There are also constructors that recieve a view id to use as the parent so you c
 
 And another constructor that receives a parent viewgroup and drawable for use in places where it is not practical to pass a reference to an Activity
 
-* _ParticleSystem(ViewGroup parentView, Drawable drawable, int maxParticles, long timeToLive)_
+* _ParticleSystem(ViewGroup parentView, int maxParticles, Drawable drawable, long timeToLive)_
 
 ### Configuration
 

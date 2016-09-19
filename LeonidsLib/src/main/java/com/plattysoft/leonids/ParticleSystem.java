@@ -22,6 +22,7 @@ import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -114,21 +115,28 @@ public class ParticleSystem {
 	public ParticleSystem(ViewGroup parentView, int maxParticles, Drawable drawable, long timeToLive) {
 		this(parentView, maxParticles, timeToLive);
 
-		if (drawable instanceof BitmapDrawable) {
-			Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-			for (int i=0; i<mMaxParticles; i++) {
-				mParticles.add (new Particle (bitmap));
-			}
-		}
-		else if (drawable instanceof AnimationDrawable) {
+		if (drawable instanceof AnimationDrawable) {
 			AnimationDrawable animation = (AnimationDrawable) drawable;
 			for (int i=0; i<mMaxParticles; i++) {
 				mParticles.add (new AnimatedParticle (animation));
 			}
 		}
-//		else {
-		// Not supported, no particles are being created
-//		}
+		else {
+			Bitmap bitmap = null;
+			if (drawable instanceof BitmapDrawable) {
+				bitmap = ((BitmapDrawable) drawable).getBitmap();
+			}
+			else {
+				bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+						drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+				Canvas canvas = new Canvas(bitmap);
+				drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+				drawable.draw(canvas);
+			}
+			for (int i=0; i<mMaxParticles; i++) {
+				mParticles.add (new Particle (bitmap));
+			}
+		}
 	}
 
 	/**

@@ -1,9 +1,10 @@
 Leonids
 ==========================
+[![Badge](http://www.libtastic.com/static/osbadges/277.png)](http://www.libtastic.com/technology/277/)
 
 Leonids is a particle system library that works with the standard Android UI.
 
-The library is extremely lightweight, [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.3/LeonidsLib-1.3.jar) is just 81Kb.
+The library is extremely lightweight, [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.3.1/LeonidsLib.jar) is just 81Kb.
 
 You can download [Leonids Demo from Google Play](https://play.google.com/store/apps/details?id=com.plattysoft.leonids.examples) to check out what can be done with it.
 
@@ -16,7 +17,7 @@ Leonids is available in jcenter as well as a jar file to fit both Android Studio
 Add the following dependency to the build.gradle of your project
 ```
 dependencies {
-    compile 'com.plattysoft.leonids:LeonidsLib:1.3'
+    compile 'com.plattysoft.leonids:LeonidsLib:1.3.1'
 }
 ```
 Note: If you get an error, you may need to update the jcenter repository to:
@@ -30,7 +31,7 @@ repositories {
 
 ### Eclipse / jar file
 
-Just put [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.3/LeonidsLib-1.3.jar) into the libs folder of your app.
+Just put [LeonidsLib.jar](https://github.com/plattysoft/Leonids/releases/download/1.3.1/LeonidsLib.jar) into the libs folder of your app.
 
 ## Why this library?
 
@@ -51,6 +52,8 @@ new ParticleSystem(this, numParticles, drawableResId, timeToLive)
 .setSpeedRange(0.2f, 0.5f)
 .oneShot(anchorView, numParticles);
 ```
+
+Note that the ParticleSystem checks the position of the anchor view when oneShot (or emit) is called, so it requires the views to be measured. This means that **ParticleSystem won't work properly if you call oneShot or emit during onCreate**. For more information check the comments on [issue #22](https://github.com/plattysoft/Leonids/issues/22).
 
 When you create the particle system, you tell how many particles will it use as a maximum, the resourceId of the drawable you want to use for the particles and for how long the particles will live.
 
@@ -105,6 +108,10 @@ There are also constructors that recieve a view id to use as the parent so you c
 * _ParticleSystem(Activity a, int maxParticles, Bitmap bitmap, long timeToLive, int parentViewId)_
 * _ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation, long timeToLive, int parentViewId)_
 
+And another constructor that receives a parent viewgroup and drawable for use in places where it is not practical to pass a reference to an Activity
+
+* _ParticleSystem(ViewGroup parentView, int maxParticles, Drawable drawable, long timeToLive)_
+
 ### Configuration
 
 Available methods on the Particle system for configuration are:
@@ -156,6 +163,7 @@ Emits the number of particles per second from the emitter. If emittingTime is se
  
 ####Update, stop, and cancel
 * _updateEmitPoint (int emitterX, int emitterY)_ Updates dynamically the point of emission.
+* _updateEmitPoint (View emiter, int gravity)_ Updates dynamically the point of emission using gravity.
 * _stopEmitting ()_ Stops the emission of new particles, but the active ones are updated.
 * _cancel ()_ Stops the emission of new particles and cancles the active ones.
 

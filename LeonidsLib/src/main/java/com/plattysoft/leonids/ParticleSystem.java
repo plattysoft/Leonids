@@ -384,7 +384,7 @@ public class ParticleSystem {
 		return this;
 	}
 
-	public ParticleSystem setStartTime(int time) {
+	public ParticleSystem setStartTime(long time) {
 		mCurrentTime = time;
 		return this;
 	}

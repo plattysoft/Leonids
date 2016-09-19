@@ -96,7 +96,13 @@ task classesJar(type: Jar) {
     archiveName "LeonidsLib-${versionName}.jar"
 }
 
-//task javaDoc(type: )
+task generateJavadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    ext.cp = android.libraryVariants.collect { variant ->
+        variant.javaCompile.classpath.files
+    }
+    classpath = files(ext.cp)
+}
 
 artifacts {
     archives sourcesJar

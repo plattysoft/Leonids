@@ -655,7 +655,12 @@ public class ParticleSystem {
 		if (minValue == maxValue) {
 			return minValue;
 		}
-		return mRandom.nextInt(maxValue-minValue) + minValue;
+		if (minValue < maxValue) {
+			return mRandom.nextInt(maxValue - minValue) + minValue;
+		}
+		else {
+			return mRandom.nextInt(minValue - maxValue) + maxValue;
+		}
 	}
 
 	private void onUpdate(long miliseconds) {

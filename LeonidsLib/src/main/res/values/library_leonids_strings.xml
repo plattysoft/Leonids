@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string name="define_leonids"></string>
+	<!-- Author section -->
+	<string name="library_leonids_author">Raul Portales</string>
+	<string name="library_leonids_authorWebsite">http://plattysoft.com/</string>
+	<!-- Library section -->
+	<string name="library_leonids_libraryName">Leonids</string>
+	<string name="library_leonids_libraryDescription">Leonids is a particle system library that works with the standard Android UI.</string>
+	<string name="library_leonids_libraryWebsite">https://github.com/plattysoft/Leonids</string>
+	<string name="library_leonids_libraryVersion">1.3.2</string>
+	<!-- OpenSource section -->
+	<string name="library_leonids_isOpenSource">true</string>
+	<string name="library_leonids_repositoryLink">https://github.com/plattysoft/Leonids</string>
+	<!-- ClassPath for autoDetect section -->
+	<string name="library_leonids_classPath">com.plattysoft.leonids.ParticleSystem</string>
+	<!-- License section -->
+	<string name="library_leonids_licenseId">apache_2_0</string>
+	<!-- Custom variables section -->
+</resources>

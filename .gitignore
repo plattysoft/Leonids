@@ -6,3 +6,5 @@ build/
 *.apk
 local.properties
 .idea/
+!LeonidasExamples.apk
+!LeonidsLib.jar

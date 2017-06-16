@@ -44,7 +44,7 @@ public class SpeedModuleAndRangeInitializer implements ParticleInitializer {
 		double angleInRads = Math.toRadians(angle);
 		p.mSpeedX = (float) (speed * Math.cos(angleInRads));
 		p.mSpeedY = (float) (speed * Math.sin(angleInRads));
-		p.mInitialRotation = angle;
+		p.mInitialRotation = angle + 90;
 	}
 
 }

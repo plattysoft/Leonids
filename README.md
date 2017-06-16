@@ -1,3 +1,8 @@
+## Changes in this fork:
+- Spelling fixes
+- Added static method to set FPS
+- Fixed some angle math
+
 Leonids
 ==========================
 [![Badge](http://www.libtastic.com/static/osbadges/277.png)](http://www.libtastic.com/technology/277/)

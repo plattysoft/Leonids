@@ -19,7 +19,7 @@ import android.view.animation.LinearInterpolator;
 
 import com.plattysoft.leonids.initializers.AccelerationInitializer;
 import com.plattysoft.leonids.initializers.ParticleInitializer;
-import com.plattysoft.leonids.initializers.RotationInitiazer;
+import com.plattysoft.leonids.initializers.RotationInitializer;
 import com.plattysoft.leonids.initializers.RotationSpeedInitializer;
 import com.plattysoft.leonids.initializers.ScaleInitializer;
 import com.plattysoft.leonids.initializers.SpeeddByComponentsInitializer;
@@ -44,11 +44,11 @@ public class ParticleSystem {
 	private ParticleField mDrawingView;
 
 	private ArrayList<Particle> mParticles;
-	private final ArrayList<Particle> mActiveParticles = new ArrayList<Particle>();
+	private final ArrayList<Particle> mActiveParticles = new ArrayList<>();
 	private long mTimeToLive;
 	private long mCurrentTime = 0;
 
-	private float mParticlesPerMilisecond;
+	private float mParticlesPerMillisecond;
 	private int mActivatedParticles;
 	private long mEmittingTime;
 
@@ -71,7 +71,7 @@ public class ParticleSystem {
         private final WeakReference<ParticleSystem> mPs;
 
         public ParticleTimerTask(ParticleSystem ps) {
-            mPs = new WeakReference<ParticleSystem>(ps);
+            mPs = new WeakReference<>(ps);
         }
 
         @Override
@@ -90,13 +90,13 @@ public class ParticleSystem {
 
 		setParentViewGroup(parentView);
 
-		mModifiers = new ArrayList<ParticleModifier>();
-		mInitializers = new ArrayList<ParticleInitializer>();
+		mModifiers = new ArrayList<>();
+		mInitializers = new ArrayList<>();
 
 		mMaxParticles = maxParticles;
 		// Create the particles
 
-		mParticles = new ArrayList<Particle> ();
+		mParticles = new ArrayList<>();
 		mTimeToLive = timeToLive;
 
 		DisplayMetrics displayMetrics = parentView.getContext().getResources().getDisplayMetrics();
@@ -219,7 +219,7 @@ public class ParticleSystem {
 	}
 
     /**
-     * Utility constructor that receives an AnimationDrawble
+     * Utility constructor that receives an AnimationDrawable
      *
      * @param a The parent activity
      * @param maxParticles The maximum number of particles
@@ -231,7 +231,7 @@ public class ParticleSystem {
     }
 
 	/**
-	 * Utility constructor that receives an AnimationDrawble
+	 * Utility constructor that receives an AnimationDrawable
 	 *
 	 * @param a The parent activity
 	 * @param maxParticles The maximum number of particles
@@ -315,7 +315,7 @@ public class ParticleSystem {
      * @return This.
      */
 	public ParticleSystem setInitialRotationRange(int minAngle, int maxAngle) {
-		mInitializers.add(new RotationInitiazer(minAngle, maxAngle));
+		mInitializers.add(new RotationInitializer(minAngle, maxAngle));
 		return this;
 	}
 
@@ -480,7 +480,7 @@ public class ParticleSystem {
 
 	private void startEmitting(int particlesPerSecond) {
 		mActivatedParticles = 0;
-		mParticlesPerMilisecond = particlesPerSecond/1000f;
+		mParticlesPerMillisecond = particlesPerSecond/1000f;
 		// Add a full size view to the parent view
 		mDrawingView = new ParticleField(mParentView.getContext());
 		mParentView.addView(mDrawingView);
@@ -506,7 +506,7 @@ public class ParticleSystem {
 
 	private void startEmitting(int particlesPerSecond, int emittingTime) {
 		mActivatedParticles = 0;
-		mParticlesPerMilisecond = particlesPerSecond/1000f;
+		mParticlesPerMillisecond = particlesPerSecond/1000f;
 		// Add a full size view to the parent view
 		mDrawingView = new ParticleField(mParentView.getContext());
 		mParentView.addView(mDrawingView);
@@ -674,7 +674,7 @@ public class ParticleSystem {
 	private void onUpdate(long miliseconds) {
 		while (((mEmittingTime > 0 && miliseconds < mEmittingTime)|| mEmittingTime == -1) && // This point should emit
 				!mParticles.isEmpty() && // We have particles in the pool
-				mActivatedParticles < mParticlesPerMilisecond*miliseconds) { // and we are under the number of particles that should be launched
+				mActivatedParticles < mParticlesPerMillisecond *miliseconds) { // and we are under the number of particles that should be launched
 			// Activate a new particle
 			activateParticle(miliseconds);
 		}

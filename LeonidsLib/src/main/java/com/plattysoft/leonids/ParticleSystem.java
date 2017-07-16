@@ -371,6 +371,19 @@ public class ParticleSystem {
 		return this;
 	}
 
+	/**
+	 * Adds a custom initializer for emitted particles. The most common use case is the ability to
+	 * update the initializer in real-time instead of adding new ones ontop of the existing one.
+	 * @param initializer The non-null initializer to add.
+	 * @return This.
+	 */
+	public ParticleSystem addInitializer(ParticleInitializer initializer) {
+		if (initializer != null) {
+			mInitializers.add(initializer);
+		}
+		return this;
+	}
+
     /**
      * Initializes the acceleration for emitted particles with the given angle. Acceleration is
      * measured in pixels per square millisecond. The angle is measured in degrees with 0°

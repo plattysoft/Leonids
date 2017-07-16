@@ -1,17 +1,17 @@
 package com.plattysoft.leonids.initializers;
 
-import java.util.Random;
-
 import com.plattysoft.leonids.Particle;
 
-public class SpeeddModuleAndRangeInitializer implements ParticleInitializer {
+import java.util.Random;
+
+public class SpeedModuleAndRangeInitializer implements ParticleInitializer {
 
 	private float mSpeedMin;
 	private float mSpeedMax;
 	private int mMinAngle;
 	private int mMaxAngle;
 
-	public SpeeddModuleAndRangeInitializer(float speedMin, float speedMax, int minAngle, int maxAngle) {
+	public SpeedModuleAndRangeInitializer(float speedMin, float speedMax, int minAngle, int maxAngle) {
 		mSpeedMin = speedMin;
 		mSpeedMax = speedMax;
 		mMinAngle = minAngle;
@@ -41,9 +41,10 @@ public class SpeeddModuleAndRangeInitializer implements ParticleInitializer {
 		else {
 			angle = r.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
 		}
-		float angleInRads = (float) (angle*Math.PI/180f);
+		double angleInRads = Math.toRadians(angle);
 		p.mSpeedX = (float) (speed * Math.cos(angleInRads));
 		p.mSpeedY = (float) (speed * Math.sin(angleInRads));
+		p.mInitialRotation = angle + 90;
 	}
 
 }

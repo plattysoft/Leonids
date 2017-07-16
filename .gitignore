@@ -1,7 +1,10 @@
 .gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
-.DS_Store
 build/
 *.iml
+*.jar
+!gradle-wrapper.jar
+*.apk
+local.properties
+.idea/
+!LeonidasExamples.apk
+!LeonidsLib.jar

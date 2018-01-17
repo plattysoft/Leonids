@@ -154,19 +154,19 @@ Make one shot using from the anchor view using the number of particles specified
 
 Emits the number of particles per second from the emitter. If emittingTime is set, the emitter stops after that time, otherwise it is continuous.
 
-####Basic emitters
+#### Basic emitters
 * _emit (View emitter, int particlesPerSecond)_
 * _emit (View emitter, int particlesPerSecond, int emittingTime)_
 
-####Emit based on (x,y) coordinates
+#### Emit based on (x,y) coordinates
 * _emit (int emitterX, int emitterY, int particlesPerSecond)_
 * _emit (int emitterX, int emitterY, int particlesPerSecond, int emitingTime)_
 
-####Emit with Gravity 
+#### Emit with Gravity 
 * _emitWithGravity (View emiter, int gravity, int particlesPerSecond)_
 * _emitWithGravity (View emiter, int gravity, int particlesPerSecond, int emitingTime)_
  
-####Update, stop, and cancel
+#### Update, stop, and cancel
 * _updateEmitPoint (int emitterX, int emitterY)_ Updates dynamically the point of emission.
 * _updateEmitPoint (View emiter, int gravity)_ Updates dynamically the point of emission using gravity.
 * _stopEmitting ()_ Stops the emission of new particles, but the active ones are updated.

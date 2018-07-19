@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
+import com.plattysoft.leonids.emitters.Emitter;
+import com.plattysoft.leonids.emitters.ViewEmitter;
 import com.plattysoft.leonids.initializers.AccelerationInitializer;
 import com.plattysoft.leonids.initializers.ParticleInitializer;
 import com.plattysoft.leonids.initializers.RotationInitializer;
@@ -439,6 +441,13 @@ public class ParticleSystem {
 	}
 
 	/**
+	 * @see #emitWithGravity(View, int, int, int)
+	 */
+	public void emitWithGravity (View emitter, int gravity, int particlesPerSecond, int emittingTime) {
+		emitWithGravity(new ViewEmitter(emitter), gravity, particlesPerSecond, emittingTime);
+	}
+
+	/**
 	 * Starts emitting particles from a specific view. If at some point the number goes over the amount of particles availabe on create
 	 * no new particles will be created
 	 *
@@ -447,7 +456,7 @@ public class ParticleSystem {
 	 * @param particlesPerSecond Number of particles per second that will be emited (evenly distributed)
 	 * @param emittingTime time the emitter will be emitting particles
 	 */
-	public void emitWithGravity (View emitter, int gravity, int particlesPerSecond, int emittingTime) {
+	public void emitWithGravity (Emitter emitter, int gravity, int particlesPerSecond, int emittingTime) {
 		// Setup emitter
 		configureEmitter(emitter, gravity);
 		startEmitting(particlesPerSecond, emittingTime);
@@ -487,7 +496,7 @@ public class ParticleSystem {
 	 */
 	public void emitWithGravity (View emitter, int gravity, int particlesPerSecond) {
 		// Setup emitter
-		configureEmitter(emitter, gravity);
+		configureEmitter(new ViewEmitter(emitter), gravity);
 		startEmitting(particlesPerSecond);
 	}
 
@@ -541,7 +550,18 @@ public class ParticleSystem {
 	}
 
 	public void updateEmitPoint (View emitter, int gravity) {
+		updateEmitPoint(new ViewEmitter(emitter), gravity);
+	}
+
+	public void updateEmitPoint (Emitter emitter, int gravity) {
 		configureEmitter(emitter, gravity);
+	}
+
+	/**
+	 * @see #oneShot(Emitter, int)
+	 */
+	public void oneShot(View emitter, int numParticles) {
+		oneShot(new ViewEmitter(emitter), numParticles);
 	}
 
 	/**
@@ -550,8 +570,15 @@ public class ParticleSystem {
 	 * @param emitter View from which center the particles will be emited
 	 * @param numParticles number of particles launched on the one shot
 	 */
-	public void oneShot(View emitter, int numParticles) {
+	public void oneShot(Emitter emitter, int numParticles) {
 		oneShot(emitter, numParticles, new LinearInterpolator());
+	}
+
+	/**
+	 * @see #oneShot(Emitter, int, Interpolator)
+	 */
+	public void oneShot(View emitter, int numParticles, Interpolator interpolator) {
+		oneShot(new ViewEmitter(emitter), numParticles, interpolator);
 	}
 
 	/**
@@ -561,7 +588,7 @@ public class ParticleSystem {
 	 * @param numParticles number of particles launched on the one shot
 	 * @param interpolator the interpolator for the time
 	 */
-	public void oneShot(View emitter, int numParticles, Interpolator interpolator) {
+	public void oneShot(Emitter emitter, int numParticles, Interpolator interpolator) {
 		configureEmitter(emitter, Gravity.CENTER);
 		mActivatedParticles = 0;
 		mEmittingTime = mTimeToLive;
@@ -609,47 +636,44 @@ public class ParticleSystem {
 		mAnimator.start();
 	}
 
-	private void configureEmitter(View emitter, int gravity) {
-		// It works with an emision range
-		int[] location = new int[2];
-		emitter.getLocationInWindow(location);
+	private void configureEmitter(Emitter emitter, int gravity) {
 
 		// Check horizontal gravity and set range
 		if (hasGravity(gravity, Gravity.LEFT)) {
-			mEmitterXMin = location[0] - mParentLocation[0];
+			mEmitterXMin = emitter.getX() - mParentLocation[0];
 			mEmitterXMax = mEmitterXMin;
 		}
 		else if (hasGravity(gravity, Gravity.RIGHT)) {
-			mEmitterXMin = location[0] + emitter.getWidth() - mParentLocation[0];
+			mEmitterXMin = emitter.getX() + emitter.getWidth() - mParentLocation[0];
 			mEmitterXMax = mEmitterXMin;
 		}
 		else if (hasGravity(gravity, Gravity.CENTER_HORIZONTAL)){
-			mEmitterXMin = location[0] + emitter.getWidth()/2 - mParentLocation[0];
+			mEmitterXMin = emitter.getX() + emitter.getWidth()/2 - mParentLocation[0];
 			mEmitterXMax = mEmitterXMin;
 		}
 		else {
 			// All the range
-			mEmitterXMin = location[0] - mParentLocation[0];
-			mEmitterXMax = location[0] + emitter.getWidth() - mParentLocation[0];
+			mEmitterXMin = emitter.getX() - mParentLocation[0];
+			mEmitterXMax = emitter.getX() + emitter.getWidth() - mParentLocation[0];
 		}
 
 		// Now, vertical gravity and range
 		if (hasGravity(gravity, Gravity.TOP)) {
-			mEmitterYMin = location[1] - mParentLocation[1];
+			mEmitterYMin = emitter.getY() - mParentLocation[1];
 			mEmitterYMax = mEmitterYMin;
 		}
 		else if (hasGravity(gravity, Gravity.BOTTOM)) {
-			mEmitterYMin = location[1] + emitter.getHeight() - mParentLocation[1];
+			mEmitterYMin = emitter.getY() + emitter.getHeight() - mParentLocation[1];
 			mEmitterYMax = mEmitterYMin;
 		}
 		else if (hasGravity(gravity, Gravity.CENTER_VERTICAL)){
-			mEmitterYMin = location[1] + emitter.getHeight()/2 - mParentLocation[1];
+			mEmitterYMin = emitter.getY() + emitter.getHeight()/2 - mParentLocation[1];
 			mEmitterYMax = mEmitterYMin;
 		}
 		else {
 			// All the range
-			mEmitterYMin = location[1] - mParentLocation[1];
-			mEmitterYMax = location[1] + emitter.getHeight() - mParentLocation[1];
+			mEmitterYMin = emitter.getY() - mParentLocation[1];
+			mEmitterYMax = emitter.getY() + emitter.getHeight() - mParentLocation[1];
 		}
 	}
 
